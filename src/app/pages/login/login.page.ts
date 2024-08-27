@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -18,22 +19,43 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private alercontroller: AlertController) { }
   
   ngOnInit() {
   }
 
   validarLogin() {
+    //Validaciones de formato (Correo)
+    if(!this.email.includes("@")) { 
+      const titulo = "Correo Electronico invalido";
+      const mensaje = "Por favor, ingrese sus datos nuevamente";
+      this.alertaLogin(titulo, mensaje);
+      return;
+    }
+
     //Validar que el usuario y contraseña coincidan con los del usuario temporal
     if(this.email == this.usuario.email && this.password == this.usuario.password) {
       //Si el login es correcto, redireccionar a la lista de medicamentos (Pag. Principal)
       if(this.usuario.rol == "autocuidado"){
         this.router.navigate(['/lista_medicamentos']);
       }else{
-        //Si el login es correcto, redireccionar a la lista de personas_cuidadas (Pag. Principal)
+        //Si el login es correcto, redireccionar a la vista de Soporte (Pag. Principal)
       }
     }else{
       //Si el login es incorrecto, mostrar una alerta de error
+      const titulo = "Credenciales incorrectas";
+      const mensaje = "Por favor, ingrese sus datos nuevamente";
+      this.alertaLogin(titulo, mensaje);
     }
   }
+
+  async alertaLogin(titulo:string , mensaje: string){
+    const alert = await this.alercontroller.create({
+      header: titulo,
+      message: mensaje,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
 }

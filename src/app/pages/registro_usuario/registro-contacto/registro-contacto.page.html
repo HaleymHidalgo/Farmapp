@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <div>
+    <h1 class="ion-text-bold">¡Regístrate!</h1>
+    <p>Ingresa aquí tu información de contacto</p>
+  </div>
+  <div class="ion-text-start" style="height: 50%;">
+    <br/>
+    <ion-input 
+      label="Numero de teléfono" 
+      label-placement="floating"
+      fill="outline" 
+      placeholder="Enter text"
+      [(ngModel)]="nrTelefono"
+    ></ion-input>
+    <br />
+    <ion-input 
+      label="Correo electrónico" 
+      label-placement="floating"
+      fill="outline"
+      type="email" 
+      placeholder="Enter text"
+      [(ngModel)]="email"
+    ></ion-input>
+    <br/>
+    <ion-input 
+      label="Dirección" 
+      label-placement="floating"
+      fill="outline" 
+      placeholder="Enter text"
+      [(ngModel)]="direccion"
+    ></ion-input>
+    <br />
+    <ion-button 
+      color="primary" 
+      expand="block"
+      (click)="siguienteFormulario()"
+      >Continuar
+    </ion-button>
+  </div>
+  <div>
+    <a [routerLink]="['/login']">¿Ya tienes una cuenta?</a>
+  </div>
+</ion-content>

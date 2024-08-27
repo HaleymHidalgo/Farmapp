@@ -26,8 +26,6 @@ export class RegistroNombrePage implements OnInit {
     rol: "cliente"
   };
 
-  prueba: string = "Variable de Prueba"
-
   constructor(private router: Router, private alertcontroller: AlertController) { }
 
   ngOnInit() {
@@ -45,7 +43,6 @@ export class RegistroNombrePage implements OnInit {
       return;
     }
     //Si pasa la validación, entonces guarda los datos
-    this.prueba = "Saved"
     this.nuevoUsuario.nombre = this.nombre;
     this.nuevoUsuario.apellido_p = this.apellido_p;
     this.nuevoUsuario.apellido_m = this.apellido_m;

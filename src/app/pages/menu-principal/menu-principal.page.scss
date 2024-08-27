@@ -1,59 +1,53 @@
-#calendario {
-	position: sticky;
-	display: flex;
+//Terminado
+#contenedor-calendario {
 	background-color: #387185;
 }
 
 .dia {
-	z-index: 2;
-	color: white;
-	margin: 5%;
-}
-
-#selector-dia {
-	z-index: 1;
-	position: relative;
 	background-color: #4C9BA2;
-	left: -60%;
-	width: 200px;
-	max-width: 200px;
+	border-radius: 100%;
 }
 
 #contenedor-alarmas {
 	background-color: #4C9BA2;
-	width: 80%;
-	margin: 10%;
-	border-radius: 10px;
-	padding: 2%;
-}
-
-#contenedor-ribete {
-	position: relative;
+	width: 90%;
+	height: 80%;
+	margin: 5%;
+	border-radius: 2%;
+	padding: 5%;
 }
 
 .ribete {
 	position: absolute;
-	max-width: 90vw;
-	margin-top: 5%;
-	left: 5%;
-	
+	max-width: 100%;
+	max-height: 100%;
+	left: 0%;
 }
 
 .mensaje-ribete {
-
-	position: absolute;
+	position: relative;
 	color: white;
-	left: 20%;
+	top: -2%;
+	left: 15%;
 }
+
+.boton {
+	margin: 5%;
+}
+//Sin terminar
 
 .alarma {
-	background-color: rgba(255,255,255, 0.9);
-	padding: 2%;
-	margin: 5%;
-	margin-top: 25%;
-	border-radius: 15px;
-	box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
+	background-color: rgba(255, 255, 255, 0.902);
+	border-radius: 2%;
 }
 
-.datos-medicamento {
+.dato-alarma {
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 10%;
+}
+
+.dosis-alarma {
+	margin-left: 15%;
+	padding-bottom: 5%;
 }

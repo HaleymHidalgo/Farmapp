@@ -1,48 +1,70 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Menu principal</ion-title>
+    <ion-title style="margin: 2%;">Menu principal</ion-title>
+
+    <!--Calendario parte superior interactuable-->
+    <div id="contenedor-calendario">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+            <ion-button class="dia">L</ion-button>
+          </ion-col>
+    
+          <ion-col>
+            <ion-button class="dia">M</ion-button>
+          </ion-col>
+    
+          <ion-col>
+            <ion-button class="dia">X</ion-button>
+          </ion-col>
+    
+          <ion-col>
+            <ion-button class="dia">J</ion-button>
+          </ion-col>
+    
+          <ion-col>
+            <ion-button class="dia">V</ion-button>
+          </ion-col>
+    
+          <ion-col>
+            <ion-button class="dia">S</ion-button>
+          </ion-col>
+    
+          <ion-col>
+            <ion-button class="dia">D</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
 
-  <div id="calendario">
-    <h4 class="dia">L</h4>
-    <h4 class="dia">M</h4>
-    <h4 class="dia">X</h4>
-    <h4 class="dia">J</h4>
-    <h4 class="dia">V</h4>
-    <h4 class="dia">S</h4>
-    <h4 class="dia">D</h4>
-    <div id="selector-dia"></div>
-  </div>
-
-
+  <!--Fondo, ribete y titulo de la seccion-->
   <div id="contenedor-alarmas">
-    <div class="contenedor-ribete">
-      <img class="ribete" src="../../../assets/images/ribete.png" alt="Ribete">
-      <h1 class="mensaje-ribete">Proximas alarmas</h1>
-    </div>
+    <img class="ribete" src="../../../assets/images/ribete.png" alt="Ribete">
+    <h1 class="mensaje-ribete">Proximas alarmas</h1>
 
-
-    <div class="alarma">
-
-      <div class="datos-medicamento">
-        <h2 class="nombre-medicamento">Losartan</h2>
-        <p class="cantidad-medicamento">50mg</p>
-      </div>
-
-      <div class="hora-medicamento">
-        <h2>10:30</h2>
-      </div>
-      
+    <!--Iterador de alarmas registradas-->
+    <div *ngFor="let alarma of alarmas" class="alarma">
+      <ion-row >
+        <h2 class="dato-alarma">{{alarma.medicamento}}</h2>
+        <ion-icon style="margin-top: 13%; scale: 150%;" name="caret-forward-outline"></ion-icon>
+        <h2 class="dato-alarma">{{alarma.hora}}</h2>
+      </ion-row>
+      <p class="dosis-alarma">{{alarma.dosis}}</p>
     </div>
 
   </div>
 
-  <ion-button 
-    color="primary" 
-    expand="block"
-    >Continuar
+  <!--Boton para agregar alarmas-->
+  <ion-button class="boton" expand="block">
+    Agregar alarma
+    <ion-icon name="add-circle-outline" aria-hidden="true"></ion-icon>
   </ion-button>
+
+
 </ion-content>

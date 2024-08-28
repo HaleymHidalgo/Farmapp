@@ -42,15 +42,13 @@ export class RegistroPasswordPage implements OnInit {
     }
 
     //Validación de formatos
-    /*
-    const chilePhoneRegex = /^\+569\d{8}$/;
-    if(!emailRegex.test(this.email)){
-      const titulo = "Correo electronico Invalido";
-      const mensaje = "Por favor, valide que el correo electronico este escrito correctamente";
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if(!passwordRegex.test(this.password)){
+      const titulo = "Contraseña invalida";
+      const mensaje = "Por favor, valide que su contraseña concuerde con los requisitos especificados";
       this.alerta(titulo, mensaje)
       return;
     }
-    */
 
     //Validar que coincidan
     if(this.password != this.confirmPassword){
@@ -71,7 +69,7 @@ export class RegistroPasswordPage implements OnInit {
     }
 
     //Redirecciona al siguiente formulario
-    this.router.navigate(['/lista_medicamentos'], navigationextras);
+    this.router.navigate([''], navigationextras);
   }
 
   async alerta(titulo:string , mensaje: string){

@@ -19,7 +19,7 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
-  constructor(private router: Router, private alercontroller: AlertController) { }
+  constructor(private router: Router, private alertcontroller: AlertController) { }
   
   ngOnInit() {
   }
@@ -50,7 +50,7 @@ export class LoginPage implements OnInit {
   }
 
   async alertaLogin(titulo:string , mensaje: string){
-    const alert = await this.alercontroller.create({
+    const alert = await this.alertcontroller.create({
       header: titulo,
       message: mensaje,
       buttons: ['OK']

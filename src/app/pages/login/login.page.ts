@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -35,11 +35,23 @@ export class LoginPage implements OnInit {
     rol: "autocuidado"
   };
 
+  //arreglo para el usuario que se registra
+  nuevoUsuario!: any;
+
   //Variables que almacenan los datos de acceso
   email!: string;
   password!: string;
 
-  constructor(private router: Router, private alertcontroller: AlertController) { }
+  constructor(private router: Router, private alertcontroller: AlertController, private activatedroute: ActivatedRoute) {
+    //Capturamos la información de NavigationExtras
+    this.activatedroute.queryParams.subscribe(params => {
+      //Validamos si viene o no información desde la pagina
+      if(this.router.getCurrentNavigation()?.extras.state){
+        //Capturamos la información
+        this.nuevoUsuario = this.router.getCurrentNavigation()?.extras?.state?.['nuevoUsuario']
+      }
+    });
+  }
   
   ngOnInit() {
   }
@@ -57,7 +69,14 @@ export class LoginPage implements OnInit {
     if(this.email == this.usuario_auto.email && this.password == this.usuario_auto.password) {
       //Si el login es correcto, redireccionar a la lista de medicamentos (Pag. Principal)
       if(this.usuario_auto.rol == "autocuidado"){
-        this.router.navigate(['/autocuidado/menu-principal']);
+        //Preparamos la data para enviarla a la siguiente pagina
+        let navigationextras: NavigationExtras = {
+          state: {
+            nuevoUsuario: this.usuario_auto
+          }
+        }
+        //Redireccionamos a la pag principal (autocuidado)
+        this.router.navigate(['/autocuidado/menu-principal'], navigationextras);
       }else{
         //Si el login es correcto, redireccionar a la vista de Soporte (Pag. Principal)
       }

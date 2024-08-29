@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mi perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="contenedor">
+    <div class="img-perfil">
+      <img src="../../../../assets/images/img-perfil.jpg" alt="img-perfil">
+    </div>
+    <div>
+      <h1 class="titulo-seccion">Tap to edit the info</h1>
+      <ion-input 
+        label="Nombre" 
+        label-placement="floating"
+        fill="outline" 
+        placeholder="Enter text"
+        errorText="Correo invalido"
+        [(ngModel)]="usuario_auto.nombre"
+        editable="true"
+      ></ion-input>
+    </div>
+  </div>
+  <div class="boton-añadir">
+    <ion-button size="large">Añadir Alarma</ion-button>
+  </div>
+</ion-content>
+

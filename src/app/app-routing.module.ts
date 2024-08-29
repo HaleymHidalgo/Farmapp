@@ -16,10 +16,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'menu-principal',
-    loadChildren: () => import('./pages/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
-  },
-  {
     path: 'agregar-alarma',
     loadChildren: () => import('./pages/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
   },
@@ -42,6 +38,10 @@ const routes: Routes = [
   {
     path: 'autocuidado/menu-principal',
     loadChildren: () => import('./pages/autocuidado/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
+  },
+  {
+    path: 'autocuidado/perfil',
+    loadChildren: () => import('./pages/autocuidado/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
 
 ];

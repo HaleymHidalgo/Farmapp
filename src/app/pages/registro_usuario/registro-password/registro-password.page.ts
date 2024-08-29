@@ -69,7 +69,7 @@ export class RegistroPasswordPage implements OnInit {
     }
 
     //Redirecciona al siguiente formulario
-    this.router.navigate([''], navigationextras);
+    this.router.navigate(['/registro-foto-perfil'], navigationextras);
   }
 
   async alerta(titulo:string , mensaje: string){

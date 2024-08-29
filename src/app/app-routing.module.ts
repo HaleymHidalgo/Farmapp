@@ -26,6 +26,10 @@ const routes: Routes = [
     path: 'registro-password',
     loadChildren: () => import('./pages/registro_usuario/registro-password/registro-password.module').then( m => m.RegistroPasswordPageModule)
   },
+  {
+    path: 'registro-foto-perfil',
+    loadChildren: () => import('./pages/registro_usuario/registro-foto-perfil/registro-foto-perfil.module').then( m => m.RegistroFotoPerfilPageModule)
+  },
 
 
 ];

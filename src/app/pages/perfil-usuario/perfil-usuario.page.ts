@@ -6,6 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./perfil-usuario.page.scss'],
 })
 export class PerfilUsuarioPage implements OnInit {
+  nombre:string = "Maria";
+  apellidoP:string = "Lopez";
+  apellidoM:string = "Villa";
+  telefono:number = 932556762;
+  comuna:string = "Lo espejo";
+  correo:string = "lovely.marie@gmail.com";
 
   constructor() { }
 

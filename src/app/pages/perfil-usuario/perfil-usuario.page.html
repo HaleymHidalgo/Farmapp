@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
 
   <!--Contiene el perfil de usuario-->
   <ion-card
@@ -23,7 +23,7 @@
     
     <ion-card-header>
       <ion-card-title>
-        <ion-button expand="block" color="secondary">
+        <ion-button (click)="hacerCamposVisibles" expand="block" color="secondary">
           Pulsa aqui para editar tus datos
           <ion-icon name="create-outline"></ion-icon>
         </ion-button>
@@ -84,10 +84,10 @@
   </ion-card>
 
   <ion-row>
-    <ion-col>
+    <ion-col style="margin-left: 3px;">
       <ion-button expand="block">Contacto de emergencia</ion-button>
     </ion-col>
-    <ion-col>
+    <ion-col style="margin-right: 3px;">
       <ion-button expand="block">Seguimiento de medicamentos</ion-button>
     </ion-col>
   </ion-row>

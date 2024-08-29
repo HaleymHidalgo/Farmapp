@@ -18,7 +18,7 @@ export class PerfilPage implements OnInit {
     password: "123",
     rol: "autocuidado"
   };
-  
+
   constructor() { }
 
   ngOnInit() {

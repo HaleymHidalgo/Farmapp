@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Pagina no encontrada</ion-title>
+    <!--
+    Si llego a esta pagina a travez de un error
+    de redirección en el codigo
+    va a poder volver con el 'back button'
+    -->
+    <ion-buttons>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-center">
+  <div class="ion-text-center ion-margin div-msg">
+    <h1 class="icon-404">Error 404</h1>
+    <h2>¡Lo sentimos!</h2>
+    <p>La pagina no ha sido encontrada</p>
+  </div>
+  <div>
+    <ion-icon class="emoji-sad" name="sad"></ion-icon>
+    <p>Opps...</p>
+  </div>
+</ion-content>

@@ -1,0 +1,30 @@
+div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.div-msg{
+    border-radius: 20px;
+    background: var(--ion-color-primary);
+}
+
+.icon-404 {
+    font-size: 50px;
+    font-weight: bold;
+    padding: 20px 0px;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+p {
+    padding: 10px 0px;
+}
+
+.emoji-sad{
+    text-align: center;
+    font-size: 100px;
+    padding: 20px auto;
+}

@@ -49,13 +49,26 @@
     <h1 class="mensaje-ribete">Proximas alarmas</h1>
 
     <!--Iterador de alarmas registradas-->
-    <div *ngFor="let alarma of alarmas" class="alarma">
-      <ion-row >
-        <h2 class="dato-alarma">{{alarma.medicamento}}</h2>
-        <ion-icon style="margin-top: 13%; scale: 150%;" name="caret-forward-outline"></ion-icon>
-        <h2 class="dato-alarma">{{alarma.hora}}</h2>
-      </ion-row>
-      <p class="dosis-alarma">{{alarma.dosis}}</p>
+    <div *ngFor="let alarma of alarmas">
+
+      <ion-card button="true" style="background-color: rgb(255, 255, 255, 0.9);">
+        <ion-card-header>
+          <ion-row>
+            <ion-card-title class="alarma" style="width: 70%; padding-top: 5%;">
+              {{alarma.medicamento}}
+  
+            </ion-card-title>
+
+            <ion-card-title style="width: 30%; padding-top: 5%;">
+              {{alarma.hora}}
+  
+            </ion-card-title>
+  
+          </ion-row>
+          <ion-card-subtitle>{{alarma.dosis}}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+
     </div>
 
   </div>

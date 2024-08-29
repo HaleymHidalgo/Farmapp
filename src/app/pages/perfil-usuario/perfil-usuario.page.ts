@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./perfil-usuario.page.scss'],
 })
 export class PerfilUsuarioPage implements OnInit {
-  camposVisibles:boolean = false;
+  
+  campoVisible:string = "true";
   nombre:string = "Maria";
   apellidoP:string = "Lopez";
   apellidoM:string = "Villa";
@@ -20,7 +21,7 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   hacerCamposVisibles(){
-    this.camposVisibles = true;
+    this.campoVisible = "false";
   }
 
 }

@@ -9,9 +9,29 @@ import { AlertController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
   //Usuario temporal para hacer validaciones
-  usuario:any = {
-    email: "hal.hidalgo@duocuc.cl",
-    password: "haleym123",
+  //Arreglo con los datos de un usuario 'Autocuidado'
+  usuario_auto: any = {
+    nombre: "Haleym",
+    apellido_p: "Hidalgo",
+    apellido_m: "Torres",
+    email:"haleym@mail.com",
+    telefono:"+56987654321",
+    direccion:"El arbol 123. Comuna",
+    imgPerfil:"haleym.png",
+    password: "123",
+    rol: "autocuidado"
+  };
+
+  //Arreglo con los datos de un usuario 'Autocuidado'
+  usuario_soporte: any = {
+    nombre: "Haleym",
+    apellido_p: "Hidalgo",
+    apellido_m: "Torres",
+    email:"haleym@mail.com",
+    telefono:"+56987654321",
+    direccion:"El arbol 123. Comuna",
+    imgPerfil:"haleym.png",
+    password: "123",
     rol: "autocuidado"
   };
 
@@ -34,10 +54,10 @@ export class LoginPage implements OnInit {
     }
 
     //Validar que el usuario y contraseña coincidan con los del usuario temporal
-    if(this.email == this.usuario.email && this.password == this.usuario.password) {
+    if(this.email == this.usuario_auto.email && this.password == this.usuario_auto.password) {
       //Si el login es correcto, redireccionar a la lista de medicamentos (Pag. Principal)
-      if(this.usuario.rol == "autocuidado"){
-        this.router.navigate(['/lista_medicamentos']);
+      if(this.usuario_auto.rol == "autocuidado"){
+        this.router.navigate(['/autocuidado/menu-principal']);
       }else{
         //Si el login es correcto, redireccionar a la vista de Soporte (Pag. Principal)
       }

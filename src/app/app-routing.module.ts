@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'menu-principal',
     loadChildren: () => import('./pages/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
+  {
+    path: 'agregar-alarma',
+    loadChildren: () => import('./pages/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
+  },
 
 
 ];

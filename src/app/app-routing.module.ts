@@ -36,7 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/autocuidado/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
 
-
 ];
 
 @NgModule({

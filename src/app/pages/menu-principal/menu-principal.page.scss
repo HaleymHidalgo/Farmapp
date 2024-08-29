@@ -1,0 +1,36 @@
+//Terminado
+#contenedor-calendario {
+	background-color: #387185;
+}
+
+.dia {
+	background-color: #4C9BA2;
+	border-radius: 100%;
+}
+
+#contenedor-alarmas {
+	background-color: #4C9BA2;
+	width: 90%;
+	height: 80%;
+	margin: 5%;
+	border-radius: 2%;
+	padding: 5%;
+}
+
+.ribete {
+	position: absolute;
+	max-width: 100%;
+	max-height: 100%;
+	left: 0%;
+}
+
+.mensaje-ribete {
+	position: relative;
+	color: white;
+	top: -2%;
+	left: 15%;
+}
+
+.boton {
+	margin: 5%;
+}

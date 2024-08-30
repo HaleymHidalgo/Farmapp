@@ -29,21 +29,23 @@
           </h4>
         </ion-col>
         <ion-col style="max-width: 25%;">
-          <ion-button style="color: white;" fill="clear" size="large">
+          <ion-button (click)="editarCampos()" style="color: white;" fill="clear" size="large">
             <ion-icon name="create-outline"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
       
       <!--Campos con informacion del perfil-->
-      <ion-card-content>
+      <ion-card-content *ngIf="myVar">
         <ion-input
           label="Nombre"
           label-placement="stacked"
           fill="solid"
           placeholder=""
           disabled="true">
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
         </ion-input>
+        
         <br>
         <ion-input
           label="Apellido paterno"
@@ -51,6 +53,7 @@
           fill="solid"
           placeholder=""
           disabled="true">
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
         </ion-input>
         <br>
         <ion-input
@@ -59,6 +62,7 @@
           fill="solid"
           placeholder=""
           disabled="true">
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
         </ion-input>
         <br>
         <ion-input
@@ -67,6 +71,7 @@
           fill="solid"
           placeholder=""
           disabled="true">
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
         </ion-input>
         <br>
         <ion-input
@@ -75,6 +80,7 @@
           fill="solid"
           placeholder=""
           disabled="true">
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
         </ion-input>
         <br>
         <ion-input
@@ -83,6 +89,58 @@
           fill="solid"
           placeholder=""
           disabled="true">
+          <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
+        </ion-input>
+      </ion-card-content>
+
+      <!--Campos editables-->
+      <ion-card-content *ngIf="!myVar">
+        <ion-input
+          label="Nombre"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="">
+            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido paterno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="">
+            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido materno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="">
+            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
+        </ion-input>
+        <br>
+        <ion-input
+          label="Telefono"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="">
+            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
+        </ion-input>
+        <br>
+        <ion-input
+          label="Correo electronico"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="">
+            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
+        </ion-input>
+        <br>
+        <ion-input
+          label="Comuna de residencia"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="">
+            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
         </ion-input>
       </ion-card-content>
 

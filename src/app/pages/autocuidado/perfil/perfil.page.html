@@ -1,0 +1,73 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mi perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="contenedor">
+    <div class="img-perfil">
+      <img src="../../../../assets/images/img-perfil.jpg" alt="img-perfil">
+    </div>
+    <div>
+      <h1 class="titulo-seccion">Tap to edit the info</h1>
+      <ion-card-content>
+        <ion-input
+          label="Nombre"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_auto.nombre}}"
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido paterno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_auto.apellido_p}}"
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido materno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_auto.apellido_m}}"
+          [disabled]="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Telefono"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_auto.telefono}}"
+          [disabled]="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Correo electronico"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_auto.email}}"
+          [disabled]="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Comuna de residencia"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_auto.direccion}}"
+          [disabled]="true">
+        </ion-input>
+      </ion-card-content>
+    </div>
+  </div>
+  <div class="botones-perfil">
+    <ion-button size="">Ver contacto emergencia</ion-button>
+    <ion-button size="">Ver historial de seguimiento</ion-button>
+  </div>
+</ion-content>
+

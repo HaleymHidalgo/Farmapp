@@ -23,7 +23,7 @@ export class RegistroNombrePage implements OnInit {
     direccion:"",
     imgPerfil:"",
     password: "",
-    rol: "cliente"
+    rol: "autocuidado"
   };
 
   constructor(private router: Router, private alertcontroller: AlertController) { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro-foto-perfil',
@@ -13,7 +13,16 @@ export class RegistroFotoPerfilPage implements OnInit {
   //Variables del formulario
   imgPerfil!: string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private activatedroute: ActivatedRoute) {
+    //Capturamos la información de NavigationExtras
+    this.activatedroute.queryParams.subscribe(params => {
+      //Validamos si viene o no información desde la pagina
+      if(this.router.getCurrentNavigation()?.extras.state){
+        //Capturamos la información
+        this.nuevoUsuario = this.router.getCurrentNavigation()?.extras?.state?.['nuevoUsuario']
+      }
+    });
+  }
 
   ngOnInit() {
   }

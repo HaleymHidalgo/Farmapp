@@ -1,0 +1,70 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Menu Principal</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment scrollable="true" value="Semana">
+      <ion-segment-button value="Lunes">
+        <ion-label>L</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Martes">
+        <ion-label>M</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Miercoles">
+        <ion-label>X</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Jueves">
+        <ion-label>J</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Viernes">
+        <ion-label>V</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Sabado">
+        <ion-label>S</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Domingo">
+        <ion-label>D</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="contenedor">
+    <div>
+      <h1 class="titulo-seccion">Proximas Alarmas</h1>
+    </div>
+
+    <div class="alarma">
+      <div class="info-alarma">
+        <p class="titulo-alarma">Paracetamol</p>
+        <p class="texto-alarma">100gm</p>
+      </div>
+      <div class="info-hora">
+        <p class="texto-hora">12:30</p>
+      </div>
+      <ion-button class="boton-alarma" fill="clear">
+        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
+      </ion-button>
+    </div>
+      
+    <div class="alarma">
+      <div class="info-alarma">
+        <p class="titulo-alarma">Paracetamol</p>
+        <p class="texto-alarma">100gm</p>
+      </div>
+      <div class="info-hora">
+        <p class="texto-hora">12:30</p>
+      </div>
+      <ion-button class="boton-alarma" fill="clear">
+        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+  <div class="boton-añadir">
+    <ion-button size="large">Añadir Alarma</ion-button>
+  </div>
+</ion-content>

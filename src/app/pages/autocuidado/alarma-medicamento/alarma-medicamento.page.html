@@ -4,30 +4,43 @@
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
   <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
   <div>
-    <p>Ahora debes añadir la información<br>del recipe medico</p>
+    <p>Ahora debes añadir la información del Medicamento<br>incluyendo sus indicaciones</p>
   </div>
   <div class="ion-text-start formulario" style="height: 50%;">
     <br/>
     <ion-input 
-      label="¿Dónde te atendieron?" 
+      label="Nombre del Medicamento" 
       label-placement="floating"
       fill="outline" 
-      placeholder="Dirección"
-      [(ngModel)]="direccion"
-    ></ion-input>
-    <br />
-    <ion-input 
-      label="¿Quién te atendió?" 
-      label-placement="floating"
-      fill="outline"
-      placeholder="Dr. Nombre"
-      [(ngModel)]="nombreDoctor"
+      placeholder="Medicamento"
+      [(ngModel)]="nombreMedicamento"
     ></ion-input>
     <br/>
-    <ion-input
-      type="date"
+    <ion-input 
+      label="¿Cuántos días debes tomarlo?" 
+      label-placement="floating"
       fill="outline"
-      [(ngModel)]="fechaAtencion"
+      type="number"
+      placeholder="Nr días"
+      [(ngModel)]="diasMedicamento"
+    ></ion-input>
+    <br/>
+    <ion-input 
+      label="¿Cuántos gramos debe tomar?" 
+      label-placement="floating"
+      fill="outline"
+      type="number"
+      placeholder="100g"
+      [(ngModel)]="cantidadMedicamento"
+    ></ion-input>
+    <br/>
+    <ion-input 
+      label="¿Cada cuantas horas?" 
+      label-placement="floating"
+      fill="outline" 
+      type="number"
+      placeholder="Medicamento"
+      [(ngModel)]="horasMedicamento"
     ></ion-input>
     <br/>
     <ion-button 

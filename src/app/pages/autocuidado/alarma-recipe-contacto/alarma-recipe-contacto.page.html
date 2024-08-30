@@ -10,27 +10,21 @@
   <div class="ion-text-start formulario" style="height: 50%;">
     <br/>
     <ion-input 
-      label="¿Dónde te atendieron?" 
+      label="¿Numero teléfono?" 
       label-placement="floating"
       fill="outline" 
-      placeholder="Dirección"
-      [(ngModel)]="direccion"
+      placeholder="Nr teléfono"
+      [(ngModel)]="numTelefono"
     ></ion-input>
     <br />
     <ion-input 
-      label="¿Quién te atendió?" 
+      label="¿Correo electrónico?" 
       label-placement="floating"
       fill="outline"
-      placeholder="Dr. Nombre"
-      [(ngModel)]="nombreDoctor"
+      placeholder="Email"
+      [(ngModel)]="email"
     ></ion-input>
     <br/>
-    <ion-input
-    type="date"
-    fill="outline"
-    [(ngModel)]="fechaAtencion"
-  ></ion-input>
-    <br />
     <ion-button 
       color="success" 
       expand="block"

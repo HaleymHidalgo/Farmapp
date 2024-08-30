@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'autocuidado/perfil',
     loadChildren: () => import('./pages/autocuidado/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },  {
+    path: 'perfil-emergencia',
+    loadChildren: () => import('./pages/autocuidado/perfil-emergencia/perfil-emergencia.module').then( m => m.PerfilEmergenciaPageModule)
   },
+
 
 ];
 

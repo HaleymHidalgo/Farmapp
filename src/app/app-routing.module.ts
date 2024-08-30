@@ -17,7 +17,7 @@ const routes: Routes = [
   },
   {
     path: 'agregar-alarma',
-    loadChildren: () => import('./pages/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
+    loadChildren: () => import('./pages/autocuidado/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
   },
   {
     path: 'registro-nombre',
@@ -42,10 +42,6 @@ const routes: Routes = [
   {
     path: 'autocuidado/perfil',
     loadChildren: () => import('./pages/autocuidado/perfil/perfil.module').then( m => m.PerfilPageModule)
-  },
-  {
-    path: 'perfil-usuario',
-    loadChildren: () => import('./pages/perfil-usuario/perfil-usuario.module').then( m => m.PerfilUsuarioPageModule)
   },
 
 ];

@@ -88,9 +88,10 @@
     }
 }
 
-.boton-añadir {
+.botones-perfil {
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
     border-radius: 15px;
     padding: 20px;
+    margin: 0px auto;
 }

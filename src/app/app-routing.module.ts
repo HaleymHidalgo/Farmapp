@@ -55,6 +55,11 @@ const routes: Routes = [
     path: 'autocuidado/alarma-medicamento',
     loadChildren: () => import('./pages/autocuidado/alarma-medicamento/alarma-medicamento.module').then( m => m.AlarmaMedicamentoPageModule)
   },
+  {
+    path: 'autocuidado/alarma-confirmar',
+    loadChildren: () => import('./pages/autocuidado/alarma-confirmar/alarma-confirmar.module').then( m => m.AlarmaConfirmarPageModule)
+  },
+
 
 
 

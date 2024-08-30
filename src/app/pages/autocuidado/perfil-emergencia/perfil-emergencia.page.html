@@ -7,141 +7,64 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
 
   <div class="contenedor">
 
     <!--Foto de perfil organizada-->
     <ion-row>
-      <ion-col></ion-col>
-      <ion-col style="border-radius: 100%;">
-        <img src="../../../../assets/images/img-contacto.jpg" alt="img-perfil">
+      <ion-col style="border-radius: 100%; max-width: 200px; max-height: 200px; margin: 2%;">
+        <img class="imagen-perfil" src="../../../../assets/images/img-contacto.jpg" alt="img-perfil">
       </ion-col>
-      <ion-col></ion-col>
+      <ion-col style="max-width: 200px; max-height: 200px;">
+        <img class="icono-perfil" src="../../../../assets/images/esculapio.png" alt="Vara de esculapio">
+      </ion-col>
     </ion-row>
 
     <!--Ribete con instrucciones y boton para editar-->
     <div>
-      <ion-row class="ribete">
-        <ion-col style="max-width: 75%;">
+      <ion-row class="ribete" >
+        <ion-col style="max-width: 75%; max-height: 100%;">
           <h4 class="texto-ribete">
-            Pulsa para editar los datos
+            Pulsa para editar los datos de tu contacto
           </h4>
         </ion-col>
-        <ion-col style="max-width: 25%;">
-          <ion-button (click)="editarCampos()" style="color: white;" fill="clear" size="large">
-            <ion-icon name="create-outline"></ion-icon>
+        <ion-col style="max-width: 25%; max-height: 100%;">
+          <ion-button (click)="editarCampos()" class="boton-editar" fill="clear" shape="round">
+            <ion-icon name="create-outline" size="large"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
       
-      <!--Campos con informacion del perfil-->
+      <!--Campos con informacion del perfil bloqueados-->
       <ion-card-content *ngIf="myVar">
-        <ion-input
-          label="Nombre"
+        <div *ngFor="let campo of campos">
+          <ion-input
+          style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+          label="{{campo.label_input}}"
           label-placement="stacked"
           fill="solid"
-          placeholder=""
+          placeholder="{{campo.dato_usuario}}"
           disabled="true">
             <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
-        </ion-input>
-        
-        <br>
-        <ion-input
-          label="Apellido paterno"
-          label-placement="stacked"
-          fill="solid"
-          placeholder=""
-          disabled="true">
-            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Apellido materno"
-          label-placement="stacked"
-          fill="solid"
-          placeholder=""
-          disabled="true">
-            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Telefono"
-          label-placement="stacked"
-          fill="solid"
-          placeholder=""
-          disabled="true">
-            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Correo electronico"
-          label-placement="stacked"
-          fill="solid"
-          placeholder=""
-          disabled="true">
-            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Comuna de residencia"
-          label-placement="stacked"
-          fill="solid"
-          placeholder=""
-          disabled="true">
-          <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
-        </ion-input>
+          </ion-input>
+        </div>
+
       </ion-card-content>
 
       <!--Campos editables-->
       <ion-card-content *ngIf="!myVar">
-        <ion-input
-          label="Nombre"
+
+        <div *ngFor="let campo of campos">
+          <ion-input
+          style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+          label="{{campo.label_input}}"
           label-placement="stacked"
           fill="solid"
-          placeholder="">
-            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Apellido paterno"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="">
-            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Apellido materno"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="">
-            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Telefono"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="">
-            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Correo electronico"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="">
-            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
-        </ion-input>
-        <br>
-        <ion-input
-          label="Comuna de residencia"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="">
-            <ion-icon slot="end" name="lock-open" size="large"></ion-icon>
-        </ion-input>
+          placeholder="{{campo.dato_usuario}}">
+          </ion-input>
+        </div>
+
       </ion-card-content>
 
     </div>
@@ -149,12 +72,12 @@
   </div>
 
   <!--Seccion de botones-->
-  <ion-row class="boton-perfil">
+  <ion-row>
     <ion-col style="max-width: 25%;"></ion-col>
-    <ion-col style="max-width: 50%; ">
-      <ion-button style="margin-top: 20px;">Llamar contacto</ion-button>
+    <ion-col style="max-width: 50%;">
+      <ion-button style="margin-bottom: 20px;" expand="block">Llamar contacto</ion-button>
     </ion-col>
-    <ion-col style="max-width: 25%;"></ion-col>
+    <ion-col style="max-width: 25%"></ion-col>
   </ion-row>
 
 </ion-content>

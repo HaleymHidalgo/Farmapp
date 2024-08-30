@@ -1,13 +1,102 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>perfil-emergencia</ion-title>
+    <ion-title>Mi perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">perfil-emergencia</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="contenedor">
+
+    <!--Foto de perfil organizada-->
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col style="border-radius: 100%;">
+        <img src="../../../../assets/images/img-perfil.jpg" alt="img-perfil">
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+    <!--Ribete con instrucciones y boton para editar-->
+    <div>
+      <ion-row class="ribete">
+        <ion-col style="max-width: 75%;">
+          <h4 class="texto-ribete">
+            Pulsa para editar los datos
+          </h4>
+        </ion-col>
+        <ion-col style="max-width: 25%;">
+          <ion-button style="color: white;" fill="clear" size="large">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      
+      <!--Campos con informacion del perfil-->
+      <ion-card-content>
+        <ion-input
+          label="Nombre"
+          label-placement="stacked"
+          fill="solid"
+          placeholder=""
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido paterno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder=""
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido materno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder=""
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Telefono"
+          label-placement="stacked"
+          fill="solid"
+          placeholder=""
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Correo electronico"
+          label-placement="stacked"
+          fill="solid"
+          placeholder=""
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Comuna de residencia"
+          label-placement="stacked"
+          fill="solid"
+          placeholder=""
+          disabled="true">
+        </ion-input>
+      </ion-card-content>
+
+    </div>
+
+  </div>
+
+  <!--Seccion de botones-->
+  <ion-row class="boton-perfil">
+    <ion-col style="max-width: 25%;"></ion-col>
+    <ion-col style="max-width: 50%; ">
+      <ion-button style="margin-top: 20px;">Llamar contacto</ion-button>
+    </ion-col>
+    <ion-col style="max-width: 25%;"></ion-col>
+  </ion-row>
+
 </ion-content>

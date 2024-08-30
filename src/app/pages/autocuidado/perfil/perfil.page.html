@@ -58,7 +58,7 @@
           label-placement="stacked"
           fill="solid"
           placeholder="{{usuario_auto.apellido_m}}"
-          [disabled]="true">
+          disabled="true">
         </ion-input>
         <br>
         <ion-input
@@ -66,7 +66,7 @@
           label-placement="stacked"
           fill="solid"
           placeholder="{{usuario_auto.telefono}}"
-          [disabled]="true">
+          disabled="true">
         </ion-input>
         <br>
         <ion-input
@@ -74,7 +74,7 @@
           label-placement="stacked"
           fill="solid"
           placeholder="{{usuario_auto.email}}"
-          [disabled]="true">
+          disabled="true">
         </ion-input>
         <br>
         <ion-input
@@ -82,7 +82,7 @@
           label-placement="stacked"
           fill="solid"
           placeholder="{{usuario_auto.direccion}}"
-          [disabled]="true">
+          disabled="true">
         </ion-input>
       </ion-card-content>
 
@@ -90,9 +90,10 @@
 
   </div>
 
+  <!--Seccion de botones-->
   <ion-row>
     <ion-col class="boton-perfil">
-      <ion-button>Contacto de emergencia</ion-button>
+      <ion-button [routerLink]="['/autocuidado/perfil-emergencia']">Contacto de emergencia</ion-button>
     </ion-col>
     <ion-col class="boton-perfil">
       <ion-button>Historial de seguimiento</ion-button>
@@ -100,4 +101,3 @@
   </ion-row>
 
 </ion-content>
-

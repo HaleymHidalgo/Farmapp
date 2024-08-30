@@ -8,12 +8,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+
   <div class="contenedor">
-    <div class="img-perfil">
-      <img src="../../../../assets/images/img-perfil.jpg" alt="img-perfil">
-    </div>
+
+    <!--Foto de perfil organizada-->
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col style="border-radius: 100%;">
+        <img src="../../../../assets/images/img-perfil.jpg" alt="img-perfil">
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+
+    <!--Ribete con instrucciones y boton para editar-->
     <div>
-      <h1 class="titulo-seccion">Tap to edit the info</h1>
+      <ion-row class="ribete">
+        <ion-col style="max-width: 75%;">
+          <h4 class="texto-ribete">
+            Pulsa para editar tu perfil
+          </h4>
+        </ion-col>
+        <ion-col style="max-width: 25%;">
+          <ion-button style="color: white;" fill="clear" size="large">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      
+      <!--Campos con informacion del perfil-->
       <ion-card-content>
         <ion-input
           label="Nombre"
@@ -63,11 +85,19 @@
           [disabled]="true">
         </ion-input>
       </ion-card-content>
+
     </div>
+
   </div>
-  <div class="botones-perfil">
-    <ion-button size="">Ver contacto emergencia</ion-button>
-    <ion-button size="">Ver historial de seguimiento</ion-button>
-  </div>
+
+  <ion-row>
+    <ion-col class="boton-perfil">
+      <ion-button>Contacto de emergencia</ion-button>
+    </ion-col>
+    <ion-col class="boton-perfil">
+      <ion-button>Historial de seguimiento</ion-button>
+    </ion-col>
+  </ion-row>
+
 </ion-content>
 

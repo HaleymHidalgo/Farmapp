@@ -16,10 +16,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'agregar-alarma',
-    loadChildren: () => import('./pages/autocuidado/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
-  },
-  {
     path: 'registro-nombre',
     loadChildren: () => import('./pages/registro_usuario/registro-nombre/registro-nombre.module').then( m => m.RegistroNombrePageModule)
   },
@@ -40,9 +36,18 @@ const routes: Routes = [
     loadChildren: () => import('./pages/autocuidado/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
   {
+    path: 'autocuidado/agregar-alarma',
+    loadChildren: () => import('./pages/autocuidado/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
+  },
+  {
     path: 'autocuidado/perfil',
     loadChildren: () => import('./pages/autocuidado/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
+  {
+    path: 'autocuidado/alarma-recipe',
+    loadChildren: () => import('./pages/autocuidado/alarma-recipe/alarma-recipe.module').then( m => m.AlarmaRecipePageModule)
+  },
+
 
 ];
 

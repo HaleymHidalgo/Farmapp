@@ -1,13 +1,16 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>agregar-alarma</ion-title>
-  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">agregar-alarma</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <img src="../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <div>
+    <p>Para añadir un nuevo recordatorio <br> debes elegir una de las siguientes opciones</p>
+  </div>
+  <div class="div-botones">
+    <ion-button [routerLink]="['/autocuidado/alarma-recipe']">Nuevo Recipe Medico</ion-button>
+    <ion-button [routerLink]="['/autocuidado/alarma-medicamento ']">Nuevo Medicamento</ion-button>
+  </div>
+  <div>
+    <ion-button color="danger" [routerLink]="['/autocuidado/menu-principal']">Volver</ion-button>
+  </div>
 </ion-content>

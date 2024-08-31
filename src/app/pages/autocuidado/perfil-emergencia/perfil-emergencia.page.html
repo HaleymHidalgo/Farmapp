@@ -14,7 +14,7 @@
     <!--Foto de perfil organizada-->
     <ion-row>
       <ion-col style="border-radius: 100%; max-width: 200px; max-height: 200px; margin: 2%;">
-        <img class="imagen-perfil" src="../../../../assets/images/img-contacto.jpg" alt="img-perfil">
+        <img class="imagen-perfil" src="../../../../assets/images/img-contacto.jpg" alt="Foto de contacto">
       </ion-col>
       <ion-col style="max-width: 200px; max-height: 200px;">
         <img class="icono-perfil" src="../../../../assets/images/esculapio.png" alt="Vara de esculapio">
@@ -61,7 +61,8 @@
           label="{{campo.label_input}}"
           label-placement="stacked"
           fill="solid"
-          placeholder="{{campo.dato_usuario}}">
+          placeholder="{{campo.dato_usuario}}"
+          [(ngModel)]="campo.dato_usuario">
           </ion-input>
         </div>
 

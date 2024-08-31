@@ -7,83 +7,65 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
 
   <div class="contenedor">
 
     <!--Foto de perfil organizada-->
     <ion-row>
-      <ion-col></ion-col>
-      <ion-col style="border-radius: 100%;">
-        <img src="../../../../assets/images/img-perfil.jpg" alt="img-perfil">
+      <ion-col style="border-radius: 100%; max-width: 200px; max-height: 200px; margin: 2%;">
+        <img class="imagen-perfil" src="../../../../assets/images/img-perfil.jpg" alt="Foto de perfil">
       </ion-col>
-      <ion-col></ion-col>
+      <ion-col style="max-width: 200px; max-height: 200px;">
+        <img class="icono-perfil" src="../../../../assets/images/esculapio.png" alt="Vara de esculapio">
+      </ion-col>
     </ion-row>
 
     <!--Ribete con instrucciones y boton para editar-->
     <div>
-      <ion-row class="ribete">
-        <ion-col style="max-width: 75%;">
+      <ion-row class="ribete" >
+        <ion-col style="max-width: 75%; max-height: 100%;">
           <h4 class="texto-ribete">
-            Pulsa para editar tu perfil
+            Pulsa para editar tus datos personales
           </h4>
         </ion-col>
-        <ion-col style="max-width: 25%;">
-          <ion-button style="color: white;" fill="clear" size="large">
-            <ion-icon name="create-outline"></ion-icon>
+        <ion-col style="max-width: 25%; max-height: 100%;">
+          <ion-button (click)="editarCampos()" class="boton-editar" fill="clear" shape="round">
+            <ion-icon name="create-outline" size="large"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
       
-      <!--Campos con informacion del perfil-->
-      <ion-card-content>
-        <ion-input
-          label="Nombre"
+      <!--Campos con informacion del perfil bloqueados-->
+      <ion-card-content *ngIf="myVar">
+        <div *ngFor="let campo of campos">
+          <ion-input
+          style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+          label="{{campo.label_input}}"
           label-placement="stacked"
           fill="solid"
-          placeholder="{{usuario_auto.nombre}}"
+          placeholder="{{campo.dato_usuario}}"
           disabled="true">
-        </ion-input>
-        <br>
-        <ion-input
-          label="Apellido paterno"
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
+          </ion-input>
+        </div>
+
+      </ion-card-content>
+
+      <!--Campos editables-->
+      <ion-card-content *ngIf="!myVar">
+
+        <div *ngFor="let campo of campos">
+          <ion-input
+          style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+          label="{{campo.label_input}}"
           label-placement="stacked"
           fill="solid"
-          placeholder="{{usuario_auto.apellido_p}}"
-          disabled="true">
-        </ion-input>
-        <br>
-        <ion-input
-          label="Apellido materno"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="{{usuario_auto.apellido_m}}"
-          disabled="true">
-        </ion-input>
-        <br>
-        <ion-input
-          label="Telefono"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="{{usuario_auto.telefono}}"
-          disabled="true">
-        </ion-input>
-        <br>
-        <ion-input
-          label="Correo electronico"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="{{usuario_auto.email}}"
-          disabled="true">
-        </ion-input>
-        <br>
-        <ion-input
-          label="Comuna de residencia"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="{{usuario_auto.direccion}}"
-          disabled="true">
-        </ion-input>
+          placeholder="{{campo.dato_usuario}}"
+          [(ngModel)]="campo.dato_usuario">
+          </ion-input>
+        </div>
+
       </ion-card-content>
 
     </div>
@@ -92,11 +74,11 @@
 
   <!--Seccion de botones-->
   <ion-row>
-    <ion-col class="boton-perfil">
-      <ion-button [routerLink]="['/autocuidado/perfil-emergencia']">Contacto de emergencia</ion-button>
+    <ion-col>
+      <ion-button [routerLink]="['/autocuidado/perfil-emergencia']" expand="block" style="margin-left: 4%;">Contacto de emergencia</ion-button>
     </ion-col>
-    <ion-col class="boton-perfil">
-      <ion-button>Historial de seguimiento</ion-button>
+    <ion-col>
+      <ion-button expand="block" style="margin-right: 4%;">Historial de seguimiento</ion-button>
     </ion-col>
   </ion-row>
 

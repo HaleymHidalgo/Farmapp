@@ -10,7 +10,7 @@ export class PerfilEmergenciaPage implements OnInit {
   myVar:boolean=true;
   campos:any = [
     {
-      label_input: "nombre",
+      label_input: "Nombre",
       dato_usuario: "Jorge"
     },
     {
@@ -33,7 +33,7 @@ export class PerfilEmergenciaPage implements OnInit {
       label_input: "Comuna de residencia",
       dato_usuario: "Conchali"
     }
-  ]
+  ];
 
   constructor() { }
 

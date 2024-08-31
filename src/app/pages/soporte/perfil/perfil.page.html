@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mi perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="contenedor">
+    <div class="img-perfil">
+      <img src="../../../../assets/images/img-perfil-soporte.jpg" alt="img-perfil">
+    </div>
+    <div>
+      <h1 class="titulo-seccion">Tap to edit the info</h1>
+      <ion-card-content>
+        <ion-input
+          label="Nombre"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_soporte.nombre}}"
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido paterno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_soporte.apellido_p}}"
+          disabled="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Apellido materno"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_soporte.apellido_m}}"
+          [disabled]="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Telefono"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_soporte.telefono}}"
+          [disabled]="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Correo electronico"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_soporte.email}}"
+          [disabled]="true">
+        </ion-input>
+        <br>
+        <ion-input
+          label="Comuna de residencia"
+          label-placement="stacked"
+          fill="solid"
+          placeholder="{{usuario_soporte.direccion}}"
+          [disabled]="true">
+        </ion-input>
+      </ion-card-content>
+    </div>
+  </div>
+</ion-content>
+

@@ -63,6 +63,11 @@ const routes: Routes = [
     path: 'soporte/menu-principal',
     loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
+  {
+    path: 'soporte/perfil',
+    loadChildren: () => import('./pages/soporte/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+
 
 ];
 

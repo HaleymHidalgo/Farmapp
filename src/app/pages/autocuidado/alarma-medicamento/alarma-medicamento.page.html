@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <div>
+    <p>Ahora debes añadir la información del Medicamento<br>incluyendo sus indicaciones</p>
+  </div>
+  <div class="ion-text-start formulario" style="height: 50%;">
+    <br/>
+    <ion-input 
+      label="Nombre del Medicamento" 
+      label-placement="floating"
+      fill="outline" 
+      placeholder="Medicamento"
+      [(ngModel)]="nombreMedicamento"
+    ></ion-input>
+    <br/>
+    <ion-input 
+      label="¿Cuántos días debes tomarlo?" 
+      label-placement="floating"
+      fill="outline"
+      type="number"
+      placeholder="Nr días"
+      [(ngModel)]="diasMedicamento"
+    ></ion-input>
+    <br/>
+    <ion-input 
+      label="¿Cuántos gramos debe tomar?" 
+      label-placement="floating"
+      fill="outline"
+      type="number"
+      placeholder="100g"
+      [(ngModel)]="cantidadMedicamento"
+    ></ion-input>
+    <br/>
+    <ion-input 
+      label="¿Cada cuantas horas?" 
+      label-placement="floating"
+      fill="outline" 
+      type="number"
+      placeholder="Medicamento"
+      [(ngModel)]="horasMedicamento"
+    ></ion-input>
+    <br/>
+    <ion-button 
+      color="success" 
+      expand="block"
+      (click)="siguienteFormulario()"
+      >Continuar
+    </ion-button>
+  </div>
+  <div>
+    <ion-button color="danger" [routerLink]="['/autocuidado/menu-principal']">Cancelar</ion-button>
+  </div>
+</ion-content>

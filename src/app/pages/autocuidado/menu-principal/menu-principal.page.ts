@@ -24,4 +24,9 @@ export class MenuPrincipalPage implements OnInit {
   ngOnInit() {
   }
 
+  nuevaAlarma(){
+    //Redireccionamos a la pagina agregar-alarma
+    this.router.navigate(['/autocuidado/agregar-alarma']);
+  }
+
 }

@@ -59,6 +59,11 @@ const routes: Routes = [
     path: 'soporte/menu-principal',
     loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
+  {
+    path: 'soporte/pregunta-seguridad',
+    loadChildren: () => import('./pages/soporte/pregunta-seguridad/pregunta-seguridad.module').then( m => m.PreguntaSeguridadPageModule)
+  },
+
 
 ];
 

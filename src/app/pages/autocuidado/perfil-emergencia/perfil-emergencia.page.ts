@@ -1,38 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-perfil',
-  templateUrl: './perfil.page.html',
-  styleUrls: ['./perfil.page.scss'],
+  selector: 'app-perfil-emergencia',
+  templateUrl: './perfil-emergencia.page.html',
+  styleUrls: ['./perfil-emergencia.page.scss'],
 })
-export class PerfilPage implements OnInit {
-  //Arreglo con los datos de un usuario 'Autocuidado'
+export class PerfilEmergenciaPage implements OnInit {
 
   myVar:boolean=true;
   campos:any = [
     {
       label_input: "Nombre",
-      dato_usuario: "Haleym"
+      dato_usuario: "Jorge"
     },
     {
       label_input: "Apellido paterno",
-      dato_usuario: "Hidalgo"
+      dato_usuario: "Gonzalez"
     },
     {
       label_input: "Apellido materno",
-      dato_usuario: "Torres"
+      dato_usuario: "Jalero"
     },
     {
       label_input: "Correo electronico",
-      dato_usuario: "haleym@mail.com"
+      dato_usuario: "JorgeGonJales@gmail.com"
     },
     {
       label_input: "Telefono",
-      dato_usuario: 987654321
+      dato_usuario: 912345678
     },
     {
       label_input: "Comuna de residencia",
-      dato_usuario: "El arbol 123. Comuna"
+      dato_usuario: "Conchali"
     }
   ];
 

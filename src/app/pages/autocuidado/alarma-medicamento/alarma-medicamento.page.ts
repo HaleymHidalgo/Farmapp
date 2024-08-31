@@ -50,6 +50,17 @@ export class AlarmaMedicamentoPage implements OnInit {
 
       //Validación de formatos
 
+      //Valida que el nombre y apellidos no contengan números
+      const noNumbersRegex = /^[^\d]+$/;
+      if(
+        !noNumbersRegex.test(this.nombreMedicamento))
+      {
+        const titulo = "Nombre de medicamento invalidos";
+        const mensaje = "Por favor, valide que el campo de nombre de medicamento no contenga números";
+        this.alerta(titulo, mensaje)
+        return
+      }
+
       //validacion de cantidad
       if ( this.cantidadMedicamento <= 0||this.horasMedicamento <= 0 || this.diasMedicamento <= 0) {
         const titulo = "Cantidades invalidas";

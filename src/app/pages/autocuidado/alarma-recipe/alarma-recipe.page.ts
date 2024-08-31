@@ -43,6 +43,17 @@ export class AlarmaRecipePage implements OnInit {
 
       //Validación de formatos
 
+      //Valida que el nombre y apellidos no contengan números
+      const noNumbersRegex = /^[^\d]+$/;
+      if(
+        !noNumbersRegex.test(this.nombreDoctor))
+      {
+        const titulo = "Nombre de meciamento invalidos";
+        const mensaje = "Por favor, valide que el campo de nombre contenga números";
+        this.alerta(titulo, mensaje)
+        return
+      }
+
       //validacion de fecha (si es posterior al momento actual)
       const actual = new Date();
       const fecha = new Date(this.fechaAtencion);

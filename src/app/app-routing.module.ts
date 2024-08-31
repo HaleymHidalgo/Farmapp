@@ -59,10 +59,10 @@ const routes: Routes = [
     path: 'autocuidado/alarma-confirmar',
     loadChildren: () => import('./pages/autocuidado/alarma-confirmar/alarma-confirmar.module').then( m => m.AlarmaConfirmarPageModule)
   },
-
-
-
-
+  {
+    path: 'soporte/menu-principal',
+    loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
+  },
 
 ];
 

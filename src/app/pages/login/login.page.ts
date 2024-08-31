@@ -14,7 +14,7 @@ export class LoginPage implements OnInit {
     nombre: "Haleym",
     apellido_p: "Hidalgo",
     apellido_m: "Torres",
-    email:"haleym@mail.com",
+    email:"haleym@gmail.com",
     telefono:"+56987654321",
     direccion:"El arbol 123. Comuna",
     imgPerfil:"haleym.png",
@@ -24,10 +24,10 @@ export class LoginPage implements OnInit {
 
   //Arreglo con los datos de un usuario 'Autocuidado'
   usuario_soporte: any = {
-    nombre: "Dondop",
+    nombre: "Dondup",
     apellido_p: "Berrios",
     apellido_m: "Perez",
-    email:"do.berrios@mail.com",
+    email:"dondup@gmail.com",
     telefono:"+56987654321",
     direccion:"El arbol 123. Comuna",
     imgPerfil:"haleym.png",
@@ -77,10 +77,22 @@ export class LoginPage implements OnInit {
         }
         //Redireccionamos a la pag principal (autocuidado)
         this.router.navigate(['/autocuidado/menu-principal'], navigationextras);
-      }else{
-        //Si el login es correcto, redireccionar a la vista de Soporte (Pag. Principal)
+      } else if(this.usuario_auto.rol == "soporte"){
       }
-    }else{
+    }
+    else if (this.email == this.usuario_soporte.email && this.password == this.usuario_soporte.password){
+      if(this.usuario_soporte.rol == "soporte"){
+        //Preparamos la data para enviarla a la siguiente pagina
+        let navigationextras: NavigationExtras = {
+          state: {
+            nuevoUsuario: this.usuario_soporte
+          }
+        }
+        //Redireccionamos a la pag principal (autocuidado)
+        this.router.navigate(['/soporte/menu-principal'], navigationextras);
+      }
+    }
+    else{
       //Si el login es incorrecto, mostrar una alerta de error
       const titulo = "Credenciales incorrectas";
       const mensaje = "Por favor, ingrese sus datos nuevamente";

@@ -66,6 +66,10 @@ const routes: Routes = [
     path: 'buscar-farmacia',
     loadChildren: () => import('./pages/buscar-farmacia/buscar-farmacia.module').then( m => m.BuscarFarmaciaPageModule)
   },
+  {
+    path: 'mapa',
+    loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
+  },
 
 
 

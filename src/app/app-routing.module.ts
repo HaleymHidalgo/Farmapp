@@ -62,7 +62,11 @@ const routes: Routes = [
   {
     path: 'autocuidado/perfil-emergencia',
     loadChildren: () => import('./pages/autocuidado/perfil-emergencia/perfil-emergencia.module').then( m => m.PerfilEmergenciaPageModule)
+  },  {
+    path: 'buscar-farmacia',
+    loadChildren: () => import('./pages/buscar-farmacia/buscar-farmacia.module').then( m => m.BuscarFarmaciaPageModule)
   },
+
 
 
 ];

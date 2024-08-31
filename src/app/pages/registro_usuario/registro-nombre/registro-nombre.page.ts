@@ -47,6 +47,19 @@ export class RegistroNombrePage implements OnInit {
     this.nuevoUsuario.apellido_p = this.apellido_p;
     this.nuevoUsuario.apellido_m = this.apellido_m;
 
+    //Valida que el nombre y apellidos no contengan números
+    const noNumbersRegex = /^[^\d]+$/;
+    if(
+      !noNumbersRegex.test(this.nombre) || 
+      !noNumbersRegex.test(this.apellido_p) || 
+      !noNumbersRegex.test(this.apellido_m))
+    {
+      const titulo = "Nombre y/o apellidos invalidos";
+      const mensaje = "Por favor, valide que los campos de nombre y apellidos no contengan números";
+      this.alerta(titulo, mensaje)
+      return
+    }
+
     //Preparamos la data para enviarla a la siguiente pagina
     let navigationextras: NavigationExtras = {
       state: {

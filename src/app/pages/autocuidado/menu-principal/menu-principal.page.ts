@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-menu-principal',
@@ -10,7 +11,7 @@ export class MenuPrincipalPage implements OnInit {
   //arreglo donde se guarda la data del usuario
   usuario!: any;
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute) {
+  constructor(private router: Router, private activatedroute: ActivatedRoute, private menucontroller: MenuController) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -22,6 +23,8 @@ export class MenuPrincipalPage implements OnInit {
   }
 
   ngOnInit() {
+    this.menucontroller.enable(false, 'soporte');
+    this.menucontroller.enable(true, 'autocuidado');
   }
 
   nuevaAlarma(){

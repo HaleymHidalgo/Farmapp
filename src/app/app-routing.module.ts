@@ -56,20 +56,20 @@ const routes: Routes = [
     loadChildren: () => import('./pages/autocuidado/alarma-confirmar/alarma-confirmar.module').then( m => m.AlarmaConfirmarPageModule)
   },
   {
-    path: 'soporte/menu-principal',
-    loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
-  },
-  {
     path: 'autocuidado/perfil-emergencia',
     loadChildren: () => import('./pages/autocuidado/perfil-emergencia/perfil-emergencia.module').then( m => m.PerfilEmergenciaPageModule)
   },
   {
     path: 'autocuidado/buscar-farmacia',
-    loadChildren: () => import('./pages/buscar-farmacia/buscar-farmacia.module').then( m => m.BuscarFarmaciaPageModule)
+    loadChildren: () => import('./pages/autocuidado/buscar-farmacia/buscar-farmacia.module').then( m => m.BuscarFarmaciaPageModule)
   },
   {
     path: 'autocuidado/mapa',
-    loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
+    loadChildren: () => import('./pages/autocuidado/mapa/mapa.module').then( m => m.MapaPageModule)
+  },
+  {
+    path: 'soporte/menu-principal',
+    loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
   {
     path: 'soporte/pregunta-seguridad',
@@ -82,6 +82,10 @@ const routes: Routes = [
   {
     path: 'soporte/cambiar-password',
     loadChildren: () => import('./pages/soporte/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
   },
 
 

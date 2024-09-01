@@ -14,7 +14,7 @@
     <!--Foto de perfil organizada-->
     <ion-row>
       <ion-col style="border-radius: 100%; max-width: 200px; max-height: 200px; margin: 2%;">
-        <img class="imagen-perfil" src="../../../../assets/images/img-perfil.jpg" alt="Foto de perfil">
+        <img class="imagen-perfil" src="../../../../assets/images/img-contacto.jpg" alt="Foto de contacto">
       </ion-col>
       <ion-col style="max-width: 200px; max-height: 200px;">
         <img class="icono-perfil" src="../../../../assets/images/esculapio.png" alt="Vara de esculapio">
@@ -26,7 +26,7 @@
       <ion-row class="ribete" >
         <ion-col style="max-width: 75%; max-height: 100%;">
           <h4 class="texto-ribete">
-            Pulsa para editar tus datos personales
+            Pulsa para editar los datos de tu contacto
           </h4>
         </ion-col>
         <ion-col style="max-width: 25%; max-height: 100%;">
@@ -74,12 +74,11 @@
 
   <!--Seccion de botones-->
   <ion-row>
-    <ion-col>
-      <ion-button [routerLink]="['/autocuidado/perfil-emergencia']" expand="block" style="margin-left: 4%;">Contacto de emergencia</ion-button>
+    <ion-col style="max-width: 25%;"></ion-col>
+    <ion-col style="max-width: 50%;">
+      <ion-button style="margin-bottom: 20px;" expand="block">Llamar contacto</ion-button>
     </ion-col>
-    <ion-col>
-      <ion-button expand="block" style="margin-right: 4%;">Historial de seguimiento</ion-button>
-    </ion-col>
+    <ion-col style="max-width: 25%"></ion-col>
   </ion-row>
 
 </ion-content>

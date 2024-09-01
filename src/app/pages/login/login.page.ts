@@ -77,7 +77,6 @@ export class LoginPage implements OnInit {
         }
         //Redireccionamos a la pag principal (autocuidado)
         this.router.navigate(['/autocuidado/menu-principal'], navigationextras);
-      } else if(this.usuario_auto.rol == "soporte"){
       }
     }
     else if (this.email == this.usuario_soporte.email && this.password == this.usuario_soporte.password){

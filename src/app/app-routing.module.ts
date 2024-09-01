@@ -59,6 +59,21 @@ const routes: Routes = [
     path: 'soporte/menu-principal',
     loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
+  {
+    path: 'soporte/pregunta-seguridad',
+    loadChildren: () => import('./pages/soporte/pregunta-seguridad/pregunta-seguridad.module').then( m => m.PreguntaSeguridadPageModule)
+  },
+  {
+    path: 'soporte/opciones-cliente',
+    loadChildren: () => import('./pages/soporte/opciones-cliente/opciones-cliente.module').then( m => m.OpcionesClientePageModule)
+  },
+  {
+    path: 'soporte/cambiar-password',
+    loadChildren: () => import('./pages/soporte/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
+  },
+
+
+
 
 ];
 

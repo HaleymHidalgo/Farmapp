@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <div>
+    <p>Para validar la identidad del cliente, el debera responderte a la siguiente pregunta:</p>
+  </div>
+  <div class="ion-text-start" style="height: 50%;">
+    <br/>
+    <ion-input 
+      label="¿Cuál es el nombre de tu primer hijo?" 
+      label-placement="floating"
+      fill="outline"
+      placeholder="Nombre"
+      [(ngModel)]="respuesta"
+    ></ion-input>
+    <br />
+    <ion-button 
+      color="success" 
+      expand="block"
+      (click)="validarRespuesta()"
+      >Continuar
+    </ion-button>
+    <ion-button 
+      color="danger" 
+      expand="block"
+      [routerLink]="['/soporte/menu-principal']"
+      >Cancelar
+    </ion-button>
+  </div>
+</ion-content>

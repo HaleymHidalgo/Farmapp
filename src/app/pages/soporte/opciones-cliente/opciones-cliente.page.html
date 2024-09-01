@@ -1,0 +1,34 @@
+<ion-menu></ion-menu>
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Opciones del Cliente</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" scroll-y="false">
+    <div>
+      <h1 class="titulo-seccion">María Muñoz</h1>
+    </div>
+    <div class="div-opciones">
+      <!-- Cambiar contraseña -->
+      <ion-button 
+        size="large" 
+        class="btn-opcion" 
+        color="primary" 
+        [routerLink]="['/soporte-cambiar-password']"
+        >Cambiar Contraseña
+      </ion-button>
+      <!-- Deshabilitar Usuario -->
+      <ion-button 
+        size="large" 
+        class="btn-opcion" 
+        color="primary" 
+        (click)="deshabilitarUsuario()"
+      >Deshabilitar Usuario
+    </ion-button>
+    </div>
+</ion-content>

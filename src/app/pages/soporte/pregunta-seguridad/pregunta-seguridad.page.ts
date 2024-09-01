@@ -27,9 +27,15 @@ export class PreguntaSeguridadPage implements OnInit {
     }
 
     //Validamos que la respuesta sea correcta
-    if(this.respuesta.toLowerCase() == this.respuestaCorrecta){
-      this.router.navigate(['/soporte/opciones-cliente']);
+    if(this.respuesta.toLowerCase() != this.respuestaCorrecta){
+      const titulo = "Respuesta incorrecta";
+      const mensaje = "la respuesta ingresada no es correcta, por favor intente de nuevo";
+      this.alerta(titulo, mensaje);
+      return;
     }
+
+    //Si la respuesta es correcta redirigimos al usuario a la pagina de opciones de cliente
+    this.router.navigate(['/soporte/opciones-cliente']);
   }
 
 

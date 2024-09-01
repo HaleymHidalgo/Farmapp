@@ -63,6 +63,11 @@ const routes: Routes = [
     path: 'soporte/pregunta-seguridad',
     loadChildren: () => import('./pages/soporte/pregunta-seguridad/pregunta-seguridad.module').then( m => m.PreguntaSeguridadPageModule)
   },
+  {
+    path: 'soporte/opciones-cliente',
+    loadChildren: () => import('./pages/soporte/opciones-cliente/opciones-cliente.module').then( m => m.OpcionesClientePageModule)
+  },
+
 
 
 ];

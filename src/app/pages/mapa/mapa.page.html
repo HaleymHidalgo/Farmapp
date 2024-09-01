@@ -1,5 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-back-button text="">
+        </ion-back-button>
+      </ion-buttons>
     <ion-title>Mapa</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -7,6 +11,11 @@
 <ion-content [fullscreen]="true"  class="ion-padding">
   <div>
     <!--Barra de busqueda-->
+
+    <div style="text-align: center; margin-top: 75px;">
+      <h1 class="ion-text-bold">¿Buscar en otra direccion?</h1>
+    </div>
+
     <ion-row style="margin-top: 25px;">
       <ion-col style="min-width: 75%;">
         <ion-input 
@@ -37,6 +46,6 @@
     <img
     src="../../../assets/images/mapa.png"
     alt="Mapa de farmacias"
-    style="background-color: rgb(28, 91, 109); padding: 2px; border-radius: 5px; margin-top: 25px;">
+    style="background-color: rgb(28, 91, 109); padding: 2px; border-radius: 5px; margin-top: 20%;">
   </div>
 </ion-content>

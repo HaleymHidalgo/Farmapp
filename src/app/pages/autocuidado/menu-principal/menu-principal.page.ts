@@ -11,6 +11,22 @@ export class MenuPrincipalPage implements OnInit {
   //arreglo donde se guarda la data del usuario
   usuario!: any;
 
+  verAlarma:boolean = true;
+
+  alarmas:any = [
+    {
+      nombre: "Losartan",
+      dosis: "12,5 mg",
+      hora: "11:00"
+    },
+
+    {
+      nombre: "Paracetamol",
+      dosis: "500 mg",
+      hora: "21:00"
+    }
+  ];
+
   constructor(private router: Router, private activatedroute: ActivatedRoute, private menucontroller: MenuController) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -30,6 +46,10 @@ export class MenuPrincipalPage implements OnInit {
   nuevaAlarma(){
     //Redireccionamos a la pagina agregar-alarma
     this.router.navigate(['/autocuidado/agregar-alarma']);
+  }
+
+  verDetalles(){
+    this.verAlarma=!this.verAlarma;
   }
 
 }

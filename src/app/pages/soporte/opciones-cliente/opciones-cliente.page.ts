@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, MenuController } from '@ionic/angular';
 
 @Component({
@@ -8,7 +9,7 @@ import { AlertController, MenuController } from '@ionic/angular';
 })
 export class OpcionesClientePage implements OnInit {
 
-  constructor(private menucontroller: MenuController, private alertcontroller: AlertController) { }
+  constructor(private menucontroller: MenuController, private alertcontroller: AlertController, private router: Router) { }
 
   ngOnInit() {
     this.menucontroller.enable(true, 'soporte');
@@ -24,7 +25,19 @@ export class OpcionesClientePage implements OnInit {
     const alert = await this.alertcontroller.create({
       header: titulo,
       message: mensaje,
-      buttons: ['Cancelar', 'Aceptar']
+      buttons: [{
+        text: 'Cancelar',
+        role: 'cancel',
+        cssClass: 'danger'
+      },
+      {
+        text: 'Confirmar',
+        role: 'ok',
+        cssClass: 'success',
+        handler: () => {
+          this.router.navigate(['soporte/menu-principal']);
+        }
+      }]
     });
 
     await alert.present();

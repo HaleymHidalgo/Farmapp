@@ -67,6 +67,11 @@ const routes: Routes = [
     path: 'soporte/opciones-cliente',
     loadChildren: () => import('./pages/soporte/opciones-cliente/opciones-cliente.module').then( m => m.OpcionesClientePageModule)
   },
+  {
+    path: 'soporte/cambiar-password',
+    loadChildren: () => import('./pages/soporte/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
+  },
+
 
 
 

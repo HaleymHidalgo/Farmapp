@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { InfiniteScrollCustomEvent, MenuController } from '@ionic/angular';
+import { Component, inject, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-menu-principal',
@@ -15,7 +15,4 @@ export class MenuPrincipalPage implements OnInit {
     this.menucontroller.enable(false, 'autocuidado');
   }
 
-  openMenu() {
-    this.menucontroller.open('menu');
-  }
 }

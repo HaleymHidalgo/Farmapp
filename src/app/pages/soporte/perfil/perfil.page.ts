@@ -40,8 +40,8 @@ export class PerfilPage implements OnInit {
   constructor(private menucontroller: MenuController) { }
 
   ngOnInit() {
-    this.menucontroller.enable(false, 'soporte');
-    this.menucontroller.enable(true, 'autocuidado');
+    this.menucontroller.enable(true, 'soporte');
+    this.menucontroller.enable(false, 'autocuidado');
   }
 
   editarCampos() {

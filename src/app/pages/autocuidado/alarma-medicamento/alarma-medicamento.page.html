@@ -6,7 +6,7 @@
   <div>
     <p>Ahora debes añadir la información del Medicamento<br>incluyendo sus indicaciones</p>
   </div>
-  <div class="ion-text-start formulario" style="height: 50%;">
+  <div class="ion-text-start formulario" style="height: 40%;">
     <br/>
     <ion-input 
       label="Nombre del Medicamento" 
@@ -43,14 +43,19 @@
       [(ngModel)]="horasMedicamento"
     ></ion-input>
     <br/>
+  </div>
+  <div>
     <ion-button 
       color="success" 
       expand="block"
       (click)="siguienteFormulario()"
       >Continuar
     </ion-button>
-  </div>
-  <div>
-    <ion-button color="danger" [routerLink]="['/autocuidado/menu-principal']">Cancelar</ion-button>
+    <br>
+    <ion-button 
+      color="danger" 
+      [routerLink]="['/autocuidado/menu-principal']"
+      >Cancelar
+    </ion-button>
   </div>
 </ion-content>

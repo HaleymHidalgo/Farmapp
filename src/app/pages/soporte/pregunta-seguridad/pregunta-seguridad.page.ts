@@ -10,7 +10,7 @@ import { AlertController } from '@ionic/angular';
 export class PreguntaSeguridadPage implements OnInit {
   //variable que almacena la respuesta a la pregunta de seguridad
   respuesta!: string;
-  respuestaCorrecta: string = "alan";
+  respuestaCorrecta: string = "toby";
 
   constructor(private alertcontroller: AlertController, private router: Router) { }
 

@@ -84,6 +84,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/soporte/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
   },
   {
+    path: 'soporte/perfil',
+    loadChildren: () => import('./pages/soporte/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
   },

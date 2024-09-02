@@ -13,19 +13,19 @@ export class PerfilPage implements OnInit {
   campos:any = [
     {
       label_input: "Nombre",
-      dato_usuario: "Haleym"
+      dato_usuario: "Dondup"
     },
     {
       label_input: "Apellido paterno",
-      dato_usuario: "Hidalgo"
+      dato_usuario: "Berrios"
     },
     {
       label_input: "Apellido materno",
-      dato_usuario: "Torres"
+      dato_usuario: "Perez"
     },
     {
       label_input: "Correo electronico",
-      dato_usuario: "haleym@mail.com"
+      dato_usuario: "dondup@mail.com"
     },
     {
       label_input: "Telefono",

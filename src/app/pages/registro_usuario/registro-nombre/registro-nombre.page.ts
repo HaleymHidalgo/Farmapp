@@ -42,10 +42,6 @@ export class RegistroNombrePage implements OnInit {
       this.alerta(titulo, mensaje)
       return;
     }
-    //Si pasa la validación, entonces guarda los datos
-    this.nuevoUsuario.nombre = this.nombre;
-    this.nuevoUsuario.apellido_p = this.apellido_p;
-    this.nuevoUsuario.apellido_m = this.apellido_m;
 
     //Valida que el nombre y apellidos no contengan números
     const noNumbersRegex = /^[^\d]+$/;
@@ -60,6 +56,11 @@ export class RegistroNombrePage implements OnInit {
       return
     }
 
+    //Si pasa la validación, entonces guarda los datos
+    this.nuevoUsuario.nombre = this.nombre;
+    this.nuevoUsuario.apellido_p = this.apellido_p;
+    this.nuevoUsuario.apellido_m = this.apellido_m;
+    
     //Preparamos la data para enviarla a la siguiente pagina
     let navigationextras: NavigationExtras = {
       state: {

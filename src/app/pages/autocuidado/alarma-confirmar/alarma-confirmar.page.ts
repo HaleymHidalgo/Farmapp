@@ -11,6 +11,8 @@ export class AlarmaConfirmarPage implements OnInit {
   //Variable para almacenar la información del recipe
   recipe!: any;
 
+  verAlarma:boolean = false;
+
   constructor(private router: Router, private activatedroute: ActivatedRoute, private alertcontroller: AlertController) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -25,4 +27,7 @@ export class AlarmaConfirmarPage implements OnInit {
   ngOnInit() {
   }
 
+  verDetalles(){
+    this.verAlarma=!this.verAlarma;
+  }
 }

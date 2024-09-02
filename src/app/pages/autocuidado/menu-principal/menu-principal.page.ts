@@ -11,7 +11,7 @@ export class MenuPrincipalPage implements OnInit {
   //arreglo donde se guarda la data del usuario
   usuario!: any;
 
-  verAlarma:boolean = true;
+  verAlarma:boolean = false;
 
   alarmas:any = [
     {

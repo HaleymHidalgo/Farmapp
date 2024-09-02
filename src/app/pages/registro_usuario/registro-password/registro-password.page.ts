@@ -14,6 +14,7 @@ export class RegistroPasswordPage implements OnInit {
   //Variables del formulario
   password!: string;
   confirmPassword!: string;
+  pregunta!: string;
 
   constructor(private router: Router, private activatedroute: ActivatedRoute, private alertcontroller: AlertController) {
     //Capturamos la información de NavigationExtras

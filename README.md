@@ -17,7 +17,7 @@ Asegúrate de tener instalado lo siguiente en tu máquina:
 ### Pasos a seguir
 
 Primero, abre una terminal o cmd (windows).
-* clona el repositorio del proyecto desde GitHub.
+* Clone el repositorio del proyecto desde GitHub.
 
 ```bash
 git clone https://github.com/Volkergz/Farmapp/tree/master

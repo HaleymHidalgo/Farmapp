@@ -34,7 +34,7 @@ export class RegistroPasswordPage implements OnInit {
   siguienteFormulario() {
     //Si el usuario no ingreso valores en los inputs o los dejo vacios
     if (this.password == undefined || this.confirmPassword == undefined||
-        this.password == "" || this.confirmPassword == "")
+        this.password == "" || this.confirmPassword == "" || this.pregunta == undefined)
     {
       const titulo = "Campos vacios";
       const mensaje = "Por favor, valide que los campos contengan su información";
@@ -43,10 +43,38 @@ export class RegistroPasswordPage implements OnInit {
     }
 
     //Validación de formatos
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if(!passwordRegex.test(this.password)){
+    //8 caracteres minimo
+    const longitudClave = /^.{8,}$/;
+    if(!longitudClave.test(this.password)){
       const titulo = "Contraseña invalida";
-      const mensaje = "Por favor, valide que su contraseña concuerde con los requisitos especificados";
+      const mensaje = "La contraseña debe contener 8 caracteres como minimo";
+      this.alerta(titulo, mensaje)
+      return;
+    }
+
+    //Una mayuscula
+    const tieneMayuscula = /[A-Z]/;
+    if(!tieneMayuscula.test(this.password)){
+      const titulo = "Contraseña invalida";
+      const mensaje = "Su contraseña debe contener al menos una letra mayuscula";
+      this.alerta(titulo, mensaje)
+      return;
+    }
+
+    //Un numero
+    const tieneNumero = /[0-9]/;
+    if(!tieneNumero.test(this.password)){
+      const titulo = "Contraseña invalida";
+      const mensaje = "Su contraseña debe contener al menos un numero";
+      this.alerta(titulo, mensaje)
+      return;
+    }
+    
+    //Caracteres especiales
+    const caracteresEspeciales = /[!@#$%^&*(),.?":{}|<>]/;
+    if(!caracteresEspeciales.test(this.password)){
+      const titulo = "Contraseña invalida";
+      const mensaje = "Su contraseña debe contener al menos un caracter especial";
       this.alerta(titulo, mensaje)
       return;
     }
@@ -60,6 +88,7 @@ export class RegistroPasswordPage implements OnInit {
     }
 
     //Si pasa las validaciones, entonces guarda los datos
+    console.log("Paso")
     this.nuevoUsuario.password = this.password;
 
     //Preparamos la data para enviarla a la siguiente pagina

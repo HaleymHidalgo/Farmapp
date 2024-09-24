@@ -2,12 +2,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
-  <img src="../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <img src="../../../assets/icon/logo.webp" alt="Logo Farmapp" style="min-height: 30%; max-height: 30%;">  
   <div>
     <h1 class="ion-text-bold">¡Inicia sesión!</h1>
     <p>Ingresa tus datos para acceder a tu perfil</p>
   </div>
-  <div class="ion-text-start" style="height: 35%;">
+
+  <div class="ion-text-start">
     <br/>
     <ion-input 
       label="Correo electronico" 
@@ -35,7 +36,9 @@
       >Continuar
     </ion-button>
   </div>
-  <div>
+
+
+  <div style="margin-top: 25px;">
     <a [routerLink]="['/registro-nombre']"><p>¿No tienes una cuenta?</p></a>
     <a [routerLink]=""><p>¿Necesitas ayuda? Llamar al soporte</p></a>
   </div>

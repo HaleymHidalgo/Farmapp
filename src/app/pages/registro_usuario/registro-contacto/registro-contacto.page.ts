@@ -12,7 +12,7 @@ export class RegistroContactoPage implements OnInit {
   nuevoUsuario!: any;
 
   //Variables del formulario
-  nrTelefono!:string;
+  nrTelefono: string = "+569";
   email!:string;
   direccion!:string;
 

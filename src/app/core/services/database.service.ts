@@ -37,7 +37,9 @@ export class DatabaseService {
   //Variables que contienen los observables
   listadoTipoUsuario = new BehaviorSubject([]);
   
-  constructor(private sqlite:SQLite, private platform:Platform, private alerts:AlertsService) { }
+  constructor(private sqlite:SQLite, private platform:Platform, private alerts:AlertsService) {
+    this.crearDB();
+  }
 
   //Función que observa el stado de la base de datos
   dbState() {
@@ -54,6 +56,7 @@ export class DatabaseService {
       .then((db:SQLiteObject) => {
         this.database = db;
         this.crearTablas();
+        this.alerts.mostrar('DB Creada', "Grande Hale <3");
       })
       .catch(error => {
         this.alerts.mostrar('Error al crear DB', JSON.stringify(error));
@@ -66,11 +69,13 @@ export class DatabaseService {
     //Ejecutamos de manera asincrona las sentencias de creación de tablas
     try {
       await this.database.executeSql(this.tabla_tipoUsuario,[]);
+      /*
       await this.database.executeSql(this.tabla_medicamento,[]);
       await this.database.executeSql(this.tabla_indicacion,[]);
       await this.database.executeSql(this.tabla_alarma,[]);
       await this.database.executeSql(this.tabla_contactoEmergencia,[]);
       await this.database.executeSql(this.tabla_usuario,[]);
+      */
     } catch (error) {
       this.alerts.mostrar('Error al crear tablas', JSON.stringify(error));
     }

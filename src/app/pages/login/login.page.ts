@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertsService } from 'src/app/core/services/alerts.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-login',
@@ -42,7 +43,7 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
-  constructor(private router: Router, private alertcontroller: AlertController, private activatedroute: ActivatedRoute) {
+  constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -54,6 +55,7 @@ export class LoginPage implements OnInit {
   }
   
   ngOnInit() {
+
   }
 
   validarLogin() {
@@ -61,7 +63,7 @@ export class LoginPage implements OnInit {
     if(!this.email.includes("@")) { 
       const titulo = "Correo Electronico invalido";
       const mensaje = "Por favor, ingrese sus datos nuevamente";
-      this.alertaLogin(titulo, mensaje);
+      this.alert.mostrar(titulo, mensaje);
       return;
     }
 
@@ -95,17 +97,7 @@ export class LoginPage implements OnInit {
       //Si el login es incorrecto, mostrar una alerta de error
       const titulo = "Credenciales incorrectas";
       const mensaje = "Por favor, ingrese sus datos nuevamente";
-      this.alertaLogin(titulo, mensaje);
+      this.alert.mostrar(titulo, mensaje);
     }
   }
-
-  async alertaLogin(titulo:string , mensaje: string){
-    const alert = await this.alertcontroller.create({
-      header: titulo,
-      message: mensaje,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }
-
 }

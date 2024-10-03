@@ -19,31 +19,26 @@ export class DatabaseService {
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   //Variables que contienen las sentencias de creación de tablas
-  tabla_tipoUsuario = 'CREATE TABLE IF NOT EXISTS tipo_usuario (id_tipo INTEGER NOT NULL UNIQUE, nombre TEXT NOT NULL, PRIMARY KEY("id_tipo"));';
+  tabla_tipoUsuario = 'CREATE TABLE IF NOT EXISTS "TIPO_USUARIO" ("id_tipo" INTEGER PRIMARY KEY autoincrement, "nombre" TEXT NOT NULL);';
 
-  tabla_medicamento = 'CREATE TABLE IF NOT EXISTS "MEDICAMENTO" ("id_medicamento" INTEGER NOT NULL UNIQUE,	"nombre" TEXT NOT NULL, "formato" INTEGER NOT NULL,	PRIMARY KEY("id_medicamento"), FOREIGN KEY ("id_medicamento") REFERENCES "INDICACION"("id_medicamento") ON UPDATE NO ACTION ON DELETE NO ACTION);';
-
-  tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER NOT NULL,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	PRIMARY KEY("id_indicacion"),	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario")	ON UPDATE NO ACTION ON DELETE NO ACTION);';
-
-  tabla_alarma = 'CREATE TABLE IF NOT EXISTS "ALARMA" ("id_indicación" INTEGER NOT NULL,	"fecha_hora" TEXT NOT NULL, "status" INTEGER NOT NULL	FOREIGN KEY ("id_indicación") REFERENCES "INDICACION"("id_indicacion")	ON UPDATE NO ACTION ON DELETE NO ACTION);';
+  tabla_medicamento = 'CREATE TABLE IF NOT EXISTS "MEDICAMENTO" ("id_medicamento" INTEGER NOT NULL UNIQUE,	"nombre" TEXT NOT NULL, "formato" INTEGER NOT NULL,	PRIMARY KEY("id_medicamento"));';
 
   tabla_contactoEmergencia = 'CREATE TABLE IF NOT EXISTS "CONTACTO_EMERGENCIA" (	"id_contacto" INTEGER NOT NULL UNIQUE,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"email" TEXT NOT NULL,	"direccion" TEXT NOT NULL,	"img_url" TEXT NOT NULL,	PRIMARY KEY("id_contacto"));';
 
-  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER NOT NULL UNIQUE,	"email" TEXT NOT NULL,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL,	"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" TEXT,	PRIMARY KEY("id_usuario"),	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo")	ON UPDATE NO ACTION ON DELETE NO ACTION,	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto")	ON UPDATE NO ACTION ON DELETE NO ACTION);';
+  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER NOT NULL UNIQUE,	"email" TEXT NOT NULL,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL,	"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" TEXT,	PRIMARY KEY("id_usuario"),	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"));';
+
+  tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER NOT NULL,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	PRIMARY KEY("id_indicacion"),	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario"), FOREIGN KEY ("id_medicamento") REFERENCES "MEDICAMENTO"("id_medicamento"));';
+
+  tabla_alarma = 'CREATE TABLE IF NOT EXISTS "ALARMA" ("id_indicacion" INTEGER NOT NULL,	"fecha_hora" TEXT NOT NULL, "status" INTEGER NOT NULL,	FOREIGN KEY ("id_indicacion") REFERENCES "INDICACION"("id_indicacion"));';
 
   //Variables que contiene las sentencias de población de tablas
-  datos_tipoUsuario = 'INSERT INTO tipo_usuario (id_tipo, nombre) VALUES (1, "Autocuidado"), (2, "Soporte");';
+  datos_tipoUsuario = "INSERT or IGNORE INTO tipo_usuario (id_tipo, nombre) VALUES (1, 'Autocuidado'), (2, 'Soporte');"; 
 
   //Variables que contienen los observables
   listadoTipoUsuario = new BehaviorSubject([]);
   
   constructor(private sqlite:SQLite, private platform:Platform, private alerts:AlertsService) {
     this.crearDB();
-  }
-
-  //Función que observa el stado de la base de datos
-  dbState() {
-    return this.isDBReady.asObservable();
   }
 
   //Función que inicializa la base de datos
@@ -61,7 +56,18 @@ export class DatabaseService {
       .catch(error => {
         this.alerts.mostrar('Error al crear DB', JSON.stringify(error));
       });
+      /*
+      this.sqlite.deleteDatabase({
+        name: 'farmapp.db',
+        location: 'default'
+      })
+    */
     })
+  }
+
+  //Función que observa el stado de la base de datos
+  dbState() {
+    return this.isDBReady.asObservable();
   }
 
   //Función que crea las tablas
@@ -69,20 +75,19 @@ export class DatabaseService {
     //Ejecutamos de manera asincrona las sentencias de creación de tablas
     try {
       await this.database.executeSql(this.tabla_tipoUsuario,[]);
-      /*
       await this.database.executeSql(this.tabla_medicamento,[]);
-      await this.database.executeSql(this.tabla_indicacion,[]);
-      await this.database.executeSql(this.tabla_alarma,[]);
       await this.database.executeSql(this.tabla_contactoEmergencia,[]);
       await this.database.executeSql(this.tabla_usuario,[]);
-      */
+      await this.database.executeSql(this.tabla_indicacion,[]);
+      await this.database.executeSql(this.tabla_alarma,[]);
+      
     } catch (error) {
       this.alerts.mostrar('Error al crear tablas', JSON.stringify(error));
     }
 
     //Ejecutamos de manera asincrona las sentencias de población de tablas
     try {
-      this.database.executeSql(this.datos_tipoUsuario,[]);
+      await this.database.executeSql(this.datos_tipoUsuario,[]);
     } catch (error) {
       this.alerts.mostrar('Error al poblar tablas', JSON.stringify(error));
     };

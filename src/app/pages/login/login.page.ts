@@ -53,10 +53,8 @@ export class LoginPage implements OnInit {
       }
     });
   }
-  
-  ngOnInit() {
 
-  }
+  ngOnInit() { }
 
   validarLogin() {
     //Validaciones de formato (Correo)

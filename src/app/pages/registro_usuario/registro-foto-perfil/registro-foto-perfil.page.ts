@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Camera } from '@capacitor/camera';
+import { Usuario } from 'src/app/core/models/usuario';
+import { AlertsService } from 'src/app/core/services/alerts.service';
+import { CamaraService } from 'src/app/core/services/camara.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-registro-foto-perfil',
@@ -8,12 +13,14 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 })
 export class RegistroFotoPerfilPage implements OnInit {
   //Variable para el nuevo usuario
-  nuevoUsuario!: any;
+  nuevoUsuario!: Usuario;
 
   //Variables del formulario
   imgPerfil!: string;
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute) {
+  img: any;
+
+  constructor(private router: Router, private activatedroute: ActivatedRoute,private db: DatabaseService, private camara:CamaraService, private alert:AlertsService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -25,25 +32,31 @@ export class RegistroFotoPerfilPage implements OnInit {
   }
 
   ngOnInit() {
+    Camera.requestPermissions();
   }
 
-  //Función que se ejecuta al presionar el botón de continuar
-  siguienteFormulario() {
-    //Si el usuario no ingreso valores en los inputs o los dejo vacios
+  //Función que se ejecuta al presionar el botón de camara
+  
 
-    //Validación de formatos
+  //Función que se ejecuta al presionar el botón de galeria
 
+
+  //Función que registra a un usuario
+  async registrarUsuario() {
     //Si pasa las validaciones, entonces guarda los datos
-    this.nuevoUsuario.imgPerfil = this.imgPerfil;
+    this.nuevoUsuario.id_tipo_usuario = 1;
 
-    //Preparamos la data para enviarla a la siguiente pagina
-    let navigationextras: NavigationExtras = {
-      state: {
-        nuevoUsuario: this.nuevoUsuario
-      }
-    }
+    //se espera la url
+    await this.camara.tomarFoto();
+
+
+
+
+    //Registramos al usuario en la base de datos
+    //this.db.registrarUsuario(this.nuevoUsuario);
+
 
     //Redirecciona al siguiente formulario
-    this.router.navigate(['/'], navigationextras);
+    //this.router.navigate(['/autocuidado/menu-principal']);
   }
 }

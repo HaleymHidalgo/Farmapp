@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Usuario } from 'src/app/core/models/usuario';
+import { AlertsService } from 'src/app/core/services/alerts.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-registro-nombre',
@@ -14,19 +17,9 @@ export class RegistroNombrePage implements OnInit {
   apellido_m!: string;
 
   //Arreglo con los datos de un nuevo usuario
-  nuevoUsuario: any = {
-    nombre: "",
-    apellido_p: "",
-    apellido_m: "",
-    email:"",
-    telefono:"",
-    direccion:"",
-    imgPerfil:"",
-    password: "",
-    rol: "autocuidado"
-  };
+  nuevoUsuario = new Usuario();
 
-  constructor(private router: Router, private alertcontroller: AlertController) { }
+  constructor(private router: Router, private alertcontroller: AlertController, private db: DatabaseService, private alerts:AlertsService) { }
 
   ngOnInit() {
   }
@@ -39,7 +32,7 @@ export class RegistroNombrePage implements OnInit {
     {
       const titulo = "Campos vacios";
       const mensaje = "Por favor, valide que los campos contengan su información";
-      this.alerta(titulo, mensaje)
+      this.alerts.mostrar(titulo, mensaje)
       return;
     }
 
@@ -52,7 +45,7 @@ export class RegistroNombrePage implements OnInit {
     {
       const titulo = "Nombre y/o apellidos invalidos";
       const mensaje = "Por favor, valide que los campos de nombre y apellidos no contengan números";
-      this.alerta(titulo, mensaje)
+      this.alerts.mostrar(titulo, mensaje)
       return
     }
 
@@ -70,15 +63,6 @@ export class RegistroNombrePage implements OnInit {
 
     //Redirecciona al siguiente formulario
     this.router.navigate(['/registro-contacto'], navigationextras);
-  }
-
-  async alerta(titulo:string , mensaje: string){
-    const alert = await this.alertcontroller.create({
-      header: titulo,
-      message: mensaje,
-      buttons: ['OK']
-    });
-    await alert.present();
   }
 
 }

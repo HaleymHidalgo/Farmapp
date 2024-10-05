@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { AlertsService } from 'src/app/core/services/alerts.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-menu-principal',
@@ -27,14 +29,9 @@ export class MenuPrincipalPage implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute, private menucontroller: MenuController) {
-    //Capturamos la información de NavigationExtras
-    this.activatedroute.queryParams.subscribe(params => {
-      //Validamos si viene o no información desde la pagina
-      if(this.router.getCurrentNavigation()?.extras.state){
-        //Capturamos la información
-        this.usuario = this.router.getCurrentNavigation()?.extras?.state?.['nuevoUsuario']
-      }
+  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService) {
+    this.db.fetchUsuarioActual().subscribe(res => {
+      this.alert.mostrar(res.nombre+' '+res.apellido_p,"Bienvenido de vuelta ♥")
     });
   }
 

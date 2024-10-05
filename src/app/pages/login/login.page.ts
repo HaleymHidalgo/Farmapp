@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 
@@ -9,33 +10,6 @@ import { DatabaseService } from 'src/app/core/services/database.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  //Usuario temporal para hacer validaciones
-  //Arreglo con los datos de un usuario 'Autocuidado'
-  usuario_auto: any = {
-    nombre: "Haleym",
-    apellido_p: "Hidalgo",
-    apellido_m: "Torres",
-    email:"haleym@gmail.com",
-    telefono:"+56987654321",
-    direccion:"El arbol 123. Comuna",
-    imgPerfil:"haleym.png",
-    password: "123",
-    rol: "autocuidado"
-  };
-
-  //Arreglo con los datos de un usuario 'Autocuidado'
-  usuario_soporte: any = {
-    nombre: "Dondup",
-    apellido_p: "Berrios",
-    apellido_m: "Perez",
-    email:"dondup@gmail.com",
-    telefono:"+56987654321",
-    direccion:"El arbol 123. Comuna",
-    imgPerfil:"haleym.png",
-    password: "123",
-    rol: "soporte"
-  };
-
   //arreglo para el usuario que se registra
   nuevoUsuario!: any;
 
@@ -43,7 +17,7 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
-  constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService) {
+  constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService, private nativeStorage: NativeStorage) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -59,43 +33,36 @@ export class LoginPage implements OnInit {
   validarLogin() {
     //Validaciones de formato (Correo)
     if(!this.email.includes("@")) { 
-      const titulo = "Correo Electronico invalido";
-      const mensaje = "Por favor, ingrese sus datos nuevamente";
-      this.alert.mostrar(titulo, mensaje);
+      this.alert.mostrar("Correo Electronico invalido", "Por favor, ingrese sus datos nuevamente");
       return;
     }
 
-    //Validar que el usuario y contraseña coincidan con los del usuario temporal
-    if(this.email == this.usuario_auto.email && this.password == this.usuario_auto.password) {
-      //Si el login es correcto, redireccionar a la lista de medicamentos (Pag. Principal)
-      if(this.usuario_auto.rol == "autocuidado"){
-        //Preparamos la data para enviarla a la siguiente pagina
-        let navigationextras: NavigationExtras = {
-          state: {
-            nuevoUsuario: this.usuario_auto
+    this.db.isDBReady.subscribe(async (val) => {
+      //Validar que la base de datos esté lista
+      if(val) {
+        //Validar que el usuario exista y lo guarda en un Observable
+        await this.db.iniciarSesion(this.email, this.password);
+        //Obtener el usuario actual
+        this.db.fetchUsuarioActual().subscribe(res => {
+          //Validar que el usuario exista (0 es el valor por defecto)
+          if(res.id_usuario > 0) {
+            switch(res.id_tipo_usuario) {
+              case 1: 
+              //Si es un usuario 'Autocuidado'
+                this.router.navigate(['/autocuidado/menu-principal']);
+                break;
+              
+              case 2:
+                //Si es un usuario 'Soporte'
+                this.router.navigate(['/soporte/menu-principal']);
+                break;
+            }            
+          } else {
+            //Mostrar mensaje de error
+            this.alert.mostrar("Error de autenticación", "Usuario o contraseña incorrectos");
           }
-        }
-        //Redireccionamos a la pag principal (autocuidado)
-        this.router.navigate(['/autocuidado/menu-principal'], navigationextras);
+        });
       }
-    }
-    else if (this.email == this.usuario_soporte.email && this.password == this.usuario_soporte.password){
-      if(this.usuario_soporte.rol == "soporte"){
-        //Preparamos la data para enviarla a la siguiente pagina
-        let navigationextras: NavigationExtras = {
-          state: {
-            nuevoUsuario: this.usuario_soporte
-          }
-        }
-        //Redireccionamos a la pag principal (autocuidado)
-        this.router.navigate(['/soporte/menu-principal'], navigationextras);
-      }
-    }
-    else{
-      //Si el login es incorrecto, mostrar una alerta de error
-      const titulo = "Credenciales incorrectas";
-      const mensaje = "Por favor, ingrese sus datos nuevamente";
-      this.alert.mostrar(titulo, mensaje);
-    }
+    });
   }
 }

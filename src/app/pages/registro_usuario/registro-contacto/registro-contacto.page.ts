@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Usuario } from 'src/app/core/models/usuario';
+import { AlertsService } from 'src/app/core/services/alerts.service';
 
 @Component({
   selector: 'app-registro-contacto',
@@ -9,14 +11,14 @@ import { AlertController } from '@ionic/angular';
 })
 export class RegistroContactoPage implements OnInit {
   //Variable de nuevo usuario
-  nuevoUsuario!: any;
+  nuevoUsuario!: Usuario;
 
   //Variables del formulario
   nrTelefono: string = "+569";
   email!:string;
   direccion!:string;
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute, private alertcontroller: AlertController) {
+  constructor(private router: Router, private activatedroute: ActivatedRoute, private alertcontroller: AlertController, private alert:AlertsService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -38,7 +40,7 @@ export class RegistroContactoPage implements OnInit {
     {
       const titulo = "Campos vacios";
       const mensaje = "Por favor, valide que los campos contengan su información";
-      this.alerta(titulo, mensaje)
+      this.alert.mostrar(titulo, mensaje)
       return;
     }
 
@@ -49,7 +51,7 @@ export class RegistroContactoPage implements OnInit {
     if(!chilePhoneRegex.test(this.nrTelefono)){
       const titulo = "Telefono Invalido";
       const mensaje = "Por favor, valide que el numero de telefono este escrito correctamente";
-      this.alerta(titulo, mensaje)
+      this.alert.mostrar(titulo, mensaje)
       return;
     }
 
@@ -58,7 +60,7 @@ export class RegistroContactoPage implements OnInit {
     if(!emailRegex.test(this.email)){
       const titulo = "Correo electronico Invalido";
       const mensaje = "Por favor, valide que el correo electronico este escrito correctamente";
-      this.alerta(titulo, mensaje)
+      this.alert.mostrar(titulo, mensaje)
       return;
     }
 
@@ -76,14 +78,5 @@ export class RegistroContactoPage implements OnInit {
 
     //Redirecciona al siguiente formulario
     this.router.navigate(['/registro-password'], navigationextras);
-  }
-
-  async alerta(titulo:string , mensaje: string){
-    const alert = await this.alertcontroller.create({
-      header: titulo,
-      message: mensaje,
-      buttons: ['OK']
-    });
-    await alert.present();
   }
 }

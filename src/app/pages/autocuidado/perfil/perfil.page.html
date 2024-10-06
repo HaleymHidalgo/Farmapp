@@ -13,10 +13,10 @@
 
     <!--Foto de perfil organizada-->
     <ion-row>
-      <ion-col style="border-radius: 100%; max-width: 200px; max-height: 200px; margin: 2%;">
-        <img class="imagen-perfil" src="../../../../assets/images/img-perfil.jpg" alt="Foto de perfil">
+      <ion-col style="border-radius: 100%; max-width: 150px; max-height: 150px; margin: 2%;">
+        <img class="imagen-perfil" [src]="imgPerfil" alt="{{imgPerfil}}">
       </ion-col>
-      <ion-col style="max-width: 200px; max-height: 200px;">
+      <ion-col style="max-width: 150px; max-height: 150px;">
         <img class="icono-perfil" src="../../../../assets/images/esculapio.png" alt="Vara de esculapio">
       </ion-col>
     </ion-row>
@@ -24,61 +24,50 @@
     <!--Ribete con instrucciones y boton para editar-->
     <div>
       <ion-row class="ribete" >
-        <ion-col style="max-width: 75%; max-height: 100%;">
-          <h6 class="texto-ribete">
+        <ion-col style="max-width: 80%; max-height: 100%;">
+          <p class="texto-ribete">
             Pulsa para editar tus datos personales
-          </h6>
+          </p>
         </ion-col>
-        <ion-col style="max-width: 25%; max-height: 100%;">
-          <ion-button (click)="editarCampos()" class="boton-editar" fill="clear" shape="round">
+        <ion-col style="max-width: 20%; max-height: 100%;">
+          <ion-button (click)="editarCampos()" class="boton-editar" fill="clear" shape="round" *ngIf="!esEditable">
             <ion-icon name="create-outline" size="large"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
       
       <!--Campos con informacion del perfil bloqueados-->
-      <ion-card-content *ngIf="myVar">
+      <ion-card-content>
         <div *ngFor="let campo of campos">
           <ion-input
-          style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
-          label="{{campo.label_input}}"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="{{campo.dato_usuario}}"
-          disabled="true">
-            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="{{campo.label_input}}"
+            label-placement="stacked"
+            fill="solid"
+            value="{{campo.dato_usuario}}"
+            [readonly]="!esEditable">
           </ion-input>
         </div>
-
       </ion-card-content>
-
-      <!--Campos editables-->
-      <ion-card-content *ngIf="!myVar">
-
-        <div *ngFor="let campo of campos">
-          <ion-input
-          style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
-          label="{{campo.label_input}}"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="{{campo.dato_usuario}}"
-          [(ngModel)]="campo.dato_usuario">
-          </ion-input>
-        </div>
-
-      </ion-card-content>
-
     </div>
-
   </div>
 
   <!--Seccion de botones-->
-  <ion-row>
+  <ion-row *ngIf="!esEditable">
     <ion-col>
       <ion-button [routerLink]="['/autocuidado/perfil-emergencia']" expand="block" style="margin-left: 4%;">Contacto de emergencia</ion-button>
     </ion-col>
     <ion-col>
       <ion-button expand="block" style="margin-right: 4%;">Historial de seguimiento</ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="esEditable">
+    <ion-col>
+      <ion-button (click)="cancelarCambios()" color="danger" expand="block" style="margin-left: 4%;">Cancelar</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="confirmarCambios()" color="success" expand="block" style="margin-right: 4%;">Confirmar</ion-button>
     </ion-col>
   </ion-row>
 

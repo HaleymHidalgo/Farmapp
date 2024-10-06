@@ -74,6 +74,23 @@ export class CamaraService {
     
   }
 
+  public obtenerFoto(imgUrl: string){
+    return new Promise<string>((resolve, reject) => {
+      //Obtenemos la foto
+      Filesystem.readFile({
+        path: imgUrl,
+        directory: Directory.Documents
+      })
+      .then( img => {
+        resolve('data:image/jpeg;base64,' + img.data);
+      })
+      .catch( error => {
+        this.alerts.mostrar('Error al obtener foto', JSON.stringify(error));
+        reject(JSON.stringify(error));
+      });
+    });
+  }
+
   //-----------------> Metodos Privados del servicio <----------------
   private savePicture(photo: string){
     return new Promise<string>(async (resolve, reject) => {
@@ -91,8 +108,8 @@ export class CamaraService {
         directory: Directory.Documents
       })
       //Si se guardo con exito, devolvemos el nombre del archivo
-      .then(() => {
-        resolve(fileName);
+      .then( () => {
+        resolve( fileName);
       })
       //Si hubo un error, devolvemos el error
       .catch(error => {

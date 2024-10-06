@@ -15,11 +15,6 @@ export class RegistroFotoPerfilPage implements OnInit {
   //Variable para el nuevo usuario
   nuevoUsuario!: Usuario;
 
-  //Variables del formulario
-  imgPerfil!: string;
-
-  img: any;
-
   constructor(private router: Router, private activatedroute: ActivatedRoute,private db: DatabaseService, private camara:CamaraService, private alert:AlertsService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -35,28 +30,37 @@ export class RegistroFotoPerfilPage implements OnInit {
     Camera.requestPermissions();
   }
 
-  //Función que se ejecuta al presionar el botón de camara
-  
+  //Función que toma la foto del usuario
+  tomarFoto(){
+    this.camara.takePicture()
+    .then((imgUrl) => {
+      this.registrarUsuario(imgUrl);
+    })
+  }
 
-  //Función que se ejecuta al presionar el botón de galeria
+  //Función que sube la foto del usuario
+  subirFoto(){}
+  /*
+  subirFoto(){
+    this.camara.uploadPicture()
+    .then((imgUrl) => {
+      this.registrarUsuario(imgUrl);
+    })
+  }
+  */
 
-
-  //Función que registra a un usuario
-  async registrarUsuario() {
-    //Si pasa las validaciones, entonces guarda los datos
+  //registrarUsuario
+  registrarUsuario(img_url:string){
+    //Añadimos el rol de usuario
     this.nuevoUsuario.id_tipo_usuario = 1;
 
-    //se espera la url
-    await this.camara.tomarFoto();
-
-
-
+    //Añadimos la url_foto del usuario
+    this.nuevoUsuario.img_url = img_url;
 
     //Registramos al usuario en la base de datos
-    //this.db.registrarUsuario(this.nuevoUsuario);
+    this.db.registrarUsuario(this.nuevoUsuario);
 
-
-    //Redirecciona al siguiente formulario
-    //this.router.navigate(['/autocuidado/menu-principal']);
+    //Redirecciona al menu principal
+    this.router.navigate(['/autocuidado/menu-principal']);
   }
 }

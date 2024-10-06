@@ -40,7 +40,7 @@ export class DatabaseService {
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
-  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym Hidalgo', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
+  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
 
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
@@ -92,6 +92,7 @@ export class DatabaseService {
       .catch(error => {
         this.alerts.mostrar('Error al crear DB', JSON.stringify(error));
       });
+
     })
   }
 
@@ -118,6 +119,7 @@ export class DatabaseService {
 
     //Ejecutamos de manera asincrona las sentencias de población de tablas
     try {
+      //Poblamos las tablas
       await this.database.executeSql(this.datos_tipoUsuario,[]);
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
@@ -173,7 +175,6 @@ export class DatabaseService {
     return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
     [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url])
     .then(() => {
-      this.alerts.mostrar('¡Bienvenido!', 'Usted se registrado con exitosamente');
       this.usuarioActual.next(usuario);
     })
     .catch(error => {

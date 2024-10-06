@@ -29,11 +29,7 @@ export class MenuPrincipalPage implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService) {
-    this.db.fetchUsuarioActual().subscribe(res => {
-      this.alert.mostrar(res.nombre+' '+res.apellido_p,"Bienvenido de vuelta ♥")
-    });
-  }
+  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService) { }
 
   ngOnInit() {
     this.menucontroller.enable(false, 'soporte');

@@ -10,7 +10,6 @@
 <ion-content [fullscreen]="true">
 
   <div class="contenedor">
-
     <!--Foto de perfil organizada-->
     <ion-row>
       <ion-col style="border-radius: 100%; max-width: 150px; max-height: 150px; margin: 2%;">
@@ -38,13 +37,53 @@
       
       <!--Campos con informacion del perfil bloqueados-->
       <ion-card-content>
-        <div *ngFor="let campo of campos">
+        <div>
           <ion-input
             style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
-            label="{{campo.label_input}}"
+            label="Nombre"
             label-placement="stacked"
             fill="solid"
-            value="{{campo.dato_usuario}}"
+            [(ngModel)]="nombre"
+            [readonly]="!esEditable">
+          </ion-input>
+          <ion-input
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="Apellido Paterno"
+            label-placement="stacked"
+            fill="solid"
+            [(ngModel)]="apellido_p"
+            [readonly]="!esEditable">
+          </ion-input>
+          <ion-input
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="Apellido Materno"
+            label-placement="stacked"
+            fill="solid"
+            [(ngModel)]="apellido_m"
+            [readonly]="!esEditable">
+          </ion-input>
+          <ion-input
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="Correo Electrónico"
+            label-placement="stacked"
+            fill="solid"
+            [(ngModel)]="correo"
+            [readonly]="!esEditable">
+          </ion-input>
+          <ion-input
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="Teléfono"
+            label-placement="stacked"
+            fill="solid"
+            [(ngModel)]="telefono"
+            [readonly]="!esEditable">
+          </ion-input>
+          <ion-input
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="Direción"
+            label-placement="stacked"
+            fill="solid"
+            [(ngModel)]="direccion"
             [readonly]="!esEditable">
           </ion-input>
         </div>
@@ -67,7 +106,7 @@
       <ion-button (click)="cancelarCambios()" color="danger" expand="block" style="margin-left: 4%;">Cancelar</ion-button>
     </ion-col>
     <ion-col>
-      <ion-button (click)="confirmarCambios()" color="success" expand="block" style="margin-right: 4%;">Confirmar</ion-button>
+      <ion-button (click)="guardarCambios()" color="success" expand="block" style="margin-right: 4%;">Confirmar</ion-button>
     </ion-col>
   </ion-row>
 

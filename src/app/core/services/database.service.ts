@@ -170,6 +170,35 @@ export class DatabaseService {
     });
   }
 
+  private obtenerUsuario(id_usuario:number) {
+    return this.database.executeSql('SELECT * FROM usuario WHERE id_usuario = ?',[id_usuario])
+    .then(res => {
+      //Si el usuario existe, retornamos el registro
+      if(res.rows.length > 0) {
+        let data: Usuario = {
+          id_usuario: res.rows.item(0).id_usuario,
+          email: res.rows.item(0).email,
+          password: res.rows.item(0).password,
+          nombre: res.rows.item(0).nombre,
+          apellido_p: res.rows.item(0).apellido_p,
+          apellido_m: res.rows.item(0).apellido_m,
+          direccion: res.rows.item(0).direccion,
+          telefono: res.rows.item(0).telefono,
+          id_tipo_usuario: res.rows.item(0).id_tipo_usuario,
+          id_pregunta: res.rows.item(0).id_pregunta,
+          res_seguridad: res.rows.item(0).res_seguridad,
+          id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
+          img_url: res.rows.item(0).img_url
+        };
+        //Actualizamos el observable del Usuario
+        this.usuarioActual.next(data); 
+      }      
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
+    });
+  }
+
   //-----> Funciones de Inserción (Insert) <-----
   public registrarUsuario(usuario:Usuario) {
     return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
@@ -182,4 +211,16 @@ export class DatabaseService {
     });
   }
 
+  //-----> Funciones de Actualización (Update) <-----
+  public actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
+    return this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, id_usuario])
+    .then(() => {
+      this.alerts.mostrar('Usuario actualizado', 'Los datos del usuario han sido actualizados con exito');
+      //Actualizamos el observable del Usuario
+      this.obtenerUsuario(id_usuario);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al actualizar usuario', JSON.stringify(error));
+    });
+  }
 }

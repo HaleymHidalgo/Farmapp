@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
+import { Alarma } from '../models/alarma';
 
 @Injectable({
   providedIn: 'root'
@@ -42,8 +43,14 @@ export class DatabaseService {
 
   datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
 
+  datos_alarma = "INSERT or IGNORE INTO alarma (id_indicacion, fecha_hora, status) VALUES (1, '12:30', 1);";
+  
+  datos_indicacion = "INSERT or IGNORE INTO indicacion (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES(1, 1, 1, 200, 7, 12);";
+  
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
+
+  private listadoAlarmas = new BehaviorSubject<Alarma[]>([]);
 
   private usuarioActual = new BehaviorSubject <Usuario>({
     id_usuario: 0,
@@ -124,6 +131,8 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
       await this.database.executeSql(this.datos_usuario,[]);
+      await this.database.executeSql(this.datos_indicacion, []);
+      await this.database.executeSql(this.datos_alarma, []);
     } catch (error) {
       this.alerts.mostrar('Error al poblar tablas', JSON.stringify(error));
     };
@@ -138,6 +147,11 @@ export class DatabaseService {
 
   fetchUsuarioActual():Observable<Usuario>{
     return this.usuarioActual.asObservable();
+  }
+
+  //Fetch's de alarmas
+  fetchAlarmas():Observable<Alarma[]>{
+    return this.listadoAlarmas.asObservable();
   }
 
   //-----> Funciones de Consulta (Select) <-----
@@ -167,6 +181,31 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
+    });
+  }
+
+  //Consulta de alarmas
+  public traerAlarmas(){
+    return this.database.executeSql('SELECT * from alarma', []).then(res=>{
+
+      if(res.rows.length>0){
+
+        let alarmas:Alarma[] = [];
+        for(var i = 0; i < res.rows.lenght; i++){
+
+          this.alerts.mostrar('Cargando alarmas', JSON.stringify(alarmas))
+          alarmas.push({
+            id_indicacion: res.rows.item(i).id_indicacion,
+            fecha_hora: res.rows.item(i).fecha_hora,
+            status: res.rows.item(i).status,
+          });
+        }
+        this.alerts.mostrar('Lista de alarmas conseguida', JSON.stringify(alarmas))
+        this.listadoAlarmas.next(alarmas);
+      }
+      
+    }).catch(error => {
+      this.alerts.mostrar('Error al buscar alarmas', JSON.stringify(error));
     });
   }
 

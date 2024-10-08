@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { Alarma } from 'src/app/core/models/alarma';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 
@@ -15,21 +16,12 @@ export class MenuPrincipalPage implements OnInit {
 
   verAlarma:boolean = false;
 
-  alarmas:any = [
-    {
-      nombre: "Losartan",
-      dosis: "12,5 mg",
-      hora: "11:00"
-    },
+  lista_alarmas!: Alarma[];
 
-    {
-      nombre: "Paracetamol",
-      dosis: "500 mg",
-      hora: "21:00"
-    }
-  ];
-
-  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService) { }
+  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService) {
+    this.db.traerAlarmas();
+    this.traerTodaAlarma();
+  }
 
   ngOnInit() {
     this.menucontroller.enable(false, 'soporte');
@@ -43,6 +35,18 @@ export class MenuPrincipalPage implements OnInit {
 
   verDetalles(){
     this.verAlarma=!this.verAlarma;
+  }
+
+  traerTodaAlarma(){
+    this.db.fetchAlarmas().subscribe(data=>{
+      data.forEach(element => {
+        this.lista_alarmas.push({
+          id_indicacion : element.id_indicacion,
+          fecha_hora : element.fecha_hora,
+          status : element.status,
+        });
+      });
+    });
   }
 
 }

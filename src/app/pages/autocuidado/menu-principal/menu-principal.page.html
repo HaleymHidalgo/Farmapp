@@ -94,13 +94,15 @@
       <h3 class="titulo-seccion">Proximas Alarmas</h3>
     </div>
 
-    <div class="alarma" *ngFor="let dato of alarmas">
+
+    <!--Template para mostrar una alarma-->
+    <div class="alarma" *ngFor="let dato of lista_alarmas">
       <div class="info-alarma">
-        <p class="titulo-alarma">{{dato.nombre}}</p>
-        <p class="texto-alarma">{{dato.dosis}}</p>
+        <p class="titulo-alarma">{{dato.id_indicacion}}</p>
+        <p class="texto-alarma">Remedio</p>
       </div>
       <div class="info-hora">
-        <p class="texto-hora">{{dato.hora}}</p>
+        <p class="texto-hora">{{dato.fecha_hora}}</p>
       </div>
       <ion-button (click)="verDetalles()" class="boton-alarma" fill="clear">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>

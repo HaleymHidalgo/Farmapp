@@ -42,11 +42,12 @@ export class DatabaseService {
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
   datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
-
+  datos_soporte = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (2, 'dondup@gmail.com', '123', 'Dondup', 'Berrios', 'Perez', 'Calle 1 #123', '+56949857762', 'Etham', 1, 2, 'https://www.google.com');";
+  
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  public listadoUsuarios!:any;
+  public listadoUsuarios!:any[];
 
   private usuarioActual = new BehaviorSubject<Usuario>({
     id_usuario: 0,
@@ -127,6 +128,8 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
       await this.database.executeSql(this.datos_usuario,[]);
+      await this.database.executeSql(this.datos_soporte,[]);
+
     } catch (error) {
       this.alerts.mostrar('Error al poblar tablas', JSON.stringify(error));
     };
@@ -208,17 +211,19 @@ export class DatabaseService {
 
   //Listado de usuarios para el perfil de soporte
   public obtenerListadoUsuarios(){
-    return this.database.executeSql('SELECT * FROM usuario',[])
+    return this.database.executeSql('SELECT id_usuario, nombre, apellido_p, apellido_m FROM usuario',[])
     .then(res => {
+
+      this.listadoUsuarios = [];
 
       if(res.rows.length > 0) {
         for(var i = 0; i < res.rows.length; i++){
 
           this.listadoUsuarios.push({
-            id_usuario: res.rows.item(i).id_usuario,
-            nombre: res.rows.item(i).nombre,
-            apellido_p: res.rows.item(i).apellido_p,
-            apellido_m: res.rows.item(i).apellido_m
+            "id_usuario": res.rows.item(i).id_usuario,
+            "nombre": res.rows.item(i).nombre,
+            "apellido_p": res.rows.item(i).apellido_p,
+            "apellido_m": res.rows.item(i).apellido_m,
           });
         }
       }

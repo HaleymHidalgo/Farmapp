@@ -31,7 +31,6 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.db.obtenerListadoUsuarios();
   }
 
   validarLogin() {

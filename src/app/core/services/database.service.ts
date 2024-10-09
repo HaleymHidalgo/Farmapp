@@ -210,13 +210,13 @@ export class DatabaseService {
   }
 
   //Listado de usuarios para el perfil de soporte
-  public obtenerListadoUsuarios(){
+  public async obtenerListadoUsuarios(){
     return this.database.executeSql('SELECT id_usuario, nombre, apellido_p, apellido_m FROM usuario',[])
     .then(res => {
 
       if(res.rows.length > 0) {
         for(var i = 0; i < res.rows.length; i++){
-
+          this.alerts.mostrar('Parseando usuarios: ', JSON.stringify(res.rows.item(i).nombre));
           this.listadoUsuarios.push({
             id_usuario: res.rows.item(i).id_usuario,
             nombre: res.rows.item(i).nombre,

@@ -17,7 +17,8 @@
     </div>
 
     <!--Loop que recorre la lista de usuarios en la base de datos-->
-    <div class="alarma" *NgFor="let usuario of listaDeUsuarios">
+
+    <div class="alarma" *ngFor="let usuario of listaDeUsuarios;">
       <div class="info-alarma">
         <p class="titulo-alarma">{{usuario.nombre}}</p>
         <p class="texto-alarma">{{usuario.apellido_p}} {{usuario.apellido_m}}</p>
@@ -26,7 +27,6 @@
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>
-    
     
   </div>
 </ion-content>

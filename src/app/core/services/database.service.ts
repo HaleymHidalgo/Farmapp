@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
+import { ListadoUsuarios } from '../models/listado-usuarios';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,9 @@ export class DatabaseService {
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  private usuarioActual = new BehaviorSubject <Usuario>({
+  public listadoUsuarios!:any;
+
+  private usuarioActual = new BehaviorSubject<Usuario>({
     id_usuario: 0,
     email: "",
     password: "",
@@ -140,6 +143,10 @@ export class DatabaseService {
     return this.usuarioActual.asObservable();
   }
 
+  fetchListadoUsuarios(){
+    return this.listadoUsuarios;
+  }
+
   //-----> Funciones de Consulta (Select) <-----
   public iniciarSesion(email:string, password:string) {
     return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ?',[email, password])
@@ -197,6 +204,30 @@ export class DatabaseService {
     .catch(error => {
       this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
     });
+  }
+
+  //Listado de usuarios para el perfil de soporte
+  public obtenerListadoUsuarios(){
+    return this.database.executeSql('SELECT * FROM usuario',[])
+    .then(res => {
+
+      if(res.rows.length > 0) {
+        for(var i = 0; i < res.rows.length; i++){
+
+          this.listadoUsuarios.push({
+            id_usuario: res.rows.item(i).id_usuario,
+            nombre: res.rows.item(i).nombre,
+            apellido_p: res.rows.item(i).apellido_p,
+            apellido_m: res.rows.item(i).apellido_m
+          });
+        }
+      }
+
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al obtener lista de usuarios', JSON.stringify(error));
+    });
+
   }
 
   //-----> Funciones de Inserción (Insert) <-----

@@ -13,43 +13,20 @@
   <ion-searchbar [debounce]="1000" color="light" class="custom"></ion-searchbar>
   <div class="contenedor">
     <div>
-      <h1 class="titulo-seccion">Usuarios</h1>
+      <h3 class="titulo-seccion">Usuarios</h3>
     </div>
-    <div class="alarma">
+
+    <!--Loop que recorre la lista de usuarios en la base de datos-->
+    <div class="alarma" *NgFor="let usuario of listaDeUsuarios">
       <div class="info-alarma">
-        <p class="titulo-alarma">Haleym Hidalgo Torres</p>
-        <p class="texto-alarma">{{"haleymgabrielhidalgo@gmail.com"}}</p>
+        <p class="titulo-alarma">{{usuario.nombre}}</p>
+        <p class="texto-alarma">{{usuario.apellido_p}} {{usuario.apellido_m}}</p>
       </div>
       <ion-button class="boton-alarma" fill="clear" [routerLink]="['/soporte/pregunta-seguridad']">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>
-    <div class="alarma">
-      <div class="info-alarma">
-        <p class="titulo-alarma">Dondup Berrios Perez</p>
-        <p class="texto-alarma">{{"do.berrios@gmail.com"}}</p>
-      </div>
-      <ion-button class="boton-alarma" fill="clear" [routerLink]="['/soporte/pregunta-seguridad']">
-        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
-      </ion-button>
-    </div>
-    <div class="alarma">
-      <div class="info-alarma">
-        <p class="titulo-alarma">María Muñoz Gonzales</p>
-        <p class="texto-alarma">{{"mariamu@gmail.com"}}</p>
-      </div>
-      <ion-button class="boton-alarma" fill="clear" [routerLink]="['/soporte/pregunta-seguridad']">
-        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
-      </ion-button>
-    </div>
-    <div class="alarma">
-      <div class="info-alarma">
-        <p class="titulo-alarma">Enrique Urrutia Palma</p>
-        <p class="texto-alarma">{{"enriqueurrutiapalma@gmail.com"}}</p>
-      </div>
-      <ion-button class="boton-alarma" fill="clear" [routerLink]="['/soporte/pregunta-seguridad']">
-        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
-      </ion-button>
-    </div>
+    
+    
   </div>
 </ion-content>

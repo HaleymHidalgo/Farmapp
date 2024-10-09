@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-menu-principal',
@@ -8,11 +9,15 @@ import { MenuController } from '@ionic/angular';
 })
 export class MenuPrincipalPage implements OnInit {
 
-  constructor(private menucontroller: MenuController) { }
+  listaDeUsuarios!: any;
+
+  constructor(private menucontroller: MenuController, private db:DatabaseService) { }
 
   ngOnInit() {
     this.menucontroller.enable(true, 'soporte');
     this.menucontroller.enable(false, 'autocuidado');
+    this.db.obtenerListadoUsuarios();
+    this.listaDeUsuarios = this.db.fetchListadoUsuarios();
   }
 
 }

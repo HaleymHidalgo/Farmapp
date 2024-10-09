@@ -17,6 +17,8 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
+  listadoDeUsuarios!:any;
+
   constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService, private nativeStorage: NativeStorage) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -28,7 +30,9 @@ export class LoginPage implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.db.obtenerListadoUsuarios();
+  }
 
   validarLogin() {
     //Validaciones de formato (Correo)

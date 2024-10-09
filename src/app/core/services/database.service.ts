@@ -47,7 +47,7 @@ export class DatabaseService {
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  public listadoUsuarios!:any[];
+  public listadoUsuarios:ListadoUsuarios[] = [];
 
   private usuarioActual = new BehaviorSubject<Usuario>({
     id_usuario: 0,
@@ -214,16 +214,14 @@ export class DatabaseService {
     return this.database.executeSql('SELECT id_usuario, nombre, apellido_p, apellido_m FROM usuario',[])
     .then(res => {
 
-      this.listadoUsuarios = [];
-
       if(res.rows.length > 0) {
         for(var i = 0; i < res.rows.length; i++){
 
           this.listadoUsuarios.push({
-            "id_usuario": res.rows.item(i).id_usuario,
-            "nombre": res.rows.item(i).nombre,
-            "apellido_p": res.rows.item(i).apellido_p,
-            "apellido_m": res.rows.item(i).apellido_m,
+            id_usuario: res.rows.item(i).id_usuario,
+            nombre: res.rows.item(i).nombre,
+            apellido_p: res.rows.item(i).apellido_p,
+            apellido_m: res.rows.item(i).apellido_m,
           });
         }
       }

@@ -42,6 +42,12 @@ export class DatabaseService {
 
   datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
 
+
+  //--------- Datos de prueba para las alarmas ------------
+  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUE (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, 'url_imagen_usuario');";
+
+  datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
+
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { Platform } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
@@ -47,7 +47,7 @@ export class DatabaseService {
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  public listadoUsuarios:ListadoUsuarios[] = [];
+  public listadoUsuarios = new Subject<ListadoUsuarios[]>();
 
   private usuarioActual = new BehaviorSubject<Usuario>({
     id_usuario: 0,
@@ -147,7 +147,8 @@ export class DatabaseService {
   }
 
   fetchListadoUsuarios(){
-    return this.listadoUsuarios;
+    this.obtenerListadoUsuarios();
+    return this.listadoUsuarios.asObservable();
   }
 
   //-----> Funciones de Consulta (Select) <-----
@@ -210,20 +211,21 @@ export class DatabaseService {
   }
 
   //Listado de usuarios para el perfil de soporte
-  public async obtenerListadoUsuarios(){
+  private async obtenerListadoUsuarios(){
     return this.database.executeSql('SELECT id_usuario, nombre, apellido_p, apellido_m FROM usuario',[])
     .then(res => {
-
+      let lista:ListadoUsuarios[] = [];
       if(res.rows.length > 0) {
         for(var i = 0; i < res.rows.length; i++){
-          this.alerts.mostrar('Parseando usuarios: ', JSON.stringify(res.rows.item(i).nombre));
-          this.listadoUsuarios.push({
+          lista.push({
             id_usuario: res.rows.item(i).id_usuario,
             nombre: res.rows.item(i).nombre,
             apellido_p: res.rows.item(i).apellido_p,
             apellido_m: res.rows.item(i).apellido_m,
           });
         }
+
+        this.listadoUsuarios.next(lista);
       }
 
     })

@@ -11,18 +11,28 @@ import { DatabaseService } from 'src/app/core/services/database.service';
 })
 export class MenuPrincipalPage implements OnInit {
 
-  listaDeUsuarios:ListadoUsuarios[];
+  listadoUsuarios!:ListadoUsuarios[];
 
   constructor(private menucontroller: MenuController, private db:DatabaseService, private alerts:AlertsService) {
-    this.db.obtenerListadoUsuarios();
-    this.listaDeUsuarios = this.db.fetchListadoUsuarios();
   }
 
   ngOnInit() {
     this.menucontroller.enable(true, 'soporte');
     this.menucontroller.enable(false, 'autocuidado');
+    this.actualizarListadoUsuarios();
   }
 
-  
+  async actualizarListadoUsuarios(){
+    this.db.fetchListadoUsuarios().subscribe(data => {
+      this.listadoUsuarios = data;
+    });
+  }
 
+  verDetallesUsuario(id_usuario: number){
+    //this.db.abrirDetallesUsuario(id_usuario);
+  }
+  
+  ver(){
+    this.alerts.mostrar('Lista: ', JSON.stringify(this.listadoUsuarios))
+  }
 }

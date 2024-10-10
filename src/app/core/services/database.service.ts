@@ -244,18 +244,17 @@ export class DatabaseService {
 
   //Pregunta y respuesta de seguridad para ayuda del soporte
   public async obtenerCredencialesUsuario(id_usuario: number){
-    return this.database.executeSql('SELECT u.nombre, u.apellido_p, u.res_seguridad, p.pregunta FROM usuario u JOIN pregunta_seguridad p ON(u.id_pregunta = p.id_pregunta) WHERE id_usuario = ?',[id_usuario])
+    return this.database.executeSql('SELECT u.nombre AS nombre, u.apellido_p AS apellido_p, u.res_seguridad AS res_seguridad, p.pregunta AS pregunta FROM usuario u JOIN pregunta_seguridad p ON u.id_pregunta = p.id_pregunta WHERE id_usuario = ?',[id_usuario])
     .then(res => {
-      let credenciales!:CredencialesUsuario;
       if(res.rows.length > 0) {
 
-        this.alerts.mostrar('Consulta exitosa: ', JSON.stringify(res));
-
-        credenciales.nombre = res.rows.item(0).nombre;
-        credenciales.apellido_p = res.rows.item(0).apellido_p;
-        credenciales.pregunta = res.rows.item(0).pregunta;
-        credenciales.res_seguridad = res.rows.item(0).res_seguridad;
-
+        let credenciales:CredencialesUsuario = {
+          "nombre": res.rows.item(0).nombre,
+          "apellido_p": res.rows.item(0).apellido_p,
+          "pregunta": res.rows.item(0).pregunta,
+          "res_seguridad": res.rows.item(0).res_seguridad,
+        };
+        
         this.credencialesUsuario.next(credenciales);
       }
 

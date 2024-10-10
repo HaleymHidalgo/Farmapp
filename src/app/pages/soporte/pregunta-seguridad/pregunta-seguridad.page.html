@@ -2,18 +2,21 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+
   <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
   <div>
     <p>Para validar la identidad del cliente, el debera responderte a la siguiente pregunta:</p>
   </div>
   <div class="ion-text-start" style="height: 50%;">
+    <br>
+    <h6>{{pregunta}}</h6>
     <br/>
     <ion-input 
-      [(ngModel)]="pregunta" 
       label-placement="floating"
+      label=""
       fill="outline"
-      placeholder="Nombre"
-      [(ngModel)]="respuesta"
+      placeholder="Respuesta"
+      [(ngModel)]="campo"
     ></ion-input>
     <br />
     <ion-button 

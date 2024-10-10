@@ -251,10 +251,10 @@ export class DatabaseService {
 
         this.alerts.mostrar('Consulta exitosa: ', JSON.stringify(res));
 
-        credenciales.nombre = res.u.nombre
-        credenciales.apellido_p = res.u.apellido_p
-        credenciales.pregunta = res.p.pregunta
-        credenciales.res_seguridad = res.u.res_seguridad
+        credenciales.nombre = res.rows.item(0).nombre;
+        credenciales.apellido_p = res.rows.item(0).apellido_p;
+        credenciales.pregunta = res.rows.item(0).pregunta;
+        credenciales.res_seguridad = res.rows.item(0).res_seguridad;
 
         this.credencialesUsuario.next(credenciales);
       }

@@ -22,7 +22,7 @@
         <p class="titulo-alarma">{{usuario.nombre}}</p>
         <p class="texto-alarma">{{usuario.apellido_p}} {{usuario.apellido_m}}</p>
       </div>
-      <ion-button class="boton-alarma" fill="clear" (click)="verDetallesUsuario(usuario.id_usuario)" [routerLink]="['/soporte/pregunta-seguridad']">
+      <ion-button class="boton-alarma" fill="clear" (click)="cargarDetallesUsuario(usuario.id_usuario)" [routerLink]="">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>

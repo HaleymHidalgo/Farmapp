@@ -6,6 +6,7 @@ import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
 import { ListadoUsuarios } from '../models/listado-usuarios';
+import { CredencialesUsuario } from '../models/credenciales-usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,9 @@ export class DatabaseService {
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  public listadoUsuarios = new Subject<ListadoUsuarios[]>();
+  private listadoUsuarios = new Subject<ListadoUsuarios[]>();
+
+  private credencialesUsuario = new Subject<CredencialesUsuario>();
 
   private usuarioActual = new BehaviorSubject<Usuario>({
     id_usuario: 0,
@@ -151,6 +154,10 @@ export class DatabaseService {
     return this.listadoUsuarios.asObservable();
   }
 
+  fetchCredencialesUsuario(){
+    return this.credencialesUsuario.asObservable();
+  }
+
   //-----> Funciones de Consulta (Select) <-----
   public iniciarSesion(email:string, password:string) {
     return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ?',[email, password])
@@ -231,6 +238,30 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al obtener lista de usuarios', JSON.stringify(error));
+    });
+
+  }
+
+  //Pregunta y respuesta de seguridad para ayuda del soporte
+  public async obtenerCredencialesUsuario(id_usuario: number){
+    return this.database.executeSql('SELECT u.nombre, u.apellido_p, u.res_seguridad, p.pregunta FROM usuario u JOIN pregunta_seguridad p ON(u.id_pregunta = p.id_pregunta) WHERE id_usuario = ?',[id_usuario])
+    .then(res => {
+      let credenciales!:CredencialesUsuario;
+      if(res.rows.length > 0) {
+
+        this.alerts.mostrar('Consulta exitosa: ', JSON.stringify(res));
+
+        credenciales.nombre = res.u.nombre
+        credenciales.apellido_p = res.u.apellido_p
+        credenciales.pregunta = res.p.pregunta
+        credenciales.res_seguridad = res.u.res_seguridad
+
+        this.credencialesUsuario.next(credenciales);
+      }
+
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al obtener credenciales de usuario', JSON.stringify(error));
     });
 
   }

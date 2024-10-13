@@ -44,25 +44,23 @@
       </ion-col>
       <ion-col style="width: 5%;"></ion-col>
     </ion-row>
-
     <div>
       <ion-input
-          style="width: 90%; margin-left: 5%; margin-top: 5%;"
-          label="Nombre medicamento"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="Remedio">
-          </ion-input>
+        style="width: 90%; margin-left: 5%; margin-top: 5%;"
+        label="Nombre medicamento"
+        label-placement="stacked"
+        fill="solid"
+        placeholder="Remedio">
+      </ion-input>
     </div>
-
     <div>
       <ion-input
-          style="width: 90%; margin-left: 5%; margin-top: 5%;"
-          label="Dosis medicamento"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="500mg">
-          </ion-input>
+        style="width: 90%; margin-left: 5%; margin-top: 5%;"
+        label="Dosis medicamento"
+        label-placement="stacked"
+        fill="solid"
+        placeholder="500mg">
+      </ion-input>
     </div>
     <br>
     <ion-row>
@@ -85,7 +83,6 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
   </div>
 
 
@@ -94,13 +91,13 @@
       <h3 class="titulo-seccion">Proximas Alarmas</h3>
     </div>
 
-    <div class="alarma" *ngFor="let dato of alarmas">
+    <div class="alarma" *ngFor="let alarma of alarmas">
       <div class="info-alarma">
-        <p class="titulo-alarma">{{dato.nombre}}</p>
-        <p class="texto-alarma">{{dato.dosis}}</p>
+        <p class="titulo-alarma">{{alarma.medicamentoNombre}}</p>
+        <p class="texto-alarma">{{alarma.indicacionDosis}}gr</p>
       </div>
       <div class="info-hora">
-        <p class="texto-hora">{{dato.hora}}</p>
+        <p class="texto-hora">{{alarma.fecha_hora | tiempoAlarma}}</p>
       </div>
       <ion-button (click)="verDetalles()" class="boton-alarma" fill="clear">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>

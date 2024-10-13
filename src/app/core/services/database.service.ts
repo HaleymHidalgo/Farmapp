@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
+import { Alarma } from '../models/alarma';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class DatabaseService {
 
   tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER PRIMARY KEY autoincrement,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario"), FOREIGN KEY ("id_medicamento") REFERENCES "MEDICAMENTO"("id_medicamento"));';
 
-  tabla_alarma = 'CREATE TABLE IF NOT EXISTS "ALARMA" ("id_indicacion" INTEGER NOT NULL,	"fecha_hora" TEXT NOT NULL, "status" INTEGER NOT NULL,	FOREIGN KEY ("id_indicacion") REFERENCES "INDICACION"("id_indicacion"));';
+  tabla_alarma = 'CREATE TABLE IF NOT EXISTS "ALARMA" ("id_alarma" INTEGER PRIMARY KEY autoincrement, "id_indicacion" INTEGER NOT NULL,	"fecha_hora" TEXT NOT NULL, "status" INTEGER NOT NULL,	FOREIGN KEY ("id_indicacion") REFERENCES "INDICACION"("id_indicacion"));';
 
   //Variables que contiene las sentencias de población de tablas
   datos_tipoUsuario = "INSERT or IGNORE INTO tipo_usuario (id_tipo, nombre) VALUES (1, 'Autocuidado'), (2, 'Soporte');";
@@ -44,9 +45,11 @@ export class DatabaseService {
 
 
   //--------- Datos de prueba para las alarmas ------------
-  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUE (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, 'url_imagen_usuario');";
+  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, 'https://www.example.com');";
 
   datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
+
+  datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-11T06:30:00', 0), (2, 1, '2024-10-11T08:30:00', 0);";
 
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
@@ -74,17 +77,6 @@ export class DatabaseService {
   //Función que inicializa la base de datos
   crearDB() {
     this.platform.ready().then(() => {
-      //Eliminamos la base de datos si existe
-      /*
-      this.sqlite.deleteDatabase({
-        name: 'farmapp.db',
-        location: 'default'
-      }).then(() => {
-        this.alerts.mostrar('DB Eliminada', "La base de datos ha sido eliminada con exito");
-      }).catch(error => {
-        this.alerts.mostrar('Error al eliminar DB', JSON.stringify(error));
-      });
-      */
       //Creamos la base de datos
       this.sqlite.create({
         name: 'farmapp.db',
@@ -118,7 +110,6 @@ export class DatabaseService {
       await this.database.executeSql(this.tabla_usuario,[]);
       await this.database.executeSql(this.tabla_indicacion,[]);
       await this.database.executeSql(this.tabla_alarma,[]);
-      
     } catch (error) {
       this.alerts.mostrar('Error al crear tablas', JSON.stringify(error));
     }
@@ -130,6 +121,16 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
       await this.database.executeSql(this.datos_usuario,[]);
+      //-------------------- Datos de prueba --------------------
+      try { await this.database.executeSql(this.datos_usuario2,[]); }
+      catch (error) { this.alerts.mostrar('Error al poblar usuario2', JSON.stringify(error)); }
+
+      try { await this.database.executeSql(this.datos_indicacion,[]); }
+      catch (error) { this.alerts.mostrar('Error al poblar indicacion', JSON.stringify(error)); }
+
+      try { await this.database.executeSql(this.datos_alarma,[]); }
+      catch (error) { this.alerts.mostrar('Error al poblar alarma', JSON.stringify(error)); }
+
     } catch (error) {
       this.alerts.mostrar('Error al poblar tablas', JSON.stringify(error));
     };
@@ -202,6 +203,52 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
+    });
+  }
+
+  /**
+   * @example obtenerAlarmasDia(1, '2024-09-01')
+   * @param id_usuario tipo numerico
+   * @param fecha en formato 'YYYY-MM-DD'
+   * @returns Alarma[{},...,{}]
+   */
+  public obtenerAlarmas(id_usuario:number, fecha:string){
+    return new Promise<Alarma[]>((resolve, reject) => {
+      this.database.executeSql(`
+      SELECT  al.id_alarma AS id_alarma,
+              al.id_indicacion AS id_indicacion,
+              al.fecha_hora AS fecha_hora, 
+              al.status AS status,
+              med.nombre AS medicamentoNombre,
+              ind.dosis AS dosis
+      FROM alarma al
+      JOIN indicacion ind ON al.id_indicacion = ind.id_indicacion
+      JOIN usuario usr ON usr.id_usuario = ind.id_usuario
+      JOIN medicamento med ON ind.id_medicamento = med.id_medicamento
+      WHERE usr.id_usuario = ? AND al.fecha_hora LIKE ?;`, 
+      [id_usuario, fecha + '%'])
+      .then(res => {
+        if(res.rows.length > 0) {
+          let alarmas:Alarma[] = [];
+          for (let i = 0; i < res.rows.length; i++) {
+            alarmas.push({
+              id_alarma: res.rows.item(i).id_alarma,
+              id_indicacion: res.rows.item(i).id_indicacion,
+              fecha_hora: res.rows.item(i).fecha_hora,
+              status: res.rows.item(i).status,
+              medicamentoNombre: res.rows.item(i).medicamentoNombre,
+              indicacionDosis: res.rows.item(i).dosis
+            });
+          }
+          resolve(alarmas);
+        }
+        else {
+          this.alerts.mostrar('No hay alarmas', 'No se encontraron alarmas para el dia de hoy');
+        }
+      })
+      .catch(error => {
+        this.alerts.mostrar('Error al buscar alarmas', JSON.stringify(error));
+      });
     });
   }
 

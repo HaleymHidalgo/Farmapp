@@ -1,3 +1,4 @@
+import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, MenuController } from '@ionic/angular';
@@ -11,28 +12,28 @@ import { DatabaseService } from 'src/app/core/services/database.service';
 })
 export class OpcionesClientePage implements OnInit {
 
+  id_usuario!: number;
   nombre!: string;
   apellido_p!: string;
 
   constructor(private menucontroller: MenuController, private alertcontroller: AlertController, private router: Router, private db:DatabaseService, private alerts:AlertsService) { }
 
   ngOnInit() {
-
-    this.actualizarCredencialesUsuario();
-
+    this.db.fetchCredencialesUsuario().subscribe(data => {
+      this.id_usuario = data.id_usuario;
+      this.nombre = data.nombre;
+      this.apellido_p = data.apellido_p;
+    });
     this.menucontroller.enable(true, 'soporte');
     this.menucontroller.enable(false, 'autocuidado');
   }
 
-  async actualizarCredencialesUsuario(){
-    this.db.fetchCredencialesUsuario().subscribe(data => {
-      this.alerts.mostrar('Datos: ', JSON.stringify(data));
-      this.nombre = data.nombre;
-      this.apellido_p = data.apellido_p;
-    });
+  cargarUsuario(){
+    this.db.obtenerCredencialesUsuario(this.id_usuario);
+    this.router.navigate(['/soporte/cambiar-password']);
   }
 
-  //cambiar contraseña
+  
   deshabilitarUsuario() {
   }
 

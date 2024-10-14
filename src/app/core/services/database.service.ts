@@ -244,11 +244,12 @@ export class DatabaseService {
 
   //Pregunta y respuesta de seguridad para ayuda del soporte
   public async obtenerCredencialesUsuario(id_usuario: number){
-    return this.database.executeSql('SELECT u.nombre AS nombre, u.apellido_p AS apellido_p, u.res_seguridad AS res_seguridad, p.pregunta AS pregunta FROM usuario u JOIN pregunta_seguridad p ON u.id_pregunta = p.id_pregunta WHERE id_usuario = ?',[id_usuario])
+    return this.database.executeSql('SELECT u.id_usuario AS id_usuario, u.nombre AS nombre, u.apellido_p AS apellido_p, u.res_seguridad AS res_seguridad, p.pregunta AS pregunta FROM usuario u JOIN pregunta_seguridad p ON u.id_pregunta = p.id_pregunta WHERE id_usuario = ?',[id_usuario])
     .then(res => {
       if(res.rows.length > 0) {
 
         let credenciales:CredencialesUsuario = {
+          "id_usuario": res.rows.item(0).id_usuario,
           "nombre": res.rows.item(0).nombre,
           "apellido_p": res.rows.item(0).apellido_p,
           "pregunta": res.rows.item(0).pregunta,
@@ -287,6 +288,17 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al actualizar usuario', JSON.stringify(error));
+    });
+  }
+
+  public actualizarPassword(id_usuario:number, password:string){
+    return this.database.executeSql('UPDATE usuario SET password = ? WHERE id_usuario = ?', [password, id_usuario])
+    .then(() => {
+      this.alerts.mostrar('Exito ', 'Su contraseña ha sido cambiada');
+      this.obtenerCredencialesUsuario(id_usuario);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al actualizar contraseña de usuario', JSON.stringify(error));
     });
   }
 }

@@ -6,6 +6,7 @@ import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
 import { Alarma } from '../models/alarma';
+import { Medicamento } from '../models/medicamento';
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +50,12 @@ export class DatabaseService {
 
   datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
 
-  datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-11T06:30:00', 0), (2, 1, '2024-10-11T08:30:00', 0);";
+  datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-12T06:30:00', 0), (2, 1, '2024-10-12T08:30:00', 0);";
 
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
+
+  private listadoMedicamentos = new BehaviorSubject<Medicamento[]>([]);
 
   private usuarioActual = new BehaviorSubject <Usuario>({
     id_usuario: 0,
@@ -136,7 +139,7 @@ export class DatabaseService {
     };
   }
 
-  //-----> Funciones de Fetch (get/obtener) <-----
+  //-----> Funciones de Fetch (get/) <-----
 
   //Fetch's de las tablas
   fetchTipoUsuario():Observable<TipoUsuario[]> {
@@ -145,6 +148,10 @@ export class DatabaseService {
 
   fetchUsuarioActual():Observable<Usuario>{
     return this.usuarioActual.asObservable();
+  }
+
+  fetchMedicamentos():Observable<Medicamento[]> {
+    return this.listadoMedicamentos.asObservable();
   }
 
   //-----> Funciones de Consulta (Select) <-----
@@ -225,7 +232,8 @@ export class DatabaseService {
       JOIN indicacion ind ON al.id_indicacion = ind.id_indicacion
       JOIN usuario usr ON usr.id_usuario = ind.id_usuario
       JOIN medicamento med ON ind.id_medicamento = med.id_medicamento
-      WHERE usr.id_usuario = ? AND al.fecha_hora LIKE ?;`, 
+      WHERE usr.id_usuario = ? AND al.fecha_hora LIKE ?
+      ORDER BY al.fecha_hora ASC;`,
       [id_usuario, fecha + '%'])
       .then(res => {
         if(res.rows.length > 0) {
@@ -252,6 +260,23 @@ export class DatabaseService {
     });
   }
 
+  public obtenerMedicamentos() {
+    return this.database.executeSql('SELECT * FROM medicamento',[])
+    .then(res => {
+      let medicamentos:Medicamento[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        medicamentos.push({
+          idMedicamento: res.rows.item(i).id_medicamento,
+          nombreMedicamento: res.rows.item(i).nombre
+        });
+      }
+      this.listadoMedicamentos.next(medicamentos);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar medicamentos', JSON.stringify(error));
+    });
+  }
+
   //-----> Funciones de Inserción (Insert) <-----
   public registrarUsuario(usuario:Usuario) {
     return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
@@ -262,6 +287,33 @@ export class DatabaseService {
     .catch(error => {
       this.alerts.mostrar('Error al registrar usuario', JSON.stringify(error));
     });
+  }
+
+  public registrarIndicacion(id_medicamento:number, dosis:number, dias_tratamiento:number, nr_horas:number):Promise<number> {
+    return this.database.executeSql('INSERT INTO indicacion (id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (?,?,?,?,?) RETURNING id_indicacion',
+    [id_medicamento, this.usuarioActual.value.id_usuario, dosis, dias_tratamiento, nr_horas])
+    .then((res) => {
+      return res.rows.item(0).id_indicacion;
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al registrar indicación', JSON.stringify(error));
+    });
+  }
+
+  public registrarAlarmas(alarmas:Alarma[]) {
+    let sentencia = ""
+    for (let i = 0; i < alarmas.length; i++) {
+      if (i > 0) {
+        sentencia += ', ';
+      }
+      sentencia += `(${alarmas[i].id_indicacion}, '${alarmas[i].fecha_hora}', ${alarmas[i].status})`;
+    }
+    this.alerts.mostrar('Sentencia', sentencia);
+    return this.database.executeSql(`INSERT INTO alarma (id_indicacion, fecha_hora, status) VALUES ${sentencia};`,[])
+    .then(()=> {
+      this.alerts.mostrar('Alarmas registradas', 'Se han registrado las alarmas con exito');
+    })
+    .catch(error => this.alerts.mostrar('Error al registrar alarmas', JSON.stringify(error)));
   }
 
   //-----> Funciones de Actualización (Update) <-----

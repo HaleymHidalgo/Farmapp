@@ -4,5 +4,5 @@ export class Alarma {
     fecha_hora!:string;
     status!:boolean;
     medicamentoNombre!:string; // Tabla Medicamento
-    indicacionDosis!:string; // Tabla Indicacion
+    indicacionDosis!:number; // Tabla Indicacion
 }

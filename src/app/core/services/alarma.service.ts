@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Alarma } from '../models/alarma';
 import { AlertsService } from './alerts.service';
 import { DatabaseService } from './database.service';
+import { LocalNotifications, LocalNotificationSchema, ScheduleOptions } from '@capacitor/local-notifications';
+import { Resolve } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class AlarmaService {
   constructor(private alert:AlertsService, private db:DatabaseService) { }
 
   //Función que crea la alarmas
-  public crearAlarmas(id_indicacion: number, cantidadMedicamento: number, horasMedicamento: number, diasMedicamento: number, fechaInicio: string) {
+  public async crearAlarmas(id_indicacion: number, cantidadMedicamento: number, horasMedicamento: number, diasMedicamento: number, fechaInicio: string) {
     //Proceso para crear las alarmas
 
     //Arreglo que guardará las alarmas
@@ -37,8 +39,8 @@ export class AlarmaService {
       alarmas.push(alarma);
       fechaAlarma.setHours(fechaAlarma.getHours() + horasMedicamento);
     }
-    this.alert.mostrar('Alarmas', JSON.stringify(alarmas));
-    this.db.registrarAlarmas(alarmas);
+
+    await this.db.registrarAlarmas(alarmas);
   }
 
   //Funcion para obtener la fecha y hora
@@ -49,4 +51,66 @@ export class AlarmaService {
       + 'T' + date.toTimeString().slice(0,5);
   }
 
+  //Funcion para crear notificaciones en el sistema
+  public async crearNotificaciones(alarmas: Alarma[]) {
+    this.verificarPermisos()
+    .then( res => {
+      if(!res) return
+
+      //Borramos todas las notificaciones programadas
+      try {
+        //Obtenemos las notificaciones pendientes
+        LocalNotifications.getPending().then(res => {
+          //Recorremos las notificaciones y las borramos
+          res.notifications.forEach(notificacion => {
+            LocalNotifications.cancel({notifications: [{id: notificacion.id}]})
+          });
+        });
+      } catch(e){
+        this.alert.mostrar("Error al borrar notificaciones", JSON.stringify(e))
+      }
+
+      //Proceso para crear las notificaciones
+      try {
+        //Arreglo que guardará las notificaciones
+        const notificaciones: LocalNotificationSchema[] = [];
+        let i = 0;
+
+        //Recorremos las alarmas y las agregamos al arreglo de notificaciones
+        alarmas.forEach(alarma => {
+          notificaciones.push({
+            title: 'Farmapp',
+            body: 'Recordatorio de medicamento: ' + alarma.medicamentoNombre + ' ' + alarma.indicacionDosis + ' gr',
+            id: i,
+            schedule: { at: new Date(alarma.fecha_hora) }
+          });
+          i++;
+        });
+
+        //Definiendo las opciones de las notificaciones
+        const options: ScheduleOptions = { notifications: notificaciones };
+      
+        //Programamos las notificaciones
+        LocalNotifications.schedule(options)
+
+      } catch(e){
+        this.alert.mostrar("Error al crear notificaciones", JSON.stringify(e))
+      }
+    })
+    .catch(() => this.alert.mostrar("Error permisos", "Hubo un error al verificar los permisos"));
+  };
+
+  //Funcion para verificar los permisos de notificaciones
+  public verificarPermisos() {
+    return new Promise<boolean> (async (resolve, reject) => {
+      const permisos = await LocalNotifications.checkPermissions()
+      if (permisos.display !== 'granted') {
+        await LocalNotifications.requestPermissions()
+        resolve(true);
+      } else if (permisos.display === 'granted') {
+        resolve(true);
+      }
+      reject();
+    });
+  }
 }

@@ -41,7 +41,7 @@ export class AlarmaMedicamentoPage implements OnInit {
   }
 
   //Función que se ejecuta al presionar el botón de continuar
-  registrarIndicacion() {
+  async registrarIndicacion() {
     //Validar que los campos no estén vacíos
     if (this.idMedicamento == undefined || this.cantidadMedicamento == undefined || this.horasMedicamento == undefined || this.diasMedicamento == undefined || this.fechaInicio == undefined) {
       this.alert.mostrar('error', 'Faltan campos por llenar');
@@ -79,9 +79,9 @@ export class AlarmaMedicamentoPage implements OnInit {
     }
 
     //Si todo está correcto, se registra la indicación
-    this.db.registrarIndicacion(this.idMedicamento, this.cantidadMedicamento, this.horasMedicamento, this.diasMedicamento)
+    await this.db.registrarIndicacion(this.idMedicamento, this.cantidadMedicamento, this.horasMedicamento, this.diasMedicamento)
     .then(idIndicacion => {
-      //Se crea la alarma
+      //Se crean las alarmas
       this.alarma.crearAlarmas(idIndicacion, this.cantidadMedicamento, this.horasMedicamento, this.diasMedicamento, this.fechaInicio);
     });
     

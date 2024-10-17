@@ -220,6 +220,7 @@ export class DatabaseService {
    * @returns Alarma[{},...,{}]
    */
   public obtenerAlarmas(id_usuario:number, fecha:string){
+    this.alerts.mostrar('Consultando', fecha);
     return new Promise<Alarma[]>((resolve, reject) => {
       this.database.executeSql(`
       SELECT  al.id_alarma AS id_alarma,
@@ -252,6 +253,7 @@ export class DatabaseService {
         }
         else {
           this.alerts.mostrar('No hay alarmas', 'No se encontraron alarmas para el dia de hoy');
+          resolve([]);
         }
       })
       .catch(error => {
@@ -326,6 +328,16 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al actualizar usuario', JSON.stringify(error));
+    });
+  }
+
+  public cambiarEstadoAlarma(id_alarma:number) {
+    return this.database.executeSql('UPDATE alarma SET status = 1 WHERE id_alarma = ?', [id_alarma])
+    .then(() => {
+      this.alerts.mostrar('Alarma actualizada', 'La alarma ha sido actualizada con exito');
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al actualizar alarma', JSON.stringify(error));
     });
   }
 }

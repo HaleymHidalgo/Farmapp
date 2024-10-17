@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { Alarma } from 'src/app/core/models/alarma';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
-import { BackgroundRunner } from '@capacitor/background-runner';
-import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
 import { AlarmaService } from 'src/app/core/services/alarma.service';
 
 @Component({
@@ -15,13 +13,13 @@ import { AlarmaService } from 'src/app/core/services/alarma.service';
   styleUrls: ['./menu-principal.page.scss'],
 })
 
-export class MenuPrincipalPage implements OnInit, OnDestroy {
-  //Dato background
-  dato!: any;
-
-  //arreglo donde se guarda la data del usuario
+export class MenuPrincipalPage implements OnInit {
+  //Objeto donde se guarda la data del usuario
   usuario!: Usuario;
   
+  //Variable que indica que dia de la semana se selecciono
+  diaSeleccionado!: number;
+
   //arreglo donde se guarda la data de las alarmas
   alarmas: Alarma[] = [];
 
@@ -36,13 +34,19 @@ export class MenuPrincipalPage implements OnInit, OnDestroy {
     this.menucontroller.enable(false, 'soporte');
     this.menucontroller.enable(true, 'autocuidado');
 
+    //Definimos el dia seleccionado como el dia actual
+    this.diaSeleccionado = new Date().getDay();
+
     //Obtenemos la data del usuario
     this.db.fetchUsuarioActual().subscribe( usr => {
       this.usuario = usr;
     });
 
+    
+    //Obtenemos la fecha en formato yyyy-mm-dd
+    let date = this.alarmaService.obtenerTiempo(new Date()).slice(0,10);
     //Obtenemos las alarmas del dia
-    this.db.obtenerAlarmas(this.usuario.id_usuario, this.obtenerTiempoActual().slice(0,10))
+    this.db.obtenerAlarmas(this.usuario.id_usuario, date)
     .then (data => {
       this.alarmas = data;
       
@@ -55,11 +59,6 @@ export class MenuPrincipalPage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(){
-    //Liberamos la memoria
-    //usuario.unsubscribe();
-  }
-
   nuevaAlarma(){
     //Redireccionamos a la pagina agregar-alarma
     this.router.navigate(['/autocuidado/alarma-medicamento']);
@@ -69,14 +68,30 @@ export class MenuPrincipalPage implements OnInit, OnDestroy {
     this.verAlarma=!this.verAlarma;
   }
 
-  //Funcion para obtener la fecha y hora actual
-  obtenerTiempoActual():string{
-    let date = new Date();
-    return (date.getFullYear().toString() + '-' 
-      + ("0" + (date.getMonth() + 1)).slice(-2) + '-' 
-      + ("0" + (date.getDate())).slice(-2))
-      + 'T' + date.toTimeString().slice(0,5);
-  }
+  cambioDia(event:any){
+    //event.detail.value contiene el dia seleccionado
+    let diaEvento = event.detail.value;
+    let diaActual = new Date().getDay();
 
-  //-------------------- Background API --------------------
+    let fechaBuscar = new Date();
+    
+    //Si el dia seleccionado es menor al dia actual
+    if(diaEvento < diaActual){
+      fechaBuscar.setDate(fechaBuscar.getDate() - (diaActual - diaEvento));
+    }
+    //Si el dia seleccionado es mayor al dia actual
+    else if(diaEvento > diaActual){
+      fechaBuscar.setDate(fechaBuscar.getDate() + (diaEvento - diaActual));
+    }
+
+    //Obtenemos la fecha en formato yyyy-mm-dd
+    let date = this.alarmaService.obtenerTiempo(fechaBuscar).slice(0,10);
+    this.db.obtenerAlarmas(this.usuario.id_usuario, date)
+    .then (data => {
+      this.alarmas = data;
+    });
+
+    //Mostramos un mensaje con el dia seleccionado y la fecha correspondiente
+    //this.alert.mostrar('Dia seleccionado', 'Dia seleccionado: ' + diaEvento + ' corresponde a: ' + fechaBuscar.toDateString());
+  }
 }

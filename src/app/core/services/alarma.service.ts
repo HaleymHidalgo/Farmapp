@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { Alarma } from '../models/alarma';
 import { AlertsService } from './alerts.service';
 import { DatabaseService } from './database.service';
-import { LocalNotifications, LocalNotificationSchema, ScheduleOptions } from '@capacitor/local-notifications';
-import { Resolve } from '@angular/router';
+import { ActionPerformed, LocalNotification, LocalNotifications, LocalNotificationSchema, ScheduleOptions } from '@capacitor/local-notifications';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlarmaService {
 
-  constructor(private alert:AlertsService, private db:DatabaseService) { }
+  constructor(private alert:AlertsService, private db:DatabaseService, private router:Router) { }
 
   //Función que crea la alarmas
   public async crearAlarmas(id_indicacion: number, cantidadMedicamento: number, horasMedicamento: number, diasMedicamento: number, fechaInicio: string) {
@@ -44,60 +44,107 @@ export class AlarmaService {
   }
 
   //Funcion para obtener la fecha y hora
-  private obtenerTiempo(date:Date):string{
+  public obtenerTiempo(date:Date):string{
     return (date.getFullYear().toString() + '-' 
       + ("0" + (date.getMonth() + 1)).slice(-2) + '-' 
       + ("0" + (date.getDate())).slice(-2))
       + 'T' + date.toTimeString().slice(0,5);
   }
 
+  //Funcion para crear Acciones de Notificacion
+  private crearAcciones(){
+    //Definimos los tipos de acciones que se pueden realizar en las notificaciones
+    LocalNotifications.registerActionTypes({
+      types: [
+        {
+          id:'ALARMA_MEDICAMENTO',
+          actions: [
+            {
+              id: 'CONFIRMAR',
+              title: 'Tomada'
+            },
+            {
+              id: 'IGNORAR',
+              title: 'Ignorar',
+              destructive: true
+            }
+          ]
+        },
+      ]
+    })
+    .catch(() => this.alert.mostrar("Error al registrar acciones", "Hubo un error al registrar las acciones"));
+  }
+
+  //Funcion para borrar todas las notificaciones
+  private borrarNotificaciones(){
+    //Obtenemos las notificaciones pendientes
+    LocalNotifications.getPending().then(notificaciones => {
+      //Recorremos las notificaciones y las borramos
+      notificaciones.notifications.forEach(notificacion => {
+        LocalNotifications.cancel({notifications: [{id: notificacion.id}]});
+      });
+    });
+  }
+
+  //Funcion para crear un listener de las notificaciones
+  private crearListener(){
+    //Añadir un listener para las acciones de las notificaciones
+    LocalNotifications.addListener('localNotificationActionPerformed', (notificationAction: ActionPerformed) => {
+      //Si la acción es confirmar
+      if (notificationAction.actionId === 'CONFIRMAR') {
+        //Actualizar la alarma en la base de datos
+        this.db.cambiarEstadoAlarma(notificationAction.notification.extra.id_alarma)
+
+        //Redirige a la pagina de alarmas
+        this.router.navigate(['/autocuidado/menu-principal']);
+      }
+    });
+  }
+
   //Funcion para crear notificaciones en el sistema
   public async crearNotificaciones(alarmas: Alarma[]) {
-    this.verificarPermisos()
-    .then( res => {
-      if(!res) return
+    const status = await this.verificarPermisos()
 
-      //Borramos todas las notificaciones programadas
-      try {
-        //Obtenemos las notificaciones pendientes
-        LocalNotifications.getPending().then(res => {
-          //Recorremos las notificaciones y las borramos
-          res.notifications.forEach(notificacion => {
-            LocalNotifications.cancel({notifications: [{id: notificacion.id}]})
-          });
+    if(!status) return
+
+    //Creamos las acciones de las notificaciones
+    await this.crearAcciones();
+
+    //Borramos todas las notificaciones programadas
+    await this.borrarNotificaciones();
+
+    //Proceso para crear las notificaciones
+    try {
+      //Arreglo que guardará las notificaciones
+      const notificaciones: LocalNotificationSchema[] = [];
+      let i = 0;
+
+      //Recorremos las alarmas y las agregamos al arreglo de notificaciones
+      alarmas.forEach(alarma => {
+        notificaciones.push({
+          title: 'Farmapp',
+          body: 'Recordatorio de medicamento: ' + alarma.medicamentoNombre + ' ' + alarma.indicacionDosis + ' gr',
+          id: i,
+          ongoing: true,
+          actionTypeId: 'ALARMA_MEDICAMENTO',
+          schedule: { at: new Date(alarma.fecha_hora) },
+          extra: { id_alarma: alarma.id_alarma }
         });
-      } catch(e){
-        this.alert.mostrar("Error al borrar notificaciones", JSON.stringify(e))
-      }
+        i++;
+      });
 
-      //Proceso para crear las notificaciones
-      try {
-        //Arreglo que guardará las notificaciones
-        const notificaciones: LocalNotificationSchema[] = [];
-        let i = 0;
+      //Definiendo las opciones de las notificaciones
+      const options: ScheduleOptions = { notifications: notificaciones };
+    
+      //Programamos las notificaciones
+      LocalNotifications.schedule(options);
 
-        //Recorremos las alarmas y las agregamos al arreglo de notificaciones
-        alarmas.forEach(alarma => {
-          notificaciones.push({
-            title: 'Farmapp',
-            body: 'Recordatorio de medicamento: ' + alarma.medicamentoNombre + ' ' + alarma.indicacionDosis + ' gr',
-            id: i,
-            schedule: { at: new Date(alarma.fecha_hora) }
-          });
-          i++;
-        });
+    } catch(e){
+      this.alert.mostrar("Error al crear notificaciones", JSON.stringify(e))
+    }
 
-        //Definiendo las opciones de las notificaciones
-        const options: ScheduleOptions = { notifications: notificaciones };
-      
-        //Programamos las notificaciones
-        LocalNotifications.schedule(options)
-
-      } catch(e){
-        this.alert.mostrar("Error al crear notificaciones", JSON.stringify(e))
-      }
-    })
-    .catch(() => this.alert.mostrar("Error permisos", "Hubo un error al verificar los permisos"));
+    //Añadimos un listener para las acciones de las notificaciones
+    this.crearListener();
   };
 
   //Funcion para verificar los permisos de notificaciones

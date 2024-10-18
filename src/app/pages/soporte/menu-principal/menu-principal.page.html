@@ -10,22 +10,58 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding" scroll-y="false">
+
+  <!--Seccion de menu-->
+  <ion-row>
+    <ion-col>
+      <ion-button expand="block" (click)="verUsuarios()">Usuarios</ion-button>
+    </ion-col>
+
+    <ion-col>
+      <ion-button expand="block" (click)="verMedicamentos()">Medicamentos</ion-button>
+    </ion-col>
+  </ion-row>
+
   <ion-searchbar [debounce]="1000" color="light" class="custom"></ion-searchbar>
-  <div class="contenedor">
-    <div>
-      <h3 class="titulo-seccion">Usuarios</h3>
-    </div>
+  <!--Seccion de medicamentos-->
+  <div class="contenedor" *ngIf="viendoMedicamentos">
+    <h3 class="titulo-seccion">Medicamentos</h3>
+    <ion-button (click)="agregarMedicamento">Agregar medicamento</ion-button>
 
     <!--Loop que recorre la lista de usuarios en la base de datos-->
-    <div class="alarma" *ngFor="let usuario of listadoUsuarios;">
+    <div class="alarma" *ngFor="let med of listadoMedicamentos;">
+
       <div class="info-alarma">
-        <p class="titulo-alarma">{{usuario.nombre}}</p>
-        <p class="texto-alarma">{{usuario.apellido_p}} {{usuario.apellido_m}}</p>
+        <p class="titulo-alarma">{{med.nombre}}</p>
+        <p class="texto-alarma">{{med.formato}}mg</p>
       </div>
-      <ion-button class="boton-alarma" fill="clear" (click)="cargarDetallesUsuario(usuario.id_usuario)" [routerLink]="">
+
+      <ion-button class="boton-alarma" fill="clear" (click)="cargarDetallesMedicamento(med.id_medicamento)">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>
     
   </div>
+
+
+  <!--Seccion de usuarios-->
+  <div class="contenedor" *ngIf="viendoUsuarios">
+    <h3 class="titulo-seccion">Usuarios</h3>
+
+    <!--Loop que recorre la lista de usuarios en la base de datos-->
+    <div class="alarma" *ngFor="let usuario of listadoUsuarios;">
+
+      <div class="info-alarma">
+        <p class="titulo-alarma">{{usuario.nombre}}</p>
+        <p class="texto-alarma">{{usuario.apellido_p}} {{usuario.apellido_m}}</p>
+      </div>
+
+      <ion-button class="boton-alarma" fill="clear" (click)="cargarDetallesUsuario(usuario.id_usuario)">
+        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
+      </ion-button>
+    </div>
+    
+  </div>
+
+
 </ion-content>

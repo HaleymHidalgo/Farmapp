@@ -7,6 +7,7 @@ import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
 import { ListadoUsuarios } from '../models/listado-usuarios';
 import { CredencialesUsuario } from '../models/credenciales-usuario';
+import { ListadoMedicamentos } from '../models/listado-medicamentos';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,8 @@ export class DatabaseService {
   private listadoTipoUsuario = new BehaviorSubject([]);
 
   private listadoUsuarios = new Subject<ListadoUsuarios[]>();
+
+  private listadoMedicamentos = new Subject<ListadoMedicamentos[]>();
 
   private credencialesUsuario = new Subject<CredencialesUsuario>();
 
@@ -149,9 +152,14 @@ export class DatabaseService {
     return this.usuarioActual.asObservable();
   }
 
-  fetchListadoUsuarios(){
+  fetchListadoUsuarios():Observable<ListadoUsuarios[]>{
     this.obtenerListadoUsuarios();
     return this.listadoUsuarios.asObservable();
+  }
+
+  fetchListadoMedicamentos():Observable<ListadoMedicamentos[]>{
+    this.obtenerListadoMedicamentos();
+    return this.listadoMedicamentos.asObservable();
   }
 
   fetchCredencialesUsuario(){
@@ -238,6 +246,30 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al obtener lista de usuarios', JSON.stringify(error));
+    });
+
+  }
+
+  //Listado de medicamentos para el perfil de soporte
+  private async obtenerListadoMedicamentos(){
+    return this.database.executeSql('SELECT * FROM medicamento',[])
+    .then(res => {
+      let lista:ListadoMedicamentos[] = [];
+      if(res.rows.length > 0) {
+        for(var i = 0; i < res.rows.length; i++){
+          lista.push({
+            id_medicamento: res.rows.item(i).id_medicamento,
+            nombre: res.rows.item(i).nombre,
+            formato: res.rows.item(i).formato,
+          });
+        }
+
+        this.listadoMedicamentos.next(lista);
+      }
+
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al obtener lista de medicamentos', JSON.stringify(error));
     });
 
   }

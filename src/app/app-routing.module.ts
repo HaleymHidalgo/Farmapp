@@ -90,7 +90,11 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
+  },  {
+    path: 'opciones-medicamento',
+    loadChildren: () => import('./pages/soporte/opciones-medicamento/opciones-medicamento.module').then( m => m.OpcionesMedicamentoPageModule)
   },
+
 
 
 ];

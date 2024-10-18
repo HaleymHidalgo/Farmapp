@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { MenuController } from '@ionic/angular';
+import { ListadoMedicamentos } from 'src/app/core/models/listado-medicamentos';
 import { ListadoUsuarios } from 'src/app/core/models/listado-usuarios';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
@@ -13,15 +14,25 @@ import { DatabaseService } from 'src/app/core/services/database.service';
 })
 export class MenuPrincipalPage implements OnInit {
 
-  listadoUsuarios!:ListadoUsuarios[];
+  viendoUsuarios:boolean = true;
+  viendoMedicamentos:boolean = false;
 
-  constructor(private menucontroller: MenuController, private db:DatabaseService, private alerts:AlertsService, private router:Router, private ns:NativeStorage) {
-  }
+  listadoUsuarios!:ListadoUsuarios[];
+  listadoMedicamentos!:ListadoMedicamentos[];
+
+  constructor(private menucontroller: MenuController, private db:DatabaseService, private alerts:AlertsService, private router:Router, private ns:NativeStorage) {}
 
   ngOnInit() {
+    //Fetch para la lista de usuarios
     this.db.fetchListadoUsuarios().subscribe(data => {
       this.listadoUsuarios = data;
     });
+
+    this.db.fetchListadoMedicamentos().subscribe(data => {
+      this.listadoMedicamentos = data;
+    });
+
+    //fetch para la lista de medicamentos
     this.menucontroller.enable(true, 'soporte');
     this.menucontroller.enable(false, 'autocuidado');
   }
@@ -32,5 +43,20 @@ export class MenuPrincipalPage implements OnInit {
 
     this.router.navigate(['/soporte/pregunta-seguridad']);
   }
+
+  async cargarDetallesMedicamento(id_medicamento: number){
+  }
+
+  verUsuarios(){
+    this.viendoUsuarios = true;
+    this.viendoMedicamentos = false;
+  }
+
+  verMedicamentos(){
+    this.viendoUsuarios = false;
+    this.viendoMedicamentos = true;
+  }
+
+  async agregarMedicamento(){}
   
 }

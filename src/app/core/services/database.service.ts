@@ -29,7 +29,7 @@ export class DatabaseService {
 
   tabla_preguntaSeguridad = 'CREATE TABLE IF NOT EXISTS "PREGUNTA_SEGURIDAD" ("id_pregunta" INTEGER PRIMARY KEY autoincrement,	"pregunta" TEXT NOT NULL);';
 
-  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" TEXT,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
+  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" BLOB,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
 
   tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER PRIMARY KEY autoincrement,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario"), FOREIGN KEY ("id_medicamento") REFERENCES "MEDICAMENTO"("id_medicamento"));';
 
@@ -42,15 +42,15 @@ export class DatabaseService {
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
-  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
+  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1);";
 
 
   //--------- Datos de prueba para las alarmas ------------
-  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, 'https://www.example.com');";
+  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1);";
 
   datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
 
-  datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-12T06:30:00', 0), (2, 1, '2024-10-12T08:30:00', 0);";
+  datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-12T06:30:00', 0);";
 
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
@@ -220,7 +220,6 @@ export class DatabaseService {
    * @returns Alarma[{},...,{}]
    */
   public obtenerAlarmas(id_usuario:number, fecha:string){
-    this.alerts.mostrar('Consultando', fecha);
     return new Promise<Alarma[]>((resolve, reject) => {
       this.database.executeSql(`
       SELECT  al.id_alarma AS id_alarma,
@@ -310,7 +309,6 @@ export class DatabaseService {
       }
       sentencia += `(${alarmas[i].id_indicacion}, '${alarmas[i].fecha_hora}', ${alarmas[i].status})`;
     }
-    this.alerts.mostrar('Sentencia', sentencia);
     return this.database.executeSql(`INSERT INTO alarma (id_indicacion, fecha_hora, status) VALUES ${sentencia};`,[])
     .then(()=> {
       this.alerts.mostrar('Alarmas registradas', 'Se han registrado las alarmas con exito');
@@ -319,8 +317,8 @@ export class DatabaseService {
   }
 
   //-----> Funciones de Actualización (Update) <-----
-  public actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
-    return this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, id_usuario])
+  public actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string, img_url:any) {
+    return this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ?, img_url = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, img_url, id_usuario])
     .then(() => {
       this.alerts.mostrar('Usuario actualizado', 'Los datos del usuario han sido actualizados con exito');
       //Actualizamos el observable del Usuario

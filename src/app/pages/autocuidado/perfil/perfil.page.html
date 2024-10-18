@@ -13,7 +13,15 @@
     <!--Foto de perfil organizada-->
     <ion-row>
       <ion-col style="border-radius: 100%; max-width: 150px; max-height: 150px; margin: 2%;">
-        <img class="imagen-perfil" [src]="imgPerfil" alt="{{imgPerfil}}">
+        <img *ngIf="!esEditable" class="imagen-perfil" [src]="imgPerfil" alt="{{imgPerfil}}">
+        <ion-button *ngIf="esEditable" size="large" shape="round" (click)="tomarFoto()">
+          <ion-icon
+            class="icono"
+            slot="icon-only" 
+            name="camera"
+            size="large">
+          </ion-icon>
+        </ion-button>
       </ion-col>
       <ion-col style="max-width: 150px; max-height: 150px;">
         <img class="icono-perfil" src="../../../../assets/images/esculapio.png" alt="Vara de esculapio">
@@ -40,6 +48,15 @@
         <div>
           <ion-input
             style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
+            label="Correo Electrónico"
+            label-placement="stacked"
+            fill="solid"
+            [(ngModel)]="correo"
+            [readonly]="true">
+            <ion-icon slot="end" name="lock-closed" size="large"></ion-icon>
+          </ion-input>
+          <ion-input
+            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
             label="Nombre"
             label-placement="stacked"
             fill="solid"
@@ -60,14 +77,6 @@
             label-placement="stacked"
             fill="solid"
             [(ngModel)]="apellido_m"
-            [readonly]="!esEditable">
-          </ion-input>
-          <ion-input
-            style="margin-bottom: 5px; margin-top: 5px; margin-left: 0px;"
-            label="Correo Electrónico"
-            label-placement="stacked"
-            fill="solid"
-            [(ngModel)]="correo"
             [readonly]="!esEditable">
           </ion-input>
           <ion-input

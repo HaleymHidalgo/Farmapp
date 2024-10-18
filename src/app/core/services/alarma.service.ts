@@ -123,7 +123,7 @@ export class AlarmaService {
       alarmas.forEach(alarma => {
         notificaciones.push({
           title: 'Farmapp',
-          body: 'Recordatorio de medicamento: ' + alarma.medicamentoNombre + ' ' + alarma.indicacionDosis + ' gr',
+          body: 'Recordatorio: ' + alarma.medicamentoNombre + ' ' + alarma.indicacionDosis + 'mg',
           id: i,
           ongoing: true,
           actionTypeId: 'ALARMA_MEDICAMENTO',

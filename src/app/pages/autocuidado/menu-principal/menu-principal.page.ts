@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { Alarma } from 'src/app/core/models/alarma';
@@ -25,16 +25,15 @@ export class MenuPrincipalPage implements OnInit {
 
   verAlarma:boolean = false;
 
-  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService, private alarmaService:AlarmaService) { 
+  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService, private alarmaService:AlarmaService) { }
 
-  }
-
-  ngOnInit() {
+  //Funcion que se ejecuta al entrar a la pagina (Post Init)
+  async ionViewWillEnter(){
     //Desactivamos el menu de soporte y activamos el de autocuidado
     this.menucontroller.enable(false, 'soporte');
     this.menucontroller.enable(true, 'autocuidado');
 
-    //Definimos el dia seleccionado como el dia actual
+    //Obtenemos el dia actual
     this.diaSeleccionado = new Date().getDay();
 
     //Obtenemos la data del usuario
@@ -42,21 +41,21 @@ export class MenuPrincipalPage implements OnInit {
       this.usuario = usr;
     });
 
-    
     //Obtenemos la fecha en formato yyyy-mm-dd
     let date = this.alarmaService.obtenerTiempo(new Date()).slice(0,10);
     //Obtenemos las alarmas del dia
-    this.db.obtenerAlarmas(this.usuario.id_usuario, date)
+    await this.db.obtenerAlarmas(this.usuario.id_usuario, date)
     .then (data => {
       this.alarmas = data;
-      
-      //Crear notificaciones del dia
-      this.alarmaService.verificarPermisos().then( res => {
-        if(!res) return
-        this.alarmaService.crearNotificaciones(this.alarmas)
-        .catch(error => this.alert.mostrar('Error al crear notificaciones', JSON.stringify(error)));
-      });
     });
+
+    //Crear notificaciones del dia
+    await this.alarmaService.crearNotificaciones(this.alarmas);
+  }
+
+  //Funcion que se ejecuta al cargar la pagina
+  async ngOnInit() {
+    
   }
 
   nuevaAlarma(){

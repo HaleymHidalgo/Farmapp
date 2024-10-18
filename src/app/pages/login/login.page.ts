@@ -18,6 +18,7 @@ export class LoginPage implements OnInit {
   password!: string;
 
   constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService, private nativeStorage: NativeStorage) {
+    
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -28,11 +29,14 @@ export class LoginPage implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.email = "";
+    this.password = "";
+  }
 
   validarLogin() {
     //Validaciones de formato (Correo)
-    if(!this.email.includes("@")) { 
+    if(!this.email.includes("@")) {
       this.alert.mostrar("Correo Electronico invalido", "Por favor, ingrese sus datos nuevamente");
       return;
     }

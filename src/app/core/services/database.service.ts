@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { Platform } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
+import { ListadoUsuarios } from '../models/listado-usuarios';
+import { CredencialesUsuario } from '../models/credenciales-usuario';
+import { ListadoMedicamentos } from '../models/listado-medicamentos';
 
 @Injectable({
   providedIn: 'root'
@@ -36,16 +39,23 @@ export class DatabaseService {
   //Variables que contiene las sentencias de población de tablas
   datos_tipoUsuario = "INSERT or IGNORE INTO tipo_usuario (id_tipo, nombre) VALUES (1, 'Autocuidado'), (2, 'Soporte');";
 
-  datos_medicamento = "INSERT or IGNORE INTO medicamento (id_medicamento, nombre, formato) VALUES (1, 'Paracetamol', 500), (2, 'Ibuprofeno', 250), (3, 'Amoxicilina', 500), (4, 'Omeprazol', 100);";
+  datos_medicamento = "INSERT or IGNORE INTO medicamento (id_medicamento, nombre, formato) VALUES (1, 'Paracetamol', 500), (2, 'Ibuprofeno', 250), (3, 'Amoxicilina', 500), (4, 'Omeprazol', 100), (5, 'Bisoprolol', 2.5);";
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
   datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
-
+  datos_soporte = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (2, 'dondup@gmail.com', '123', 'Dondup', 'Berrios', 'Perez', 'Calle 1 #123', '+56949857762', 'Etham', 1, 2, 'https://www.google.com');";
+  
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  private usuarioActual = new BehaviorSubject <Usuario>({
+  private listadoUsuarios = new Subject<ListadoUsuarios[]>();
+
+  private listadoMedicamentos = new Subject<ListadoMedicamentos[]>();
+
+  private credencialesUsuario = new Subject<CredencialesUsuario>();
+
+  private usuarioActual = new BehaviorSubject<Usuario>({
     id_usuario: 0,
     email: "",
     password: "",
@@ -124,6 +134,8 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
       await this.database.executeSql(this.datos_usuario,[]);
+      await this.database.executeSql(this.datos_soporte,[]);
+
     } catch (error) {
       this.alerts.mostrar('Error al poblar tablas', JSON.stringify(error));
     };
@@ -140,8 +152,22 @@ export class DatabaseService {
     return this.usuarioActual.asObservable();
   }
 
+  fetchListadoUsuarios():Observable<ListadoUsuarios[]>{
+    this.obtenerListadoUsuarios();
+    return this.listadoUsuarios.asObservable();
+  }
+
+  fetchListadoMedicamentos():Observable<ListadoMedicamentos[]>{
+    this.obtenerListadoMedicamentos();
+    return this.listadoMedicamentos.asObservable();
+  }
+
+  fetchCredencialesUsuario(){
+    return this.credencialesUsuario.asObservable();
+  }
+
   //-----> Funciones de Consulta (Select) <-----
-  public iniciarSesion(email:string, password:string) {
+  public async iniciarSesion(email:string, password:string) {
     return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ?',[email, password])
     .then(res => {
       //Si el usuario existe, retornamos el registro
@@ -170,7 +196,7 @@ export class DatabaseService {
     });
   }
 
-  private obtenerUsuario(id_usuario:number) {
+  private async obtenerUsuario(id_usuario:number) {
     return this.database.executeSql('SELECT * FROM usuario WHERE id_usuario = ?',[id_usuario])
     .then(res => {
       //Si el usuario existe, retornamos el registro
@@ -199,8 +225,81 @@ export class DatabaseService {
     });
   }
 
+  //Listado de usuarios para el perfil de soporte
+  private async obtenerListadoUsuarios(){
+    return this.database.executeSql('SELECT id_usuario, nombre, apellido_p, apellido_m FROM usuario',[])
+    .then(res => {
+      let lista:ListadoUsuarios[] = [];
+      if(res.rows.length > 0) {
+        for(var i = 0; i < res.rows.length; i++){
+          lista.push({
+            id_usuario: res.rows.item(i).id_usuario,
+            nombre: res.rows.item(i).nombre,
+            apellido_p: res.rows.item(i).apellido_p,
+            apellido_m: res.rows.item(i).apellido_m,
+          });
+        }
+
+        this.listadoUsuarios.next(lista);
+      }
+
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al obtener lista de usuarios', JSON.stringify(error));
+    });
+
+  }
+
+  //Listado de medicamentos para el perfil de soporte
+  private async obtenerListadoMedicamentos(){
+    return this.database.executeSql('SELECT * FROM medicamento',[])
+    .then(res => {
+      let lista:ListadoMedicamentos[] = [];
+      if(res.rows.length > 0) {
+        for(var i = 0; i < res.rows.length; i++){
+          lista.push({
+            id_medicamento: res.rows.item(i).id_medicamento,
+            nombre: res.rows.item(i).nombre,
+            formato: res.rows.item(i).formato,
+          });
+        }
+
+        this.listadoMedicamentos.next(lista);
+      }
+
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al obtener lista de medicamentos', JSON.stringify(error));
+    });
+
+  }
+
+  //Pregunta y respuesta de seguridad para ayuda del soporte
+  public async obtenerCredencialesUsuario(id_usuario: number){
+    return this.database.executeSql('SELECT u.id_usuario AS id_usuario, u.nombre AS nombre, u.apellido_p AS apellido_p, u.res_seguridad AS res_seguridad, p.pregunta AS pregunta FROM usuario u JOIN pregunta_seguridad p ON u.id_pregunta = p.id_pregunta WHERE id_usuario = ?',[id_usuario])
+    .then(res => {
+      if(res.rows.length > 0) {
+
+        let credenciales:CredencialesUsuario = {
+          "id_usuario": res.rows.item(0).id_usuario,
+          "nombre": res.rows.item(0).nombre,
+          "apellido_p": res.rows.item(0).apellido_p,
+          "pregunta": res.rows.item(0).pregunta,
+          "res_seguridad": res.rows.item(0).res_seguridad,
+        };
+        
+        this.credencialesUsuario.next(credenciales);
+      }
+
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al obtener credenciales de usuario', JSON.stringify(error));
+    });
+
+  }
+
   //-----> Funciones de Inserción (Insert) <-----
-  public registrarUsuario(usuario:Usuario) {
+  public async registrarUsuario(usuario:Usuario) {
     return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
     [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url])
     .then(() => {
@@ -211,8 +310,19 @@ export class DatabaseService {
     });
   }
 
+  public async registrarMedicamento(nombre:string, formato:number){
+    return this.database.executeSql('INSERT INTO medicamento (nombre, formato) VALUES (?,?)', [nombre, formato])
+    .then(() => {
+      this.alerts.mostrar('Exito', "medicamento registrado: " + nombre);
+      this.obtenerListadoMedicamentos();
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al registrar usuario', JSON.stringify(error));
+    });
+  }
+
   //-----> Funciones de Actualización (Update) <-----
-  public actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
+  public async actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
     return this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, id_usuario])
     .then(() => {
       this.alerts.mostrar('Usuario actualizado', 'Los datos del usuario han sido actualizados con exito');
@@ -221,6 +331,29 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al actualizar usuario', JSON.stringify(error));
+    });
+  }
+
+  public async actualizarPassword(id_usuario:number, password:string){
+    return this.database.executeSql('UPDATE usuario SET password = ? WHERE id_usuario = ?', [password, id_usuario])
+    .then(() => {
+      this.alerts.mostrar('Exito ', 'Su contraseña ha sido cambiada');
+      this.obtenerCredencialesUsuario(id_usuario);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al actualizar contraseña de usuario', JSON.stringify(error));
+    });
+  }
+
+  //FUnciones de eliminar (Delete)
+  public async eliminarMedicamento(id_medicamento:number){
+    return this.database.executeSql('DELETE FROM medicamento WHERE id_medicamento = ?', [id_medicamento])
+    .then(() => {
+      this.alerts.mostrar('Exito ', 'Medicamento eliminado de la BD');
+      this.obtenerListadoMedicamentos();
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al eliminar medicamento', JSON.stringify(error));
     });
   }
 }

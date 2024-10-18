@@ -45,17 +45,17 @@ export class DatabaseService {
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
-  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, false);";
+  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, ?);";
 
 
   //--------- Datos de prueba para las alarmas ------------
-  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, false);";
+  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, ?);";
 
   datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
 
   datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-12T06:30:00', 0);";
   
-  datos_soporte = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (2, 'dondup@gmail.com', '123', 'Dondup', 'Berrios', 'Perez', 'Calle 1 #123', '+56949857762', 'Etham', 1, 2, 'https://www.google.com');";
+  datos_soporte = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (3, 'dondup@gmail.com', '123', 'Dondup', 'Berrios', 'Perez', 'Calle 1 #123', '+56949857762', 'Firulais', 1, 2, ?);";
   
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
@@ -135,9 +135,9 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_tipoUsuario,[]);
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
-      await this.database.executeSql(this.datos_usuario,[]);
-      await this.database.executeSql(this.datos_usuario2,[]);
-      await this.database.executeSql(this.datos_soporte,[]);
+      await this.database.executeSql(this.datos_usuario,[false]);
+      await this.database.executeSql(this.datos_usuario2,[false]);
+      await this.database.executeSql(this.datos_soporte,[true]);
       await this.database.executeSql(this.datos_indicacion,[]);
       await this.database.executeSql(this.datos_alarma,[]);      
     } catch (error) {

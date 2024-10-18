@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ListadoMedicamentos } from 'src/app/core/models/listado-medicamentos';
 import { Medicamento } from 'src/app/core/models/medicamento';
 import { AlarmaService } from 'src/app/core/services/alarma.service';
 import { AlertsService } from 'src/app/core/services/alerts.service';
@@ -11,13 +12,8 @@ import { DatabaseService } from 'src/app/core/services/database.service';
   styleUrls: ['./alarma-medicamento.page.scss'],
 })
 export class AlarmaMedicamentoPage implements OnInit {
-  //Arreglo que guadara los datos del recipe
-  recipe: any = {
-    tramiento: undefined
-  };
-
   //Arreglo que guardará los medicamentos
-  listaMedicamentos: Medicamento[] = [];
+  listaMedicamentos: ListadoMedicamentos[] = [];
 
   //Variables que se enviarán al siguiente formulario
   idMedicamento!: number;
@@ -28,8 +24,9 @@ export class AlarmaMedicamentoPage implements OnInit {
 
   constructor(private db: DatabaseService, private alert:AlertsService, private router: Router, private alarma: AlarmaService) {
     //Se obtienen los medicamentos de la base de datos
-    this.db.obtenerMedicamentos().then(() => this.db.fetchMedicamentos().subscribe(data => this.listaMedicamentos = data));
-    
+    this.db.fetchListadoMedicamentos().subscribe(data => {
+      this.listaMedicamentos = data;
+    });
   }
 
   ngOnInit() {

@@ -16,8 +16,8 @@
       (ionChange)="obtenerMedicamento($event)">
       <ion-select-option 
         *ngFor="let medicamento of listaMedicamentos" 
-        value="{{medicamento.idMedicamento}}"
-        >{{medicamento.nombreMedicamento}}
+        value="{{medicamento.id_medicamento}}"
+        >{{medicamento.nombre}}
       </ion-select-option>
     </ion-select>
     <br/>

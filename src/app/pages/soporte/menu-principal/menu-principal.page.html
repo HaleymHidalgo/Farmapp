@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding" scroll-y="false">
+<ion-content [fullscreen]="true" class="ion-padding">
 
   <!--Seccion de menu-->
   <ion-row>
@@ -22,11 +22,23 @@
     </ion-col>
   </ion-row>
 
+  <!--Barra de busqueda-->
   <ion-searchbar [debounce]="1000" color="light" class="custom"></ion-searchbar>
+
   <!--Seccion de medicamentos-->
   <div class="contenedor" *ngIf="viendoMedicamentos">
     <h3 class="titulo-seccion">Medicamentos</h3>
-    <ion-button (click)="agregarMedicamento">Agregar medicamento</ion-button>
+
+    <!--Boton de agregar medicamentos-->
+    <ion-row>
+      <ion-col style="max-width: 25%;"></ion-col>
+      <ion-col style="max-width: 75%; min-width: 75%;">
+        <ion-button expand="block" size="large" [routerLink]="'/soporte/agregar-medicamento'">Agregar medicamento
+          <ion-icon name="add-circle-outline" slot="end" size="large"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col style="max-width: 25%;"></ion-col>
+    </ion-row>
 
     <!--Loop que recorre la lista de usuarios en la base de datos-->
     <div class="alarma" *ngFor="let med of listadoMedicamentos;">
@@ -36,8 +48,8 @@
         <p class="texto-alarma">{{med.formato}}mg</p>
       </div>
 
-      <ion-button class="boton-alarma" fill="clear" (click)="cargarDetallesMedicamento(med.id_medicamento)">
-        <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
+      <ion-button class="boton-alarma" fill="clear" (click)="eliminarMedicamento(med.id_medicamento)">
+        <ion-icon class="icono-boton-alarma" name="trash-bin"></ion-icon>
       </ion-button>
     </div>
     

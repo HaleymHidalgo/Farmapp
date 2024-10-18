@@ -39,7 +39,7 @@ export class DatabaseService {
   //Variables que contiene las sentencias de población de tablas
   datos_tipoUsuario = "INSERT or IGNORE INTO tipo_usuario (id_tipo, nombre) VALUES (1, 'Autocuidado'), (2, 'Soporte');";
 
-  datos_medicamento = "INSERT or IGNORE INTO medicamento (id_medicamento, nombre, formato) VALUES (1, 'Paracetamol', 500), (2, 'Ibuprofeno', 250), (3, 'Amoxicilina', 500), (4, 'Omeprazol', 100);";
+  datos_medicamento = "INSERT or IGNORE INTO medicamento (id_medicamento, nombre, formato) VALUES (1, 'Paracetamol', 500), (2, 'Ibuprofeno', 250), (3, 'Amoxicilina', 500), (4, 'Omeprazol', 100), (5, 'Bisoprolol', 2.5);";
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
@@ -167,7 +167,7 @@ export class DatabaseService {
   }
 
   //-----> Funciones de Consulta (Select) <-----
-  public iniciarSesion(email:string, password:string) {
+  public async iniciarSesion(email:string, password:string) {
     return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ?',[email, password])
     .then(res => {
       //Si el usuario existe, retornamos el registro
@@ -196,7 +196,7 @@ export class DatabaseService {
     });
   }
 
-  private obtenerUsuario(id_usuario:number) {
+  private async obtenerUsuario(id_usuario:number) {
     return this.database.executeSql('SELECT * FROM usuario WHERE id_usuario = ?',[id_usuario])
     .then(res => {
       //Si el usuario existe, retornamos el registro
@@ -299,7 +299,7 @@ export class DatabaseService {
   }
 
   //-----> Funciones de Inserción (Insert) <-----
-  public registrarUsuario(usuario:Usuario) {
+  public async registrarUsuario(usuario:Usuario) {
     return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
     [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url])
     .then(() => {
@@ -310,8 +310,19 @@ export class DatabaseService {
     });
   }
 
+  public async registrarMedicamento(nombre:string, formato:number){
+    return this.database.executeSql('INSERT INTO medicamento (nombre, formato) VALUES (?,?)', [nombre, formato])
+    .then(() => {
+      this.alerts.mostrar('Exito', "medicamento registrado: " + nombre);
+      this.obtenerListadoMedicamentos();
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al registrar usuario', JSON.stringify(error));
+    });
+  }
+
   //-----> Funciones de Actualización (Update) <-----
-  public actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
+  public async actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
     return this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, id_usuario])
     .then(() => {
       this.alerts.mostrar('Usuario actualizado', 'Los datos del usuario han sido actualizados con exito');
@@ -323,7 +334,7 @@ export class DatabaseService {
     });
   }
 
-  public actualizarPassword(id_usuario:number, password:string){
+  public async actualizarPassword(id_usuario:number, password:string){
     return this.database.executeSql('UPDATE usuario SET password = ? WHERE id_usuario = ?', [password, id_usuario])
     .then(() => {
       this.alerts.mostrar('Exito ', 'Su contraseña ha sido cambiada');
@@ -331,6 +342,18 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al actualizar contraseña de usuario', JSON.stringify(error));
+    });
+  }
+
+  //FUnciones de eliminar (Delete)
+  public async eliminarMedicamento(id_medicamento:number){
+    return this.database.executeSql('DELETE FROM medicamento WHERE id_medicamento = ?', [id_medicamento])
+    .then(() => {
+      this.alerts.mostrar('Exito ', 'Medicamento eliminado de la BD');
+      this.obtenerListadoMedicamentos();
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al eliminar medicamento', JSON.stringify(error));
     });
   }
 }

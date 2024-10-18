@@ -28,11 +28,12 @@ export class MenuPrincipalPage implements OnInit {
       this.listadoUsuarios = data;
     });
 
+    //fetch para la lista de medicamentos
     this.db.fetchListadoMedicamentos().subscribe(data => {
       this.listadoMedicamentos = data;
     });
 
-    //fetch para la lista de medicamentos
+    
     this.menucontroller.enable(true, 'soporte');
     this.menucontroller.enable(false, 'autocuidado');
   }
@@ -42,9 +43,6 @@ export class MenuPrincipalPage implements OnInit {
     this.db.obtenerCredencialesUsuario(id_usuario);
 
     this.router.navigate(['/soporte/pregunta-seguridad']);
-  }
-
-  async cargarDetallesMedicamento(id_medicamento: number){
   }
 
   verUsuarios(){
@@ -57,6 +55,8 @@ export class MenuPrincipalPage implements OnInit {
     this.viendoMedicamentos = true;
   }
 
-  async agregarMedicamento(){}
+  async eliminarMedicamento(id_medicamento:number){
+    this.db.eliminarMedicamento(id_medicamento);
+  }
   
 }

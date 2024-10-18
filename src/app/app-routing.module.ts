@@ -88,14 +88,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/soporte/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
+    path: 'soporte/agregar-medicamento',
+    loadChildren: () => import('./pages/soporte/agregar-medicamento/agregar-medicamento.module').then( m => m.AgregarMedicamentoPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
-  },  {
-    path: 'opciones-medicamento',
-    loadChildren: () => import('./pages/soporte/opciones-medicamento/opciones-medicamento.module').then( m => m.OpcionesMedicamentoPageModule)
   },
-
-
 
 ];
 

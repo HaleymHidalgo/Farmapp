@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-registro-contacto',
@@ -18,7 +19,7 @@ export class RegistroContactoPage implements OnInit {
   email!:string;
   direccion!:string;
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute, private alertcontroller: AlertController, private alert:AlertsService) {
+  constructor(private router: Router, private activatedroute: ActivatedRoute, private alert:AlertsService, private db:DatabaseService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -33,7 +34,7 @@ export class RegistroContactoPage implements OnInit {
   }
 
   //Función que se ejecuta al presionar el botón de continuar
-  siguienteFormulario() {
+  async siguienteFormulario() {
     //Si el usuario no ingreso valores en los inputs o los dejo vacios
     if (this.nrTelefono == undefined || this.email == undefined || this.direccion == undefined ||
         this.nrTelefono == "" || this.email == "" || this.direccion == "")
@@ -60,6 +61,15 @@ export class RegistroContactoPage implements OnInit {
     if(!emailRegex.test(this.email)){
       const titulo = "Correo electronico Invalido";
       const mensaje = "Por favor, valide que el correo electronico este escrito correctamente";
+      this.alert.mostrar(titulo, mensaje)
+      return;
+    }
+
+    //Validación de existencia de correo electronico
+    const emailExiste = await this.db.emailExiste(this.email);
+    if (emailExiste){
+      const titulo = "Correo electronico registrado";
+      const mensaje = "El correo electronico ingresado ya se encuentra registrado, por favor, ingrese otro correo electronico para su cuenta";
       this.alert.mostrar(titulo, mensaje)
       return;
     }

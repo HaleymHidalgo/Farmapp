@@ -251,7 +251,7 @@ export class DatabaseService {
           resolve(alarmas);
         }
         else {
-          this.alerts.mostrar('No hay alarmas', 'No se encontraron alarmas para el dia de hoy');
+          this.alerts.mostrar('No hay alarmas', 'No se encontraron alarmas para este dia');
           resolve([]);
         }
       })
@@ -275,6 +275,21 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al buscar medicamentos', JSON.stringify(error));
+    });
+  }
+
+  public emailExiste(email:string) {
+    return this.database.executeSql('SELECT email FROM usuario WHERE email = ?',[email])
+    .then(res => {
+      if(res.rows.length > 0) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar email', JSON.stringify(error));
     });
   }
 

@@ -34,28 +34,17 @@ export class RegistroFotoPerfilPage implements OnInit {
   tomarFoto(){
     this.camara.takePicture()
     .then((imgUrl) => {
-      this.registrarUsuario(imgUrl);
+      //Guardamos la imagen en el objeto nuevoUsuario
+      this.nuevoUsuario.img_url = imgUrl;
+      //Ejecutamos la función registrarUsuario
+      this.registrarUsuario();
     })
   }
-
-  //Función que sube la foto del usuario
-  subirFoto(){}
-  /*
-  subirFoto(){
-    this.camara.uploadPicture()
-    .then((imgUrl) => {
-      this.registrarUsuario(imgUrl);
-    })
-  }
-  */
 
   //registrarUsuario
-  registrarUsuario(img_url:string){
+  registrarUsuario(){
     //Añadimos el rol de usuario
     this.nuevoUsuario.id_tipo_usuario = 1;
-
-    //Añadimos la url_foto del usuario
-    this.nuevoUsuario.img_url = img_url;
 
     //Registramos al usuario en la base de datos
     this.db.registrarUsuario(this.nuevoUsuario);

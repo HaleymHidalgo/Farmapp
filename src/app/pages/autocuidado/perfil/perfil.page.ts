@@ -22,7 +22,7 @@ export class PerfilPage implements OnInit {
   correo!:string;
   telefono!:string;
   direccion!:string;
-  imgPerfil!:string;
+  imgPerfil!:any;
 
   constructor(private menucontroller: MenuController, private db:DatabaseService, private alert:AlertsService, private camara:CamaraService) {
     this.obtenerDatosUser();
@@ -50,18 +50,22 @@ export class PerfilPage implements OnInit {
       this.correo = this.datosUsuario.email;
       this.telefono = this.datosUsuario.telefono;
       this.direccion = this.datosUsuario.direccion;
-
-      //Seteamos la imagen de perfil
-      this.camara.obtenerFoto(this.datosUsuario.img_url)
-      .then((data) => {
-        this.imgPerfil = data;
-      });
+      this.imgPerfil = this.datosUsuario.img_url;
     });
   }
 
   cancelarCambios(){
     this.esEditable = false;
     this.obtenerDatosUser();
+  }
+
+  //Función que toma la foto del usuario
+  tomarFoto(){
+    this.camara.takePicture()
+    .then((img) => {
+      //Guardamos la imagen en el objeto nuevoUsuario
+      this.imgPerfil = img;
+    })
   }
 
   async guardarCambios(){
@@ -103,10 +107,6 @@ export class PerfilPage implements OnInit {
     this.editarCampos();
 
     //Si pasa todas las validaciones, entonces actualizamos los datos
-    await this.db.actualizarUsuario(this.datosUsuario.id_usuario, this.nombre, this.apellido_p, this.apellido_m, this.correo, this.telefono, this.direccion);
-
-    //Actualizamos los datos del usuario
-    this.obtenerDatosUser()
-
+    await this.db.actualizarUsuario(this.datosUsuario.id_usuario, this.nombre, this.apellido_p, this.apellido_m, this.correo, this.telefono, this.direccion, this.imgPerfil);
   }
 }

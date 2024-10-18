@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/registro_usuario/registro-password/registro-password.module').then( m => m.RegistroPasswordPageModule)
   },
   {
+    path: 'registro-seguridad',
+    loadChildren: () => import('./pages/registro_usuario/registro-seguridad/registro-seguridad.module').then( m => m.RegistroSeguridadPageModule)
+  },
+  {
     path: 'registro-foto-perfil',
     loadChildren: () => import('./pages/registro_usuario/registro-foto-perfil/registro-foto-perfil.module').then( m => m.RegistroFotoPerfilPageModule)
   },
@@ -36,24 +40,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/autocuidado/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
   {
-    path: 'autocuidado/agregar-alarma',
-    loadChildren: () => import('./pages/autocuidado/agregar-alarma/agregar-alarma.module').then( m => m.AgregarAlarmaPageModule)
-  },
-  {
-    path: 'autocuidado/alarma-recipe',
-    loadChildren: () => import('./pages/autocuidado/alarma-recipe/alarma-recipe.module').then( m => m.AlarmaRecipePageModule)
-  },
-  {
-    path: 'autocuidado/alarma-recipe-contacto',
-    loadChildren: () => import('./pages/autocuidado/alarma-recipe-contacto/alarma-recipe-contacto.module').then( m => m.AlarmaRecipeContactoPageModule)
-  },
-  {
     path: 'autocuidado/alarma-medicamento',
     loadChildren: () => import('./pages/autocuidado/alarma-medicamento/alarma-medicamento.module').then( m => m.AlarmaMedicamentoPageModule)
-  },
-  {
-    path: 'autocuidado/alarma-confirmar',
-    loadChildren: () => import('./pages/autocuidado/alarma-confirmar/alarma-confirmar.module').then( m => m.AlarmaConfirmarPageModule)
   },
   {
     path: 'autocuidado/perfil-emergencia',
@@ -95,7 +83,6 @@ const routes: Routes = [
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
   },
-
 ];
 
 @NgModule({

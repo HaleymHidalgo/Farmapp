@@ -6,34 +6,33 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment scrollable="true" value="Semana">
-      <ion-segment-button value="Lunes">
+    <ion-segment scrollable="true" value="{{diaSeleccionado}}" (ionChange)="cambioDia($event)" >
+      <ion-segment-button value=0>
+        <ion-label>D</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value=1>
         <ion-label>L</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Martes">
+      <ion-segment-button value=2>
         <ion-label>M</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Miercoles">
+      <ion-segment-button value=3>
         <ion-label>X</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Jueves">
+      <ion-segment-button value=4>
         <ion-label>J</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Viernes">
+      <ion-segment-button value=5>
         <ion-label>V</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Sabado">
+      <ion-segment-button value=6>
         <ion-label>S</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="Domingo">
-        <ion-label>D</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding" style="min-height: 85%;">
-
 
   <div id="detalle-alarma" *ngIf="verAlarma" color="secondary">
     <h4 style="text-align: center; color: white; font-weight: bolder; background-color: #387185; padding: 2%;">Detalles de alarma</h4>
@@ -44,25 +43,23 @@
       </ion-col>
       <ion-col style="width: 5%;"></ion-col>
     </ion-row>
-
     <div>
       <ion-input
-          style="width: 90%; margin-left: 5%; margin-top: 5%;"
-          label="Nombre medicamento"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="Remedio">
-          </ion-input>
+        style="width: 90%; margin-left: 5%; margin-top: 5%;"
+        label="Nombre medicamento"
+        label-placement="stacked"
+        fill="solid"
+        placeholder="Remedio">
+      </ion-input>
     </div>
-
     <div>
       <ion-input
-          style="width: 90%; margin-left: 5%; margin-top: 5%;"
-          label="Dosis medicamento"
-          label-placement="stacked"
-          fill="solid"
-          placeholder="500mg">
-          </ion-input>
+        style="width: 90%; margin-left: 5%; margin-top: 5%;"
+        label="Dosis medicamento"
+        label-placement="stacked"
+        fill="solid"
+        placeholder="500mg">
+      </ion-input>
     </div>
     <br>
     <ion-row>
@@ -85,7 +82,6 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
   </div>
 
 
@@ -94,13 +90,14 @@
       <h3 class="titulo-seccion">Proximas Alarmas</h3>
     </div>
 
-    <div class="alarma" *ngFor="let dato of alarmas">
+    <div class="alarma" *ngFor="let alarma of alarmas">
       <div class="info-alarma">
-        <p class="titulo-alarma">{{dato.nombre}}</p>
-        <p class="texto-alarma">{{dato.dosis}}</p>
+        <p class="titulo-alarma">{{alarma.medicamentoNombre}}</p>
+        <p class="texto-alarma">{{alarma.indicacionDosis}}gr</p>
+        <p class="texto-alarma">{{alarma.status | statusAlarma}}</p>
       </div>
       <div class="info-hora">
-        <p class="texto-hora">{{dato.hora}}</p>
+        <p class="texto-hora">{{alarma.fecha_hora | tiempoAlarma}}</p>
       </div>
       <ion-button (click)="verDetalles()" class="boton-alarma" fill="clear">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
@@ -108,8 +105,6 @@
     </div>
       
   </div>
-
-
   <div class="boton-añadir">
     <ion-row>
       <ion-col style="max-width: 25%;"></ion-col>

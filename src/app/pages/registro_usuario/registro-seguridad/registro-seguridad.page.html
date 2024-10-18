@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <div>
+    <h1 class="ion-text-bold">¡Regístrate!</h1>
+    <p>¡Ya esta listo!<br>Ahora seleccione y responda a una pregunta de seguridad.</p>
+  </div>
+  <div class="ion-text-start">
+    <br>
+    <ion-select 
+      label="Preguntas de seguridad" 
+      label-placement="floating"
+      fill="outline"
+      interface="popover"
+      (ionChange)="obtenerPregunta($event)">
+      <ion-select-option 
+        *ngFor="let pregunta of listaPreguntas" 
+        value="{{pregunta.id_pregunta}}"
+        >{{pregunta.pregunta}}
+      </ion-select-option>
+    </ion-select>
+    <br>
+    <ion-input 
+      label="Tu Respuesta:" 
+      label-placement="stacked"
+      fill="outline" 
+      type="text"
+      placeholder="Ingrese una respuesta"
+      [(ngModel)]="respuesta"
+    ></ion-input>
+    <br/>
+    <ion-button 
+      color="primary" 
+      expand="block"
+      (click)="siguienteFormulario()"
+      >Continuar
+    </ion-button>
+  </div>
+  <div style="margin-top: 25px;">
+    <a [routerLink]="['/login']">¿Ya tienes una cuenta?</a>
+  </div>
+</ion-content>

@@ -5,9 +5,11 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AlertsService } from './alerts.service';
 import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
+import { PreguntaSeguridad } from '../models/pregunta-seguridad';
 import { ListadoUsuarios } from '../models/listado-usuarios';
-import { CredencialesUsuario } from '../models/credenciales-usuario';
 import { ListadoMedicamentos } from '../models/listado-medicamentos';
+import { CredencialesUsuario } from '../models/credenciales-usuario';
+import { Alarma } from '../models/alarma';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +32,11 @@ export class DatabaseService {
 
   tabla_preguntaSeguridad = 'CREATE TABLE IF NOT EXISTS "PREGUNTA_SEGURIDAD" ("id_pregunta" INTEGER PRIMARY KEY autoincrement,	"pregunta" TEXT NOT NULL);';
 
-  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" TEXT,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
+  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" BLOB, activo BOOLEAN NOT NULL,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
 
   tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER PRIMARY KEY autoincrement,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario"), FOREIGN KEY ("id_medicamento") REFERENCES "MEDICAMENTO"("id_medicamento"));';
 
-  tabla_alarma = 'CREATE TABLE IF NOT EXISTS "ALARMA" ("id_indicacion" INTEGER NOT NULL,	"fecha_hora" TEXT NOT NULL, "status" INTEGER NOT NULL,	FOREIGN KEY ("id_indicacion") REFERENCES "INDICACION"("id_indicacion"));';
+  tabla_alarma = 'CREATE TABLE IF NOT EXISTS "ALARMA" ("id_alarma" INTEGER PRIMARY KEY autoincrement, "id_indicacion" INTEGER NOT NULL,	"fecha_hora" TEXT NOT NULL, "status" INTEGER NOT NULL,	FOREIGN KEY ("id_indicacion") REFERENCES "INDICACION"("id_indicacion"));';
 
   //Variables que contiene las sentencias de población de tablas
   datos_tipoUsuario = "INSERT or IGNORE INTO tipo_usuario (id_tipo, nombre) VALUES (1, 'Autocuidado'), (2, 'Soporte');";
@@ -43,15 +45,26 @@ export class DatabaseService {
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
-  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, 'https://www.google.com');";
+  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, false);";
+
+
+  //--------- Datos de prueba para las alarmas ------------
+  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, false);";
+
+  datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
+
+  datos_alarma = "INSERT or IGNORE INTO ALARMA (id_alarma, id_indicacion, fecha_hora, status) VALUES (1, 1, '2024-10-12T06:30:00', 0);";
+  
   datos_soporte = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (2, 'dondup@gmail.com', '123', 'Dondup', 'Berrios', 'Perez', 'Calle 1 #123', '+56949857762', 'Etham', 1, 2, 'https://www.google.com');";
   
   //Variables que contienen los observables
   private listadoTipoUsuario = new BehaviorSubject([]);
 
-  private listadoUsuarios = new Subject<ListadoUsuarios[]>();
-
   private listadoMedicamentos = new Subject<ListadoMedicamentos[]>();
+
+  private listadoPreguntasSeguridad = new BehaviorSubject<PreguntaSeguridad[]>([]);
+
+  private listadoUsuarios = new Subject<ListadoUsuarios[]>();
 
   private credencialesUsuario = new Subject<CredencialesUsuario>();
 
@@ -68,7 +81,8 @@ export class DatabaseService {
     id_pregunta: 0,
     res_seguridad: "",
     id_cont_emergencia: 0,
-    img_url: ""
+    img_url: "",
+    activo: false
   });
   
   constructor(private sqlite:SQLite, private platform:Platform, private alerts:AlertsService) {
@@ -78,17 +92,6 @@ export class DatabaseService {
   //Función que inicializa la base de datos
   crearDB() {
     this.platform.ready().then(() => {
-      //Eliminamos la base de datos si existe
-      /*
-      this.sqlite.deleteDatabase({
-        name: 'farmapp.db',
-        location: 'default'
-      }).then(() => {
-        this.alerts.mostrar('DB Eliminada', "La base de datos ha sido eliminada con exito");
-      }).catch(error => {
-        this.alerts.mostrar('Error al eliminar DB', JSON.stringify(error));
-      });
-      */
       //Creamos la base de datos
       this.sqlite.create({
         name: 'farmapp.db',
@@ -122,7 +125,6 @@ export class DatabaseService {
       await this.database.executeSql(this.tabla_usuario,[]);
       await this.database.executeSql(this.tabla_indicacion,[]);
       await this.database.executeSql(this.tabla_alarma,[]);
-      
     } catch (error) {
       this.alerts.mostrar('Error al crear tablas', JSON.stringify(error));
     }
@@ -134,14 +136,16 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
       await this.database.executeSql(this.datos_usuario,[]);
+      await this.database.executeSql(this.datos_usuario2,[]);
       await this.database.executeSql(this.datos_soporte,[]);
-
+      await this.database.executeSql(this.datos_indicacion,[]);
+      await this.database.executeSql(this.datos_alarma,[]);      
     } catch (error) {
       this.alerts.mostrar('Error al poblar tablas', JSON.stringify(error));
     };
   }
 
-  //-----> Funciones de Fetch (get/obtener) <-----
+  //-----> Funciones de Fetch (get/) <-----
 
   //Fetch's de las tablas
   fetchTipoUsuario():Observable<TipoUsuario[]> {
@@ -150,6 +154,10 @@ export class DatabaseService {
 
   fetchUsuarioActual():Observable<Usuario>{
     return this.usuarioActual.asObservable();
+  }
+
+  fetchPreguntasSeguridad():Observable<PreguntaSeguridad[]> {
+    return this.listadoPreguntasSeguridad.asObservable();
   }
 
   fetchListadoUsuarios():Observable<ListadoUsuarios[]>{
@@ -167,8 +175,8 @@ export class DatabaseService {
   }
 
   //-----> Funciones de Consulta (Select) <-----
-  public async iniciarSesion(email:string, password:string) {
-    return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ?',[email, password])
+  public iniciarSesion(email:string, password:string) {
+    return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ? AND activo = ?' ,[email, password, true])
     .then(res => {
       //Si el usuario existe, retornamos el registro
       if(res.rows.length > 0) {
@@ -185,7 +193,8 @@ export class DatabaseService {
           id_pregunta: res.rows.item(0).id_pregunta,
           res_seguridad: res.rows.item(0).res_seguridad,
           id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
-          img_url: res.rows.item(0).img_url
+          img_url: res.rows.item(0).img_url,
+          activo: res.rows.item(0).activo
         };
         //Actualizamos el observable del Usuario
         this.usuarioActual.next(data); 
@@ -214,7 +223,8 @@ export class DatabaseService {
           id_pregunta: res.rows.item(0).id_pregunta,
           res_seguridad: res.rows.item(0).res_seguridad,
           id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
-          img_url: res.rows.item(0).img_url
+          img_url: res.rows.item(0).img_url,
+          activo: res.rows.item(0).activo
         };
         //Actualizamos el observable del Usuario
         this.usuarioActual.next(data); 
@@ -222,6 +232,104 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
+    });
+  }
+
+  /**
+   * @example obtenerAlarmasDia(1, '2024-09-01')
+   * @param id_usuario tipo numerico
+   * @param fecha en formato 'YYYY-MM-DD'
+   * @returns Alarma[{},...,{}]
+   */
+  public obtenerAlarmas(id_usuario:number, fecha:string){
+    return new Promise<Alarma[]>((resolve, reject) => {
+      this.database.executeSql(`
+      SELECT  al.id_alarma AS id_alarma,
+              al.id_indicacion AS id_indicacion,
+              al.fecha_hora AS fecha_hora, 
+              al.status AS status,
+              med.nombre AS medicamentoNombre,
+              ind.dosis AS dosis
+      FROM alarma al
+      JOIN indicacion ind ON al.id_indicacion = ind.id_indicacion
+      JOIN usuario usr ON usr.id_usuario = ind.id_usuario
+      JOIN medicamento med ON ind.id_medicamento = med.id_medicamento
+      WHERE usr.id_usuario = ? AND al.fecha_hora LIKE ?
+      ORDER BY al.fecha_hora ASC;`,
+      [id_usuario, fecha + '%'])
+      .then(res => {
+        if(res.rows.length > 0) {
+          let alarmas:Alarma[] = [];
+          for (let i = 0; i < res.rows.length; i++) {
+            alarmas.push({
+              id_alarma: res.rows.item(i).id_alarma,
+              id_indicacion: res.rows.item(i).id_indicacion,
+              fecha_hora: res.rows.item(i).fecha_hora,
+              status: res.rows.item(i).status,
+              medicamentoNombre: res.rows.item(i).medicamentoNombre,
+              indicacionDosis: res.rows.item(i).dosis
+            });
+          }
+          resolve(alarmas);
+        }
+        else {
+          this.alerts.mostrar('No hay alarmas', 'No se encontraron alarmas para este dia');
+          resolve([]);
+        }
+      })
+      .catch(error => {
+        this.alerts.mostrar('Error al buscar alarmas', JSON.stringify(error));
+      });
+    });
+  }
+
+  public obtenerMedicamentos() {
+    return this.database.executeSql('SELECT * FROM medicamento',[])
+    .then(res => {
+      let medicamentos:ListadoMedicamentos[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        medicamentos.push({
+          id_medicamento: res.rows.item(i).id_medicamento,
+          nombre: res.rows.item(i).nombre,
+          formato: res.rows.item(i).formato
+        });
+      }
+      this.listadoMedicamentos.next(medicamentos);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar medicamentos', JSON.stringify(error));
+    });
+  }
+
+  public emailExiste(email:string) {
+    return this.database.executeSql('SELECT email FROM usuario WHERE email = ?',[email])
+    .then(res => {
+      if(res.rows.length > 0) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar email', JSON.stringify(error));
+    });
+  }
+
+  public obtenerPreguntasSeguridad() {
+    return this.database.executeSql('SELECT * FROM pregunta_seguridad',[])
+    .then(res => {
+      let preguntas:PreguntaSeguridad[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        preguntas.push({
+          id_pregunta: res.rows.item(i).id_pregunta,
+          pregunta: res.rows.item(i).pregunta
+        });
+      }
+      this.listadoPreguntasSeguridad.next(preguntas);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar preguntas de seguridad', JSON.stringify(error));
     });
   }
 
@@ -300,14 +408,40 @@ export class DatabaseService {
 
   //-----> Funciones de Inserción (Insert) <-----
   public async registrarUsuario(usuario:Usuario) {
-    return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-    [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url])
+    return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url, activo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+    [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url, usuario.activo])
     .then(() => {
       this.usuarioActual.next(usuario);
     })
     .catch(error => {
       this.alerts.mostrar('Error al registrar usuario', JSON.stringify(error));
     });
+  }
+
+  public registrarIndicacion(id_medicamento:number, dosis:number, dias_tratamiento:number, nr_horas:number):Promise<number> {
+    return this.database.executeSql('INSERT INTO indicacion (id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (?,?,?,?,?) RETURNING id_indicacion',
+    [id_medicamento, this.usuarioActual.value.id_usuario, dosis, dias_tratamiento, nr_horas])
+    .then((res) => {
+      return res.rows.item(0).id_indicacion;
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al registrar indicación', JSON.stringify(error));
+    });
+  }
+
+  public registrarAlarmas(alarmas:Alarma[]) {
+    let sentencia = ""
+    for (let i = 0; i < alarmas.length; i++) {
+      if (i > 0) {
+        sentencia += ', ';
+      }
+      sentencia += `(${alarmas[i].id_indicacion}, '${alarmas[i].fecha_hora}', ${alarmas[i].status})`;
+    }
+    return this.database.executeSql(`INSERT INTO alarma (id_indicacion, fecha_hora, status) VALUES ${sentencia};`,[])
+    .then(()=> {
+      this.alerts.mostrar('Alarmas registradas', 'Se han registrado las alarmas con exito');
+    })
+    .catch(error => this.alerts.mostrar('Error al registrar alarmas', JSON.stringify(error)));
   }
 
   public async registrarMedicamento(nombre:string, formato:number){
@@ -322,16 +456,15 @@ export class DatabaseService {
   }
 
   //-----> Funciones de Actualización (Update) <-----
-  public async actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string) {
-    return this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, id_usuario])
-    .then(() => {
+  public async actualizarUsuario(id_usuario:number, nombre:string, apellido_p:string, apellido_m:string, email:string, telefono:string, direccion:string, img_url:any) {
+    try {
+      await this.database.executeSql('UPDATE usuario SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ?, img_url = ? WHERE id_usuario = ?', [nombre, apellido_p, apellido_m, email, telefono, direccion, img_url, id_usuario]);
       this.alerts.mostrar('Usuario actualizado', 'Los datos del usuario han sido actualizados con exito');
       //Actualizamos el observable del Usuario
       this.obtenerUsuario(id_usuario);
-    })
-    .catch(error => {
+    } catch (error) {
       this.alerts.mostrar('Error al actualizar usuario', JSON.stringify(error));
-    });
+    }
   }
 
   public async actualizarPassword(id_usuario:number, password:string){
@@ -354,6 +487,16 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al eliminar medicamento', JSON.stringify(error));
+    });
+  }
+
+  public cambiarEstadoAlarma(id_alarma:number) {
+    return this.database.executeSql('UPDATE alarma SET status = ? WHERE id_alarma = ?', [true, id_alarma])
+    .then(() => {
+      this.alerts.mostrar('Alarma actualizada', 'La alarma ha sido actualizada con exito');
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al actualizar alarma', JSON.stringify(error));
     });
   }
 }

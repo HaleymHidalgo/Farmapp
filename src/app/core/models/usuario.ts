@@ -13,4 +13,5 @@ export class Usuario {
     res_seguridad!: string;
     id_cont_emergencia!: any;
     img_url!: any;
+    activo!: boolean;
 }

@@ -7,6 +7,7 @@ import { TipoUsuario } from '../models/tipo-usuario';
 import { Usuario } from '../models/usuario';
 import { Alarma } from '../models/alarma';
 import { Medicamento } from '../models/medicamento';
+import { PreguntaSeguridad } from '../models/pregunta-seguridad';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class DatabaseService {
 
   tabla_preguntaSeguridad = 'CREATE TABLE IF NOT EXISTS "PREGUNTA_SEGURIDAD" ("id_pregunta" INTEGER PRIMARY KEY autoincrement,	"pregunta" TEXT NOT NULL);';
 
-  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" BLOB,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
+  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" BLOB, activo BOOLEAN NOT NULL,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
 
   tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER PRIMARY KEY autoincrement,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario"), FOREIGN KEY ("id_medicamento") REFERENCES "MEDICAMENTO"("id_medicamento"));';
 
@@ -42,11 +43,11 @@ export class DatabaseService {
 
   datos_preguntaSeguridad = "INSERT or IGNORE INTO pregunta_seguridad (id_pregunta, pregunta) VALUES (1, '¿Cual es el nombre de tu mascota?'), (2, '¿Cual es el nombre de tu primer amor?'), (3, '¿Cual es el nombre de tu mejor amigo?');";
 
-  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1);";
+  datos_usuario = "INSERT or IGNORE INTO usuario (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (1, 'haleym@gmail.com', '123', 'Haleym', 'Hidalgo', 'Torres', 'Calle 1 #123', '+56949857762', 'Etham', 1, 1, false);";
 
 
   //--------- Datos de prueba para las alarmas ------------
-  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1);";
+  datos_usuario2 = "INSERT or IGNORE INTO USUARIO (id_usuario, email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, activo) VALUES (2, 'juan@gmail.com', '123', 'Juan', 'Gómez', 'López', 'Av. Siempreviva 742', '+56987654321', 'Rocky', 1, 1, false);";
 
   datos_indicacion = "INSERT or IGNORE INTO INDICACION (id_indicacion, id_medicamento, id_usuario, dosis, dias_tratamiento, nr_horas) VALUES (1, 1, 2, 400, 7, 8);";
 
@@ -56,6 +57,8 @@ export class DatabaseService {
   private listadoTipoUsuario = new BehaviorSubject([]);
 
   private listadoMedicamentos = new BehaviorSubject<Medicamento[]>([]);
+
+  private listadoPreguntasSeguridad = new BehaviorSubject<PreguntaSeguridad[]>([]);
 
   private usuarioActual = new BehaviorSubject <Usuario>({
     id_usuario: 0,
@@ -70,7 +73,8 @@ export class DatabaseService {
     id_pregunta: 0,
     res_seguridad: "",
     id_cont_emergencia: 0,
-    img_url: ""
+    img_url: "",
+    activo: false
   });
   
   constructor(private sqlite:SQLite, private platform:Platform, private alerts:AlertsService) {
@@ -154,9 +158,13 @@ export class DatabaseService {
     return this.listadoMedicamentos.asObservable();
   }
 
+  fetchPreguntasSeguridad():Observable<PreguntaSeguridad[]> {
+    return this.listadoPreguntasSeguridad.asObservable();
+  }
+
   //-----> Funciones de Consulta (Select) <-----
   public iniciarSesion(email:string, password:string) {
-    return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ?',[email, password])
+    return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ? AND activo = ?' ,[email, password, true])
     .then(res => {
       //Si el usuario existe, retornamos el registro
       if(res.rows.length > 0) {
@@ -173,7 +181,8 @@ export class DatabaseService {
           id_pregunta: res.rows.item(0).id_pregunta,
           res_seguridad: res.rows.item(0).res_seguridad,
           id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
-          img_url: res.rows.item(0).img_url
+          img_url: res.rows.item(0).img_url,
+          activo: res.rows.item(0).activo
         };
         //Actualizamos el observable del Usuario
         this.usuarioActual.next(data); 
@@ -202,7 +211,8 @@ export class DatabaseService {
           id_pregunta: res.rows.item(0).id_pregunta,
           res_seguridad: res.rows.item(0).res_seguridad,
           id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
-          img_url: res.rows.item(0).img_url
+          img_url: res.rows.item(0).img_url,
+          activo: res.rows.item(0).activo
         };
         //Actualizamos el observable del Usuario
         this.usuarioActual.next(data); 
@@ -293,10 +303,27 @@ export class DatabaseService {
     });
   }
 
+  public obtenerPreguntasSeguridad() {
+    return this.database.executeSql('SELECT * FROM pregunta_seguridad',[])
+    .then(res => {
+      let preguntas:PreguntaSeguridad[] = [];
+      for (let i = 0; i < res.rows.length; i++) {
+        preguntas.push({
+          id_pregunta: res.rows.item(i).id_pregunta,
+          pregunta: res.rows.item(i).pregunta
+        });
+      }
+      this.listadoPreguntasSeguridad.next(preguntas);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al buscar preguntas de seguridad', JSON.stringify(error));
+    });
+  }
+
   //-----> Funciones de Inserción (Insert) <-----
   public registrarUsuario(usuario:Usuario) {
-    return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-    [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url])
+    return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url, activo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+    [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url, usuario.activo])
     .then(() => {
       this.usuarioActual.next(usuario);
     })

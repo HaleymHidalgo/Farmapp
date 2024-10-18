@@ -16,7 +16,6 @@ export class RegistroPasswordPage implements OnInit {
   //Variables del formulario
   password!: string;
   confirmPassword!: string;
-  pregunta!: string;
 
   constructor(private router: Router, private activatedroute: ActivatedRoute, private alert:AlertsService) {
     //Capturamos la información de NavigationExtras
@@ -36,7 +35,7 @@ export class RegistroPasswordPage implements OnInit {
   siguienteFormulario() {
     //Si el usuario no ingreso valores en los inputs o los dejo vacios
     if (this.password == undefined || this.confirmPassword == undefined||
-        this.password == "" || this.confirmPassword == "" || this.pregunta == undefined)
+        this.password == "" || this.confirmPassword == "")
     {
       const titulo = "Campos vacios";
       const mensaje = "Por favor, valide que los campos contengan su información";
@@ -91,8 +90,6 @@ export class RegistroPasswordPage implements OnInit {
 
     //Si pasa las validaciones, entonces guarda los datos
     this.nuevoUsuario.password = this.password;
-    this.nuevoUsuario.res_seguridad = this.pregunta;
-    this.nuevoUsuario.id_pregunta = 1;
 
     //Preparamos la data para enviarla a la siguiente pagina
     let navigationextras: NavigationExtras = {
@@ -102,7 +99,7 @@ export class RegistroPasswordPage implements OnInit {
     }
 
     //Redirecciona al siguiente formulario
-    this.router.navigate(['/registro-foto-perfil'], navigationextras);
+    this.router.navigate(['/registro-seguridad'], navigationextras);
   }
 
 }

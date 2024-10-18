@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/registro_usuario/registro-password/registro-password.module').then( m => m.RegistroPasswordPageModule)
   },
   {
+    path: 'registro-seguridad',
+    loadChildren: () => import('./pages/registro_usuario/registro-seguridad/registro-seguridad.module').then( m => m.RegistroSeguridadPageModule)
+  },
+  {
     path: 'registro-foto-perfil',
     loadChildren: () => import('./pages/registro_usuario/registro-foto-perfil/registro-foto-perfil.module').then( m => m.RegistroFotoPerfilPageModule)
   },
@@ -75,8 +79,6 @@ const routes: Routes = [
     path: '**',
     loadChildren: () => import('./pages/not-found/not-found.module').then( m => m.NotFoundPageModule)
   },
-
-
 ];
 
 @NgModule({

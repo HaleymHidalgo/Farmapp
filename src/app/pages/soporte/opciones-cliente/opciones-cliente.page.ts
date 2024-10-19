@@ -35,6 +35,19 @@ export class OpcionesClientePage implements OnInit {
 
   
   deshabilitarUsuario() {
+    this.db.cambiarEstadoUsuario(this.id_usuario, false)
+    .then(() => {
+      this.alerts.mostrar('Usuario deshabilitado', 'El usuario ha sido deshabilitado correctamente');
+      this.router.navigate(['/soporte/menu-principal']);
+    });
+  }
+
+  rehabilitarUsuario() {
+    this.db.cambiarEstadoUsuario(this.id_usuario, true)
+    .then(() => {
+      this.alerts.mostrar('Usuario rehabilitado', 'El usuario ha sido rehabilitado correctamente');
+      this.router.navigate(['/soporte/menu-principal']);
+    });
   }
 
 }

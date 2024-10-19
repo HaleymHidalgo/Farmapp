@@ -197,7 +197,7 @@ export class DatabaseService {
           activo: res.rows.item(0).activo
         };
         //Actualizamos el observable del Usuario
-        this.usuarioActual.next(data); 
+        this.usuarioActual.next(data);
       }      
     })
     .catch(error => {
@@ -499,4 +499,12 @@ export class DatabaseService {
       this.alerts.mostrar('Error al actualizar alarma', JSON.stringify(error));
     });
   }
+
+  public cambiarEstadoUsuario(id_usuario:number, estado:boolean) {
+    return this.database.executeSql('UPDATE usuario SET activo = ? WHERE id_usuario = ?', [estado, id_usuario])
+    .catch(error => {
+      this.alerts.mostrar('Error al deshabilitar usuario', JSON.stringify(error));
+    });
+  }
+
 }

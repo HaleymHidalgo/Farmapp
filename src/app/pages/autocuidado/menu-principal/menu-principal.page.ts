@@ -16,6 +16,15 @@ import { AlarmaService } from 'src/app/core/services/alarma.service';
 export class MenuPrincipalPage implements OnInit {
   //Objeto donde se guarda la data del usuario
   usuario!: Usuario;
+
+  //Objeto que guarda los detalles de la alarma seleccionada
+  alarmaSeleccionada = {
+    id_alarma: 0,
+    fecha_hora:"",
+    indicacionDosis: 0,
+    medicamentoNombre:"",
+    status:"",
+  };
   
   //Variable que indica que dia de la semana se selecciono
   diaSeleccionado!: number;
@@ -23,7 +32,7 @@ export class MenuPrincipalPage implements OnInit {
   //arreglo donde se guarda la data de las alarmas
   alarmas: Alarma[] = [];
 
-  verAlarma:boolean = false;
+  viendoDetalles:boolean = false;
 
   constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService, private alarmaService:AlarmaService) { }
 
@@ -63,8 +72,27 @@ export class MenuPrincipalPage implements OnInit {
     this.router.navigate(['/autocuidado/alarma-medicamento']);
   }
 
-  verDetalles(){
-    this.verAlarma=!this.verAlarma;
+  //Carga los detalles de la alarma seleccionada en el modal
+  //Tambien cierra el modal cuando ya no este en uso
+  verDetalles(id_alarma:number){
+    this.viendoDetalles=!this.viendoDetalles;
+
+    if(this.viendoDetalles == true){
+      for(let i = 0; i < this.alarmas.length; i++){
+        if(id_alarma == this.alarmas[i].id_alarma){
+          this.alarmaSeleccionada.fecha_hora = this.alarmas[i].fecha_hora;
+          this.alarmaSeleccionada.indicacionDosis = this.alarmas[i].indicacionDosis;
+          this.alarmaSeleccionada.medicamentoNombre = this.alarmas[i].medicamentoNombre;
+          if(this.alarmas[i].status == false){
+            this.alarmaSeleccionada.status = "No tomado";
+          }
+  
+          if(this.alarmas[i].status == true){
+            this.alarmaSeleccionada.status = "Tomado";
+          }
+        }
+      }
+    }
   }
 
   cambioDia(event:any){

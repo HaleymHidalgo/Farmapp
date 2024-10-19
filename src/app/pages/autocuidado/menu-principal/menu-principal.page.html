@@ -34,54 +34,37 @@
 
 <ion-content [fullscreen]="true" class="ion-padding" style="min-height: 85%;">
 
-  <div id="detalle-alarma" *ngIf="verAlarma" color="secondary">
-    <h4 style="text-align: center; color: white; font-weight: bolder; background-color: #387185; padding: 2%;">Detalles de alarma</h4>
-    <ion-row style="margin-top: 10%;">
-      <ion-col style="width: 5%;"></ion-col>
-      <ion-col style="width: 90%;">
-        <ion-datetime presentation="time" [preferWheel]="true" style="border-radius: 10%;"></ion-datetime>
-      </ion-col>
-      <ion-col style="width: 5%;"></ion-col>
-    </ion-row>
-    <div>
-      <ion-input
-        style="width: 90%; margin-left: 5%; margin-top: 5%;"
-        label="Nombre medicamento"
-        label-placement="stacked"
-        fill="solid"
-        placeholder="Remedio">
-      </ion-input>
-    </div>
-    <div>
-      <ion-input
-        style="width: 90%; margin-left: 5%; margin-top: 5%;"
-        label="Dosis medicamento"
-        label-placement="stacked"
-        fill="solid"
-        placeholder="500mg">
-      </ion-input>
-    </div>
-    <br>
-    <ion-row>
-      <ion-col>
-        <ion-button
-        color="secondary"
-        expand="block"
-        (click)="verDetalles()"
-        style="height: 80%; margin-left: 9%;">
-          Volver
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button 
-          color="success" 
-          expand="block"
-          (click)="verDetalles()"
-          style="height: 80%; margin-right: 9%;">
-            Guardar cambios
-        </ion-button>
-      </ion-col>
-    </ion-row>
+  <!--Modal detalles de alarma-->
+  <div id="conetendor-modal">
+    <ion-modal [isOpen]="viendoDetalles">
+
+      <h6>Nombre del medicamento</h6>
+      <p>{{alarmaSeleccionada.medicamentoNombre}}</p>
+      <br>
+
+      <h6>Dosis del medicamento</h6>
+      <p>{{alarmaSeleccionada.indicacionDosis}}</p>
+      <br>
+
+      <h6>Horas de toma del medicamento</h6>
+      <p>{{alarmaSeleccionada.fecha_hora}}</p>
+      <br>
+
+      <h6>Estado del medicamento</h6>
+      <p>{{alarmaSeleccionada.status}}</p>
+      <br>
+
+      <!--Botones del modal-->
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block">Marcar como tomada</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" (click)="verDetalles(alarmaSeleccionada.id_alarma)">Volver</ion-button>
+        </ion-col>
+      </ion-row>
+
+    </ion-modal>
   </div>
 
 
@@ -99,7 +82,7 @@
       <div class="info-hora">
         <p class="texto-hora">{{alarma.fecha_hora | tiempoAlarma}}</p>
       </div>
-      <ion-button (click)="verDetalles()" class="boton-alarma" fill="clear">
+      <ion-button (click)="verDetalles(alarma.id_alarma)" class="boton-alarma" fill="clear">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>

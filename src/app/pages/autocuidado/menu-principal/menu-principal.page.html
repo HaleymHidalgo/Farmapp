@@ -32,39 +32,72 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding" style="min-height: 85%;">
+<ion-content [fullscreen]="true" class="ion-padding" style="min-height: 75%;">
 
   <!--Modal detalles de alarma-->
   <div id="conetendor-modal">
     <ion-modal [isOpen]="viendoDetalles">
+      <ng-template>
+        <div style="background-color: #4C9BA2; text-align: center;">
+          <h3 style="font-weight: bold; margin-top: 5%; margin-bottom: 5%;">Detalles de alarma</h3>
+        </div>
+        
+        <h6 style="margin-left: 5%;">Nombre del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Nombre del medicamento"
+          label-placement="stacked"
+          fill="solid"
+          value="{{alarmaSeleccionada.medicamentoNombre}}"
+          [readonly]="true">
+        </ion-input>
 
-      <h6>Nombre del medicamento</h6>
-      <p>{{alarmaSeleccionada.medicamentoNombre}}</p>
-      <br>
+        <h6 style="margin-left: 5%;">Dosis del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Dosis del medicamento"
+          label-placement="stacked"
+          fill="solid"
+          value="{{alarmaSeleccionada.indicacionDosis}}"
+          [readonly]="true">
+        </ion-input>
 
-      <h6>Dosis del medicamento</h6>
-      <p>{{alarmaSeleccionada.indicacionDosis}}</p>
-      <br>
+        <h6 style="margin-left: 5%;">Horas de toma del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Horas de toma del medicamento"
+          label-placement="stacked"
+          fill="solid"
+          value="{{alarmaSeleccionada.fecha_hora | tiempoAlarma}}"
+          [readonly]="true">
+        </ion-input>
 
-      <h6>Horas de toma del medicamento</h6>
-      <p>{{alarmaSeleccionada.fecha_hora}}</p>
-      <br>
+        <h6 style="margin-left: 5%;">Estado del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Estado del medicamento"
+          label-placement="stacked"
+          fill="solid"
+          value="{{alarmaSeleccionada.status}}"
+          [readonly]="true">
+        </ion-input>
 
-      <h6>Estado del medicamento</h6>
-      <p>{{alarmaSeleccionada.status}}</p>
-      <br>
+        <!--Botones del modal-->
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" size="large" color="success" style="min-height: 50px;" (click)="marcarAlarmaTomada(alarmaSeleccionada.id_alarma)">Marcar como tomada</ion-button>
+          </ion-col>
+        </ion-row>
 
-      <!--Botones del modal-->
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block">Marcar como tomada</ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" (click)="verDetalles(alarmaSeleccionada.id_alarma)">Volver</ion-button>
-        </ion-col>
-      </ion-row>
-
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" size="large" style="min-height: 50px;" (click)="verDetalles(alarmaSeleccionada.id_alarma)">Volver</ion-button>
+          </ion-col>
+        </ion-row>
+      </ng-template>
     </ion-modal>
+
+      
   </div>
 
 

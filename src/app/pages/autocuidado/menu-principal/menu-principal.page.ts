@@ -95,6 +95,10 @@ export class MenuPrincipalPage implements OnInit {
     }
   }
 
+  marcarAlarmaTomada(id_alarma:number){
+    this.db.cambiarEstadoAlarma(id_alarma);
+  }
+
   cambioDia(event:any){
     //event.detail.value contiene el dia seleccionado
     let diaEvento = event.detail.value;

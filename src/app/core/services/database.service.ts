@@ -135,7 +135,7 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_tipoUsuario,[]);
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
-      await this.database.executeSql(this.datos_usuario,[false]);
+      await this.database.executeSql(this.datos_usuario,[true]);
       await this.database.executeSql(this.datos_usuario2,[false]);
       await this.database.executeSql(this.datos_soporte,[true]);
       await this.database.executeSql(this.datos_indicacion,[]);

@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { MenuPrincipalPageRoutingModule } from './menu-principal-routing.module';
 
 import { MenuPrincipalPage } from './menu-principal.page';
+import { TiempoAlarmaPipe } from 'src/app/core/pipes/tiempo-alarma.pipe';
+import { StatusAlarmaPipe } from 'src/app/core/pipes/status-alarma.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MenuPrincipalPageRoutingModule
+    MenuPrincipalPageRoutingModule,
+    TiempoAlarmaPipe,
+    StatusAlarmaPipe
   ],
   declarations: [MenuPrincipalPage]
 })

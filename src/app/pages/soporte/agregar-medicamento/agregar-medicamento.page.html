@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <div>
+    <p>Añade la información del Medicamento</p>
+  </div>
+
+  <!--Espacio para el formulario-->
+  <div class="ion-text-start formulario" style="height: 40%;">
+    <br/>
+    <ion-input 
+      label="Nombre del Medicamento" 
+      label-placement="floating"
+      fill="outline" 
+      placeholder="Medicamento"
+      [(ngModel)]="nombre_med"
+    ></ion-input>
+
+    <br/>
+    <ion-input 
+      label="Gramaje del medicamento" 
+      label-placement="floating"
+      fill="outline" 
+      placeholder="500mg"
+      [(ngModel)]="formato_med"
+    ></ion-input>
+
+  </div>
+
+  <!--Espacio para los botones-->
+  <div>
+    <ion-button 
+      color="success" 
+      expand="block"
+      (click)="agregarMedicamento()"
+      >Continuar
+    </ion-button>
+    <br>
+    <ion-button 
+      color="danger"
+      expand="block"
+      [routerLink]="'/soporte/menu-principal'"
+      >Cancelar
+    </ion-button>
+  </div>
+</ion-content>

@@ -6,86 +6,98 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment scrollable="true" value="Semana">
-      <ion-segment-button value="Lunes">
+    <ion-segment scrollable="true" value="{{diaSeleccionado}}" (ionChange)="cambioDia($event)" >
+      <ion-segment-button value=0>
+        <ion-label>D</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value=1>
         <ion-label>L</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Martes">
+      <ion-segment-button value=2>
         <ion-label>M</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Miercoles">
+      <ion-segment-button value=3>
         <ion-label>X</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Jueves">
+      <ion-segment-button value=4>
         <ion-label>J</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Viernes">
+      <ion-segment-button value=5>
         <ion-label>V</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="Sabado">
+      <ion-segment-button value=6>
         <ion-label>S</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="Domingo">
-        <ion-label>D</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding" style="min-height: 85%;">
+<ion-content [fullscreen]="true" class="ion-padding" style="min-height: 75%;">
 
-
-  <div id="detalle-alarma" *ngIf="verAlarma" color="secondary">
-    <h4 style="text-align: center; color: white; font-weight: bolder; background-color: #387185; padding: 2%;">Detalles de alarma</h4>
-    <ion-row style="margin-top: 10%;">
-      <ion-col style="width: 5%;"></ion-col>
-      <ion-col style="width: 90%;">
-        <ion-datetime presentation="time" [preferWheel]="true" style="border-radius: 10%;"></ion-datetime>
-      </ion-col>
-      <ion-col style="width: 5%;"></ion-col>
-    </ion-row>
-
-    <div>
-      <ion-input
-          style="width: 90%; margin-left: 5%; margin-top: 5%;"
-          label="Nombre medicamento"
+  <!--Modal detalles de alarma-->
+  <div id="conetendor-modal">
+    <ion-modal [isOpen]="viendoDetalles">
+      <ng-template>
+        <div style="background-color: #4C9BA2; text-align: center;">
+          <h3 style="font-weight: bold; margin-top: 5%; margin-bottom: 5%;">Detalles de alarma</h3>
+        </div>
+        
+        <h6 style="margin-left: 5%;">Nombre del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Nombre del medicamento"
           label-placement="stacked"
           fill="solid"
-          placeholder="Remedio">
-          </ion-input>
-    </div>
+          value="{{alarmaSeleccionada.medicamentoNombre}}"
+          [readonly]="true">
+        </ion-input>
 
-    <div>
-      <ion-input
-          style="width: 90%; margin-left: 5%; margin-top: 5%;"
-          label="Dosis medicamento"
+        <h6 style="margin-left: 5%;">Dosis del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Dosis del medicamento"
           label-placement="stacked"
           fill="solid"
-          placeholder="500mg">
-          </ion-input>
-    </div>
-    <br>
-    <ion-row>
-      <ion-col>
-        <ion-button
-        color="secondary"
-        expand="block"
-        (click)="verDetalles()"
-        style="height: 80%; margin-left: 9%;">
-          Volver
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button 
-          color="success" 
-          expand="block"
-          (click)="verDetalles()"
-          style="height: 80%; margin-right: 9%;">
-            Guardar cambios
-        </ion-button>
-      </ion-col>
-    </ion-row>
+          value="{{alarmaSeleccionada.indicacionDosis}}"
+          [readonly]="true">
+        </ion-input>
 
+        <h6 style="margin-left: 5%;">Horas de toma del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Horas de toma del medicamento"
+          label-placement="stacked"
+          fill="solid"
+          value="{{alarmaSeleccionada.fecha_hora | tiempoAlarma}}"
+          [readonly]="true">
+        </ion-input>
+
+        <h6 style="margin-left: 5%;">Estado del medicamento</h6>
+        <ion-input
+        style="max-width: 90%; margin-left: 5%; margin-top: -5%;"
+          label="Estado del medicamento"
+          label-placement="stacked"
+          fill="solid"
+          value="{{alarmaSeleccionada.status}}"
+          [readonly]="true">
+        </ion-input>
+
+        <!--Botones del modal-->
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" size="large" color="success" style="min-height: 50px;" (click)="marcarAlarmaTomada(alarmaSeleccionada.id_alarma)">Marcar como tomada</ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" size="large" style="min-height: 50px;" (click)="verDetalles(alarmaSeleccionada.id_alarma)">Volver</ion-button>
+          </ion-col>
+        </ion-row>
+      </ng-template>
+    </ion-modal>
+
+      
   </div>
 
 
@@ -94,22 +106,21 @@
       <h3 class="titulo-seccion">Proximas Alarmas</h3>
     </div>
 
-    <div class="alarma" *ngFor="let dato of alarmas">
+    <div class="alarma" *ngFor="let alarma of alarmas">
       <div class="info-alarma">
-        <p class="titulo-alarma">{{dato.nombre}}</p>
-        <p class="texto-alarma">{{dato.dosis}}</p>
+        <p class="titulo-alarma">{{alarma.medicamentoNombre}}</p>
+        <p class="texto-alarma">{{alarma.indicacionDosis}}gr</p>
+        <p class="texto-alarma">{{alarma.status | statusAlarma}}</p>
       </div>
       <div class="info-hora">
-        <p class="texto-hora">{{dato.hora}}</p>
+        <p class="texto-hora">{{alarma.fecha_hora | tiempoAlarma}}</p>
       </div>
-      <ion-button (click)="verDetalles()" class="boton-alarma" fill="clear">
+      <ion-button (click)="verDetalles(alarma.id_alarma)" class="boton-alarma" fill="clear">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>
       
   </div>
-
-
   <div class="boton-añadir">
     <ion-row>
       <ion-col style="max-width: 25%;"></ion-col>

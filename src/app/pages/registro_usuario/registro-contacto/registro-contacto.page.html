@@ -7,16 +7,18 @@
     <h1 class="ion-text-bold">¡Regístrate!</h1>
     <p>Ingresa aquí tu información de contacto</p>
   </div>
-  <div class="ion-text-start" style="height: 50%;">
+  <div class="ion-text-start">
     <br/>
     <ion-input 
       label="Numero de teléfono" 
       label-placement="floating"
-      fill="outline" 
+      fill="outline"
+      type="tel"
       placeholder="Enter text"
-      [(ngModel)]="nrTelefono"
-    ></ion-input>
-    <br />
+      [(ngModel)]="nrTelefono">
+        <ion-icon slot="start" name="phone-portrait-outline"></ion-icon>
+    </ion-input>
+    <br/>
     <ion-input 
       label="Correo electrónico" 
       label-placement="floating"
@@ -33,7 +35,7 @@
       placeholder="Enter text"
       [(ngModel)]="direccion"
     ></ion-input>
-    <br />
+    <br/>
     <ion-button 
       color="primary" 
       expand="block"
@@ -41,7 +43,7 @@
       >Continuar
     </ion-button>
   </div>
-  <div>
+  <div style="margin-top: 25px;">
     <a [routerLink]="['/login']">¿Ya tienes una cuenta?</a>
   </div>
 </ion-content>

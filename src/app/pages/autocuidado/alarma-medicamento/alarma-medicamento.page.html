@@ -4,33 +4,38 @@
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
   <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
   <div>
-    <p>Ahora debes añadir la información del Medicamento<br>incluyendo sus indicaciones</p>
+    <p>Ahora añadiras las indicaciones del Medicamento</p>
   </div>
   <div class="ion-text-start formulario" style="height: 40%;">
     <br/>
-    <ion-input 
-      label="Nombre del Medicamento" 
+    <ion-select 
+      label="Medicamento"
       label-placement="floating"
-      fill="outline" 
-      placeholder="Medicamento"
-      [(ngModel)]="nombreMedicamento"
-    ></ion-input>
+      fill="outline"
+      interface="popover"
+      (ionChange)="obtenerMedicamento($event)">
+      <ion-select-option 
+        *ngFor="let medicamento of listaMedicamentos" 
+        value="{{medicamento.id_medicamento}}"
+        >{{medicamento.nombre}}
+      </ion-select-option>
+    </ion-select>
     <br/>
     <ion-input 
       label="¿Cuántos días debes tomarlo?" 
       label-placement="floating"
       fill="outline"
       type="number"
-      placeholder="Nr días"
+      placeholder="Número de días"
       [(ngModel)]="diasMedicamento"
     ></ion-input>
     <br/>
     <ion-input 
-      label="¿Cuántos gramos debe tomar?" 
+      label="¿Cuántos miligramos debe tomar?" 
       label-placement="floating"
       fill="outline"
       type="number"
-      placeholder="100g"
+      placeholder="miligramos"
       [(ngModel)]="cantidadMedicamento"
     ></ion-input>
     <br/>
@@ -39,21 +44,28 @@
       label-placement="floating"
       fill="outline" 
       type="number"
-      placeholder="Medicamento"
+      placeholder="Número de horas"
       [(ngModel)]="horasMedicamento"
     ></ion-input>
     <br/>
-  </div>
-  <div>
+    <ion-input
+      label="Fecha de inicio tratamiento"
+      label-placement="floating"
+      fill="outline"
+      type="datetime-local"
+      [(ngModel)]="fechaInicio"
+    ></ion-input>
+    <br>
     <ion-button 
       color="success" 
       expand="block"
-      (click)="siguienteFormulario()"
+      (click)="registrarIndicacion()"
       >Continuar
     </ion-button>
     <br>
     <ion-button 
-      color="danger" 
+      color="danger"
+      expand="block" 
       [routerLink]="['/autocuidado/menu-principal']"
       >Cancelar
     </ion-button>

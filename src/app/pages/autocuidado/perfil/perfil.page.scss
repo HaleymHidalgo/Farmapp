@@ -3,6 +3,9 @@
     padding: 5%;
     background-color: #19333d;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 1/1;
 }
 
 .icono-perfil {
@@ -26,7 +29,8 @@
 .texto-ribete {
     color: white;
     text-align: center;
-    font-weight: bolder;
+    font-weight: bold;
+    font-size: medium;
 }
 
 .boton-editar {

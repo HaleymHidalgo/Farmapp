@@ -10,25 +10,38 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding" scroll-y="false">
-    <div>
-      <h1 class="titulo-seccion">María Muñoz</h1>
-    </div>
-    <div class="div-opciones">
-      <!-- Cambiar contraseña -->
-      <ion-button 
-        size="large" 
-        class="btn-opcion" 
-        color="primary" 
-        [routerLink]="['/soporte/cambiar-password']"
-        >Cambiar Contraseña
-      </ion-button>
-      <!-- Deshabilitar Usuario -->
-      <ion-button 
-        size="large" 
-        class="btn-opcion" 
-        color="primary" 
-        (click)="deshabilitarUsuario()"
+
+  <div>
+    <h3 class="titulo-seccion">{{nombre}} {{apellido_p}}</h3>
+  </div>
+  
+  <div class="div-opciones">
+    <!-- Cambiar contraseña -->
+    <ion-button 
+      size="large" 
+      class="btn-opcion" 
+      color="primary" 
+      (click)="cargarUsuario()"
+      >Cambiar Contraseña
+    </ion-button>
+    
+    <!-- Deshabilitar Usuario -->
+    <ion-button 
+      size="large" 
+      class="btn-opcion" 
+      color="danger" 
+      (click)="deshabilitarUsuario()"
       >Deshabilitar Usuario
     </ion-button>
-    </div>
+
+    <!-- Cancelar operacion -->
+    <ion-button 
+      size="large" 
+      class="btn-opcion" 
+      color="primary" 
+      [routerLink]="['/soporte/menu-principal']"
+      >Volver al menu
+    </ion-button>
+
+  </div>
 </ion-content>

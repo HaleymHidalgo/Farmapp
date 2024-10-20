@@ -2,21 +2,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
-  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp" style="height: 30%;">  
+  <img src="../../../../assets/icon/logo.webp" alt="Logo Farmapp">  
   <ion-text>
     <h2 class="titulo">¡Regístrate!</h2>
     <h4>¡Ya casi acabamos!<br>ahora sube una foto bonita</h4>
   </ion-text>
   <div class="contenedor-btn" style="height: 30%;">
-    <ion-button size="large" shape="round" [routerLink]="['/autocuidado/menu-principal']">
-      <ion-icon
-        class="icono"
-        slot="icon-only" 
-        name="images"
-        size="large">
-      </ion-icon>
-    </ion-button>
-    <ion-button size="large" shape="round" [routerLink]="['/autocuidado/menu-principal']">
+    <ion-button size="large" shape="round" (click)="tomarFoto()">
       <ion-icon
         class="icono"
         slot="icon-only" 
@@ -25,7 +17,7 @@
       </ion-icon>
     </ion-button>
   </div>
-  <div>
+  <div style="margin-top: 25px;">
     <a [routerLink]="['/login']">¿Ya tienes una cuenta?</a>
   </div>
 </ion-content>

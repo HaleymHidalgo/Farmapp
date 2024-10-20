@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { AlertsService } from 'src/app/core/services/alerts.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
   selector: 'app-cambiar-password',
@@ -9,56 +11,41 @@ import { AlertController } from '@ionic/angular';
 })
 export class CambiarPasswordPage implements OnInit {
 
+  id_usuario!: number;
   password!: string;
   confirmPassword!: string;
 
-  constructor(private alertcontroller: AlertController, private router: Router) { }
+  constructor(private alertcontroller: AlertController, private router: Router, private alerts:AlertsService, private db:DatabaseService) { }
 
   ngOnInit() {
+    this.db.fetchCredencialesUsuario().subscribe(data => {
+      this.id_usuario = data.id_usuario;
+    });
   }
 
-  cambiarPassword() {
+  confirmarCambioPassword() {
     //Si el usuario no ingreso valores en los inputs o los dejo vacios
-    if (this.password == undefined || this.confirmPassword == undefined||
-      this.password == "" || this.confirmPassword == "")
-    {
-      const titulo = "Campos vacios";
-      const mensaje = "Por favor, valide que los campos contengan su información";
-      this.alerta(titulo, mensaje)
+    if (this.password == undefined || this.confirmPassword == undefined || this.password == "" || this.confirmPassword == ""){
+      this.alerts.mostrar('Error: ', 'Los campos estan vacios');
+      return;
+    }
+
+    //Validar que coincidan
+    if(this.password != this.confirmPassword){
+      this.alerts.mostrar('Error: ', 'Los campos no coinciden');
       return;
     }
 
     //Validación de formatos
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if(!passwordRegex.test(this.password)){
-      const titulo = "Contraseña invalida";
-      const mensaje = "Por favor, valide que su contraseña concuerde con los requisitos especificados";
-      this.alerta(titulo, mensaje)
-      return;
-    }
-
-    //Validar que coincidan
-    if(this.password != this.confirmPassword){
-      const titulo = "Contraseñas no coinciden";
-      const mensaje = "Por favor, valide que las contraseñas coincidan";
-      this.alerta(titulo, mensaje)
+      this.alerts.mostrar('Error: ', 'Los campos no cumplen las condiciones');
       return;
     }
 
     //Si pasa todas las validaciones
-    this.alerta("Contraseña cambiada", "Su contraseña ha sido cambiada exitosamente");
+    this.db.actualizarPassword(this.id_usuario, this.password);
     this.router.navigate(['soporte/menu-principal']);
 
-  }
-
-
-  async alerta(titulo: string, mensaje: string) {
-    const alert = await this.alertcontroller.create({
-      header: titulo,
-      message: mensaje,
-      buttons: ['Aceptar']
-    });
-
-    await alert.present();
   }
 }

@@ -23,8 +23,8 @@
   </ion-row>
 
   <!--Barra de busqueda-->
-  <ion-searchbar [debounce]="1000" color="light" class="custom"></ion-searchbar>
-
+  
+  
   <!--Seccion de medicamentos-->
   <div class="contenedor" *ngIf="viendoMedicamentos">
     <h3 class="titulo-seccion">Medicamentos</h3>
@@ -33,7 +33,7 @@
     <ion-row>
       <ion-col style="max-width: 25%;"></ion-col>
       <ion-col style="max-width: 75%; min-width: 75%;">
-        <ion-button expand="block" size="large" [routerLink]="'/soporte/agregar-medicamento'">Agregar medicamento
+        <ion-button color="secondary" expand="block" size="large" [routerLink]="'/soporte/agregar-medicamento'">Agregar medicamento
           <ion-icon name="add-circle-outline" slot="end" size="large"></ion-icon>
         </ion-button>
       </ion-col>

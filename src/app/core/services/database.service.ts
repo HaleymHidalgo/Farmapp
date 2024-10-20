@@ -32,7 +32,7 @@ export class DatabaseService {
 
   tabla_preguntaSeguridad = 'CREATE TABLE IF NOT EXISTS "PREGUNTA_SEGURIDAD" ("id_pregunta" INTEGER PRIMARY KEY autoincrement,	"pregunta" TEXT NOT NULL);';
 
-  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL,		"id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" BLOB, activo BOOLEAN NOT NULL,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
+  tabla_usuario = 'CREATE TABLE IF NOT EXISTS "USUARIO" ("id_usuario" INTEGER PRIMARY KEY autoincrement,	"email" TEXT NOT NULL UNIQUE,	"password" TEXT NOT NULL,	"nombre" TEXT NOT NULL,	"apellido_p" TEXT NOT NULL,	"apellido_m" TEXT NOT NULL,	"direccion" TEXT NOT NULL, "telefono" TEXT NOT NULL, "res_seguridad" TEXT NOT NULL, "id_pregunta" INTEGER NOT NULL, "id_tipo_usuario" INTEGER NOT NULL,	"id_cont_emergencia" INTEGER,	"img_url" BLOB, activo BOOLEAN NOT NULL,	FOREIGN KEY ("id_tipo_usuario") REFERENCES "TIPO_USUARIO"("id_tipo"),	FOREIGN KEY ("id_cont_emergencia") REFERENCES "CONTACTO_EMERGENCIA"("id_contacto"), FOREIGN KEY ("id_pregunta") REFERENCES "PREGUNTA_SEGURIDAD" ("id_pregunta"));';
 
   tabla_indicacion = 'CREATE TABLE IF NOT EXISTS "INDICACION" ("id_indicacion" INTEGER PRIMARY KEY autoincrement,	"id_medicamento" INTEGER NOT NULL,	"id_usuario" INTEGER NOT NULL,  "dosis" INTEGER NOT NULL,	"dias_tratamiento" INTEGER NOT NULL,	"nr_horas" INTEGER NOT NULL,	"medicamento_img" TEXT,	"receta_img" TEXT,	FOREIGN KEY ("id_usuario") REFERENCES "USUARIO"("id_usuario"), FOREIGN KEY ("id_medicamento") REFERENCES "MEDICAMENTO"("id_medicamento"));';
 
@@ -135,7 +135,7 @@ export class DatabaseService {
       await this.database.executeSql(this.datos_tipoUsuario,[]);
       await this.database.executeSql(this.datos_medicamento,[]);
       await this.database.executeSql(this.datos_preguntaSeguridad,[]);
-      await this.database.executeSql(this.datos_usuario,[false]);
+      await this.database.executeSql(this.datos_usuario,[true]);
       await this.database.executeSql(this.datos_usuario2,[false]);
       await this.database.executeSql(this.datos_soporte,[true]);
       await this.database.executeSql(this.datos_indicacion,[]);

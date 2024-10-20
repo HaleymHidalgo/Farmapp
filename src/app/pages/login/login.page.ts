@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertsService } from 'src/app/core/services/alerts.service';
+import { AutenticacionService } from 'src/app/core/services/autenticacion.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { DatabaseService } from 'src/app/core/services/database.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   //arreglo para el usuario que se registra
   nuevoUsuario!: any;
 
@@ -17,7 +17,7 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
-  constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService, private nativeStorage: NativeStorage) {
+  constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService, private auth:AutenticacionService) {
     
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -29,43 +29,30 @@ export class LoginPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.email = "";
-    this.password = "";
+  //Metodo para rescatar la sesion del usuario
+  async ionViewWillEnter() {
+    await this.auth.obtenerSesion();
   }
 
+  //Metodo para validar el usuario y mantener la sesión
   validarLogin() {
+    //Validaciones de campos vacíos
+    if(this.email == "" || this.password == "" || this.email == null || this.password == null || this.email == undefined || this.password == undefined) {
+      this.alert.mostrar("Campos vacíos", "Por favor, ingrese sus datos");
+      return;
+    }
+
     //Validaciones de formato (Correo)
     if(!this.email.includes("@")) {
       this.alert.mostrar("Correo Electronico invalido", "Por favor, ingrese sus datos nuevamente");
       return;
     }
 
+    //Validar que la base de datos esté lista
     this.db.isDBReady.subscribe(async (val) => {
-      //Validar que la base de datos esté lista
       if(val) {
-        //Validar que el usuario exista y lo guarda en un Observable
-        await this.db.iniciarSesion(this.email, this.password);
-        //Obtener el usuario actual
-        this.db.fetchUsuarioActual().subscribe(res => {
-          //Validar que el usuario exista (0 es el valor por defecto)
-          if(res.id_usuario > 0) {
-            switch(res.id_tipo_usuario) {
-              case 1: 
-              //Si es un usuario 'Autocuidado'
-                this.router.navigate(['/autocuidado/menu-principal']);
-                break;
-              
-              case 2:
-                //Si es un usuario 'Soporte'
-                this.router.navigate(['/soporte/menu-principal']);
-                break;
-            }            
-          } else {
-            //Mostrar mensaje de error
-            this.alert.mostrar("Error de autenticación", "Usuario o contraseña incorrectos");
-          }
-        });
+        //Validar que el usuario exista
+        this.auth.iniciarSesion(this.email, this.password);
       }
     });
   }

@@ -76,7 +76,7 @@ export class AlarmaService {
   }
 
   //Funcion para borrar todas las notificaciones
-  private borrarNotificaciones(){
+  public borrarNotificaciones(){
     //Obtenemos las notificaciones pendientes
     LocalNotifications.getPending().then(notificaciones => {
       //Recorremos las notificaciones y las borramos

@@ -145,6 +145,30 @@ export class DatabaseService {
     };
   }
 
+  //funcion que borra el usuario de la base de datos
+  public async eliminarSesion(){
+    try {
+      this.usuarioActual.next({
+        id_usuario: 0,
+        email: "",
+        password: "",
+        nombre: "",
+        apellido_p: "",
+        apellido_m: "",
+        direccion: "",
+        telefono: "",
+        id_tipo_usuario: 0,
+        id_pregunta: 0,
+        res_seguridad: "",
+        id_cont_emergencia: 0,
+        img_url: "",
+        activo: false
+      });
+    } catch (error) {
+      this.alerts.mostrar('Error al borrar el cache usuario', JSON.stringify(error));
+    }
+  }
+
   //-----> Funciones de Fetch (get/) <-----
 
   //Fetch's de las tablas
@@ -175,37 +199,41 @@ export class DatabaseService {
   }
 
   //-----> Funciones de Consulta (Select) <-----
-  public iniciarSesion(email:string, password:string) {
-    return this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ? AND activo = ?' ,[email, password, true])
-    .then(res => {
-      //Si el usuario existe, retornamos el registro
-      if(res.rows.length > 0) {
-        let data: Usuario = {
-          id_usuario: res.rows.item(0).id_usuario,
-          email: res.rows.item(0).email,
-          password: res.rows.item(0).password,
-          nombre: res.rows.item(0).nombre,
-          apellido_p: res.rows.item(0).apellido_p,
-          apellido_m: res.rows.item(0).apellido_m,
-          direccion: res.rows.item(0).direccion,
-          telefono: res.rows.item(0).telefono,
-          id_tipo_usuario: res.rows.item(0).id_tipo_usuario,
-          id_pregunta: res.rows.item(0).id_pregunta,
-          res_seguridad: res.rows.item(0).res_seguridad,
-          id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
-          img_url: res.rows.item(0).img_url,
-          activo: res.rows.item(0).activo
-        };
-        //Actualizamos el observable del Usuario
-        this.usuarioActual.next(data); 
-      }      
-    })
-    .catch(error => {
-      this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
-    });
+  public validarUsuario(email:string, password:string){
+    return new Promise<boolean> ((resolve, reject) => {
+      this.database.executeSql('SELECT * FROM usuario WHERE email = ? AND password = ? AND activo = ?' ,[email, password, true])
+      .then(res => {
+        //Si el usuario existe, retornamos el registro
+        if(res.rows.length > 0) {
+          let data: Usuario = {
+            id_usuario: res.rows.item(0).id_usuario,
+            email: res.rows.item(0).email,
+            password: res.rows.item(0).password,
+            nombre: res.rows.item(0).nombre,
+            apellido_p: res.rows.item(0).apellido_p,
+            apellido_m: res.rows.item(0).apellido_m,
+            direccion: res.rows.item(0).direccion,
+            telefono: res.rows.item(0).telefono,
+            id_tipo_usuario: res.rows.item(0).id_tipo_usuario,
+            id_pregunta: res.rows.item(0).id_pregunta,
+            res_seguridad: res.rows.item(0).res_seguridad,
+            id_cont_emergencia: res.rows.item(0).id_cont_emergencia,
+            img_url: res.rows.item(0).img_url,
+            activo: res.rows.item(0).activo
+          };
+          //Actualizamos el observable del Usuario
+          this.usuarioActual.next(data);
+          resolve(true);
+        }
+        resolve(false);
+      })
+      .catch(error => {
+        this.alerts.mostrar('Error al buscar usuario', JSON.stringify(error));
+      });
+    }) 
   }
 
-  private async obtenerUsuario(id_usuario:number) {
+  public async obtenerUsuario(id_usuario:number) {
     return this.database.executeSql('SELECT * FROM usuario WHERE id_usuario = ?',[id_usuario])
     .then(res => {
       //Si el usuario existe, retornamos el registro
@@ -499,4 +527,12 @@ export class DatabaseService {
       this.alerts.mostrar('Error al actualizar alarma', JSON.stringify(error));
     });
   }
+
+  public cambiarEstadoUsuario(id_usuario:number, estado:boolean) {
+    return this.database.executeSql('UPDATE usuario SET activo = ? WHERE id_usuario = ?', [estado, id_usuario])
+    .catch(error => {
+      this.alerts.mostrar('Error al deshabilitar usuario', JSON.stringify(error));
+    });
+  }
+
 }

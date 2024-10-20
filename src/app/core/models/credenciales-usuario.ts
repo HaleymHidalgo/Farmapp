@@ -4,4 +4,5 @@ export class CredencialesUsuario {
 	apellido_p!: string;
 	pregunta!: string;
 	res_seguridad!: string;
+	id_tipo_usuario!: number;
 }

@@ -412,7 +412,7 @@ export class DatabaseService {
 
   //Pregunta y respuesta de seguridad para ayuda del soporte
   public async obtenerCredencialesUsuario(id_usuario: number){
-    return this.database.executeSql('SELECT u.id_usuario AS id_usuario, u.nombre AS nombre, u.apellido_p AS apellido_p, u.res_seguridad AS res_seguridad, p.pregunta AS pregunta FROM usuario u JOIN pregunta_seguridad p ON u.id_pregunta = p.id_pregunta WHERE id_usuario = ?',[id_usuario])
+    return this.database.executeSql('SELECT u.id_usuario AS id_usuario, u.nombre AS nombre, u.apellido_p AS apellido_p, u.res_seguridad AS res_seguridad, p.pregunta AS pregunta, u.id_tipo_usuario AS id_tipo_usuario FROM usuario u JOIN pregunta_seguridad p ON u.id_pregunta = p.id_pregunta WHERE id_usuario = ?',[id_usuario])
     .then(res => {
       if(res.rows.length > 0) {
 
@@ -422,6 +422,7 @@ export class DatabaseService {
           "apellido_p": res.rows.item(0).apellido_p,
           "pregunta": res.rows.item(0).pregunta,
           "res_seguridad": res.rows.item(0).res_seguridad,
+          "id_tipo_usuario": res.rows.item(0).id_tipo_usuario
         };
         
         this.credencialesUsuario.next(credenciales);
@@ -432,6 +433,25 @@ export class DatabaseService {
       this.alerts.mostrar('Error al obtener credenciales de usuario', JSON.stringify(error));
     });
 
+  }
+
+  public async obtenerUsuarioPorEmail(email:string){
+    return new Promise<number>((resolve, reject) => {
+      this.database.executeSql('SELECT id_usuario, id_tipo_usuario FROM usuario WHERE email = ?',[email])
+      .then(res => {
+        if(res.rows.length === 1) {
+          let data = res.rows.item(0).id_usuario as number;
+          resolve(data);
+        }else{
+          this.alerts.mostrar('Usuario no encontrado', 'No se encontro el usuario');
+          reject();
+        }
+      })
+      .catch(error => {
+        this.alerts.mostrar('Error al buscar usuario por Email', JSON.stringify(error));
+        reject();
+      });
+    });
   }
 
   //-----> Funciones de Inserción (Insert) <-----

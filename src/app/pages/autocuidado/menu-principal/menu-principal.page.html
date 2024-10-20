@@ -34,6 +34,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding" style="min-height: 85%;">
 
+  <!-- Modal -->
   <div id="detalle-alarma" *ngIf="verAlarma" color="secondary">
     <h4 style="text-align: center; color: white; font-weight: bolder; background-color: #387185; padding: 2%;">Detalles de alarma</h4>
     <ion-row style="margin-top: 10%;">
@@ -64,21 +65,21 @@
     <br>
     <ion-row>
       <ion-col>
-        <ion-button
-        color="secondary"
-        expand="block"
-        (click)="verDetalles()"
-        style="height: 80%; margin-left: 9%;">
-          Volver
-        </ion-button>
-      </ion-col>
-      <ion-col>
         <ion-button 
           color="success" 
           expand="block"
           (click)="verDetalles()"
           style="height: 80%; margin-right: 9%;">
             Guardar cambios
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button
+        color="secondary"
+        expand="block"
+        (click)="verDetalles()"
+        style="height: 80%; margin-left: 9%;">
+          Volver
         </ion-button>
       </ion-col>
     </ion-row>

@@ -65,6 +65,8 @@ export class RegistroContactoPage implements OnInit {
       return;
     }
 
+    this.email = this.email.toLowerCase();
+
     //Validación de existencia de correo electronico
     const emailExiste = await this.db.emailExiste(this.email);
     if (emailExiste){

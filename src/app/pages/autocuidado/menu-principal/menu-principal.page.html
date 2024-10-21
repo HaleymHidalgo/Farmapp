@@ -100,7 +100,7 @@
       <div class="info-hora">
         <p class="texto-hora">{{alarma.fecha_hora | tiempoAlarma}}</p>
       </div>
-      <ion-button (click)="verDetalles()" class="boton-alarma" fill="clear">
+      <ion-button (click)="verDetalles({{alarma.idAlarma}})" class="boton-alarma" fill="clear">
         <ion-icon class="icono-boton-alarma" name="eye"></ion-icon>
       </ion-button>
     </div>

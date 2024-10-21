@@ -30,7 +30,7 @@ export class OpcionesClientePage implements OnInit {
 
   cargarUsuario(){
     this.db.obtenerCredencialesUsuario(this.id_usuario);
-    this.router.navigate(['/soporte/cambiar-password']);
+    this.router.navigate(['/cambiar-password']);
   }
 
   

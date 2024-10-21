@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertsService } from 'src/app/core/services/alerts.service';
+import { DatabaseService } from 'src/app/core/services/database.service';
 import { EmailService } from 'src/app/core/services/email.service';
 
 @Component({
@@ -16,12 +17,27 @@ export class CodigoPasswordPage implements OnInit {
   codigoRecuperacion!: number;
   emailRecuperacion!: string;
 
-  constructor(private emailServ:EmailService, private alert:AlertsService, private router:Router) { }
+  constructor(private emailServ:EmailService, private alert:AlertsService, private router:Router, private db:DatabaseService) { }
 
   ngOnInit() {
   }
 
-  recuperarPassword(){
+  async recuperarPassword(){
+
+    this.emailRecuperacion = this.emailRecuperacion.toLowerCase();
+
+    //Validamos que el email no esté vacío
+    if(this.emailRecuperacion == undefined || this.emailRecuperacion == "") {
+      this.alert.mostrar("Error", "Por favor, ingrese su correo electrónico");
+      return;
+    }
+
+    //Validamos que el email este en la base de datos
+    if(await !this.db.emailExiste(this.emailRecuperacion)) {
+      this.alert.mostrar("Error", "El correo ingresado no está registrado en el sistema");
+      return;
+    }
+
     //Mostramos el formulario de codigo recuperación
     this.enviado = !this.enviado;
 
@@ -29,19 +45,15 @@ export class CodigoPasswordPage implements OnInit {
     this.token = Math.floor(Math.random() * 1000000);
 
     //Enviamos el correo
-    this.emailServ.enviarCorreo(this.emailRecuperacion, this.token.toString()).subscribe(
-      response => {
-        this.alert.mostrar("Correo enviado", "Se ha enviado un correo con el código de recuperación");
-      },
-      error => {
-        this.alert.mostrar("Error", "No se pudo enviar el correo: " + JSON.stringify(error));
-      }
-    );
+    this.emailServ.enviarCorreo(this.emailRecuperacion, this.token).subscribe(data => {
+      //Mostramos el mensaje de éxito
+      this.alert.mostrar("Correo enviado", "Se ha enviado un correo con el código de recuperación: " + JSON.stringify(data));
+    });
   }
 
   validarCodigo() {
     if (this.codigoRecuperacion == this.token) {
-      // 2. Mostramos el mensaje de éxito
+      //Mostramos el mensaje de éxito
       this.alert.mostrar("Código correcto", "Por favor, ingrese su nueva contraseña");
       this.router.navigate(['/cambiar-password'], { state: { email: this.emailRecuperacion } });
     } else {

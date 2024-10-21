@@ -16,7 +16,7 @@ export class EmailService {
 
   constructor(private alert:AlertsService, private http: HttpClient) { }
 
-  enviarCorreo(email: string, codigo: string):Observable<any> {
+  enviarCorreo(email: string, codigo: number):Observable<any> {
     //Parametros del correo
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -31,8 +31,6 @@ export class EmailService {
         "message": codigo
       }
     }
-    //Mostramos la información
-    this.alert.mostrar("Data", JSON.stringify(body));
 
     // Enviamos el correo y manejamos el resultado con suscripción
     return this.http.post(this.API_URL, body, { headers });

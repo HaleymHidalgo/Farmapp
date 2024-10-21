@@ -36,7 +36,6 @@ export class CambiarPasswordPage implements OnInit {
           .then(res => {
             this.id_usuario = res;
             this.id_rolUsuario = data.id_tipo_usuario;
-            this.alerts.mostrar('Hola: ', 'usr: ' + this.id_usuario + ' rol: ' + this.id_rolUsuario);
           })
           .catch(error => this.alerts.mostrar('Error: ', 'No se pudo obtener el usuario'));
       } else if (data.id_tipo_usuario == 1) {
@@ -55,8 +54,6 @@ export class CambiarPasswordPage implements OnInit {
   
 
   async confirmarCambioPassword() {
-    this.alerts.mostrar('Hola: ', 'usr: ' + this.id_usuario + ' rol: ' + this.id_rolUsuario);
-  
     // Validar que los campos de contraseña no estén vacíos
     if (!this.password || !this.confirmPassword) {
       this.alerts.mostrar('Error: ', 'Los campos están vacíos');
@@ -79,7 +76,6 @@ export class CambiarPasswordPage implements OnInit {
     // Si todas las validaciones pasan, actualizar la contraseña
     try {
       await this.db.actualizarPassword(this.id_usuario, this.password);
-      this.alerts.mostrar('Hola: ', 'usr: ' + this.id_usuario + ' rol: ' + this.id_rolUsuario);
       // Redirigir dependiendo del tipo de usuario
       switch (this.id_rolUsuario) {
         case 0:
@@ -100,8 +96,6 @@ export class CambiarPasswordPage implements OnInit {
   }
   
   async cancelarCambioPassword() {
-    this.alerts.mostrar('Hola: ', 'usr: ' + this.id_usuario + ' rol: ' + this.id_rolUsuario);
-  
     // Redirigir dependiendo del tipo de usuario
     switch (this.id_rolUsuario) {
       case 0:

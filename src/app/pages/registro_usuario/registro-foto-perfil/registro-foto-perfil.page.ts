@@ -42,14 +42,14 @@ export class RegistroFotoPerfilPage implements OnInit {
   }
 
   //registrarUsuario
-  registrarUsuario(){
+  async registrarUsuario(){
     //Añadimos el rol de usuario
     this.nuevoUsuario.id_tipo_usuario = 1;
 
     //Registramos al usuario en la base de datos
-    this.db.registrarUsuario(this.nuevoUsuario);
-
-    //Redirecciona al menu principal
-    this.router.navigate(['/autocuidado/menu-principal']);
+    await this.db.registrarUsuario(this.nuevoUsuario).then(() => {
+      //Redirecciona al menu principal
+      this.router.navigate(['/autocuidado/menu-principal']);
+    });
   }
 }

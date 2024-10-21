@@ -456,9 +456,14 @@ export class DatabaseService {
 
   //-----> Funciones de Inserción (Insert) <-----
   public async registrarUsuario(usuario:Usuario) {
-    return this.database.executeSql('INSERT INTO usuario (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url, activo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+    return this.database.executeSql(`
+      INSERT INTO usuario
+      (email, password, nombre, apellido_p, apellido_m, direccion, telefono, res_seguridad, id_pregunta, id_tipo_usuario, img_url, activo)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+      RETURNING id_usuario;`,
     [usuario.email, usuario.password, usuario.nombre, usuario.apellido_p, usuario.apellido_m, usuario.direccion, usuario.telefono, usuario.res_seguridad, usuario.id_pregunta, usuario.id_tipo_usuario, usuario.img_url, usuario.activo])
-    .then(() => {
+    .then(res => {
+      usuario.id_usuario = res.rows.item(0).id_usuario;
       this.usuarioActual.next(usuario);
     })
     .catch(error => {

@@ -67,7 +67,7 @@ export class AutenticacionService {
         }
       });
     } catch (error) {
-      this.alert.mostrar('Error al obtener sesión', JSON.stringify(error));
+      //Error al obtener la sesión
     }
   }
 }

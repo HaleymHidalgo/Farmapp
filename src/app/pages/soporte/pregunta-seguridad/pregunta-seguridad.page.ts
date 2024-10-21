@@ -37,6 +37,9 @@ export class PreguntaSeguridadPage implements OnInit {
       return;
     }
 
+    //Eliminamos los espacios en blanco al inicio y al final del campo
+    this.campo = this.campo.trim();
+
     //Validamos que la respuesta sea correcta
     if(this.campo.toLowerCase() != this.respuesta.toLowerCase()){
       this.alerts.mostrar('Error', 'Respuesta incorrecta');

@@ -76,10 +76,10 @@ export class MenuPrincipalPage implements OnInit {
   //Tambien cierra el modal cuando ya no este en uso
   verDetalles(id_alarma:number){
     this.viendoDetalles=!this.viendoDetalles;
-
     if(this.viendoDetalles == true){
       for(let i = 0; i < this.alarmas.length; i++){
         if(id_alarma == this.alarmas[i].id_alarma){
+          this.alarmaSeleccionada.id_alarma = this.alarmas[i].id_alarma;
           this.alarmaSeleccionada.fecha_hora = this.alarmas[i].fecha_hora;
           this.alarmaSeleccionada.indicacionDosis = this.alarmas[i].indicacionDosis;
           this.alarmaSeleccionada.medicamentoNombre = this.alarmas[i].medicamentoNombre;

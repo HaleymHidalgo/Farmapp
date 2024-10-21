@@ -76,9 +76,6 @@ export class AlarmaMedicamentoPage implements OnInit {
     }
 
     //Si todo está correcto, se registra la indicación
-    await this.db.fetchUsuarioActual().subscribe(data => {
-      this.alert.mostrar('Datos de usuario', JSON.stringify(data));
-    });
     await this.db.registrarIndicacion(this.idMedicamento, this.cantidadMedicamento, this.horasMedicamento, this.diasMedicamento)
     .then(idIndicacion => {
       //Se crean las alarmas

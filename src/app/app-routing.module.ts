@@ -68,8 +68,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/soporte/opciones-cliente/opciones-cliente.module').then( m => m.OpcionesClientePageModule)
   },
   {
-    path: 'soporte/cambiar-password',
-    loadChildren: () => import('./pages/soporte/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
+    path: 'cambiar-password',
+    loadChildren: () => import('./pages/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
   },
   {
     path: 'soporte/perfil',
@@ -78,6 +78,10 @@ const routes: Routes = [
   {
     path: 'soporte/agregar-medicamento',
     loadChildren: () => import('./pages/soporte/agregar-medicamento/agregar-medicamento.module').then( m => m.AgregarMedicamentoPageModule)
+  },
+  {
+    path: 'codigo-password',
+    loadChildren: () => import('./pages/codigo-password/codigo-password.module').then( m => m.CodigoPasswordPageModule)
   },
   {
     path: '**',

@@ -2,7 +2,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
-
   <img src="../../../assets/icon/logo.webp" alt="Logo Farmapp" style="min-height: 30%; max-height: 30%;">  
   <div>
     <h1 class="ion-text-bold">¡Inicia sesión!</h1>
@@ -38,9 +37,8 @@
     </ion-button>
   </div>
 
-
   <div style="margin-top: 25px;">
-    <a [routerLink]="['/registro-nombre']"><p>¿No tienes una cuenta?</p></a>
-    <a [routerLink]=""><p>¿Necesitas ayuda? Llamar al soporte</p></a>
+    <a [routerLink]="['/registro-nombre']">¿No tienes una cuenta?</a><br><br>
+    <a [routerLink]="['/codigo-password']">¿Olvidaste tu contraseña?</a><br><br>
+    <a [routerLink]="">¿Necesitas ayuda? Llamar al soporte</a>
   </div>
-</ion-content>

@@ -123,4 +123,17 @@
     </ion-col>
   </ion-row>
 
+  <!--Seccion de Eliminar -->
+  <ion-row *ngIf="!esEditable">
+    <ion-col>
+      <ion-button 
+        (click)="eliminarContacto()" 
+        color="danger" 
+        expand="block" 
+        style="margin-left: 4%;"
+        >Eliminar Contacto de Emergencia
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
 </ion-content>

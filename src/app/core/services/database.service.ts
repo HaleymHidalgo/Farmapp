@@ -579,6 +579,19 @@ export class DatabaseService {
     });
   }
 
+  //
+  async actualizarContactoEmergencia(nombres:string, apellido_p:string, apellido_m:string, correo:string, telefono:string, direccion:string, imgPerfil:any){
+    return this.database.executeSql('UPDATE contacto_emergencia SET nombre = ?, apellido_p = ?, apellido_m = ?, email = ?, telefono = ?, direccion = ?, img_url = ? WHERE id_contacto = ?', [nombres, apellido_p, apellido_m, correo, telefono, direccion, imgPerfil, this.usuarioActual.value.id_cont_emergencia])
+    .then(() => {
+      this.alerts.mostrar('Exito ', 'Contacto de emergencia actualizado');
+      //Actualizamos el observable del Usuario
+      this.buscarContactoEmergencia();
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al actualizar contacto de emergencia', JSON.stringify(error));
+    });
+  }
+
   //FUnciones de eliminar (Delete)
   public async eliminarMedicamento(id_medicamento:number){
     return this.database.executeSql('DELETE FROM medicamento WHERE id_medicamento = ?', [id_medicamento])
@@ -608,4 +621,18 @@ export class DatabaseService {
     });
   }
 
+  //--------------------> Funciones Elimicación de datos <--------------------
+  public async eliminarContactoEmergencia(){
+    return this.database.executeSql('DELETE FROM contacto_emergencia WHERE id_contacto = ?', [this.usuarioActual.value.id_cont_emergencia])
+    .then(() => {
+      this.alerts.mostrar('Exito ', 'Contacto de emergencia eliminado de la BD');
+      //Actualizamos el id del contacto de emergencia en el usuario
+      this.database.executeSql('UPDATE usuario SET id_cont_emergencia = ? WHERE id_usuario = ?', [null, this.usuarioActual.value.id_usuario]);
+      //Actualizamos el observable del Usuario
+      this.obtenerUsuario(this.usuarioActual.value.id_usuario);
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al eliminar contacto de emergencia', JSON.stringify(error));
+    });
+  }
 }

@@ -10,6 +10,7 @@ import { ListadoUsuarios } from '../models/listado-usuarios';
 import { ListadoMedicamentos } from '../models/listado-medicamentos';
 import { CredencialesUsuario } from '../models/credenciales-usuario';
 import { Alarma } from '../models/alarma';
+import { ContactoEmergencia } from '../models/contacto-emergencia';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +85,8 @@ export class DatabaseService {
     img_url: "",
     activo: false
   });
+
+  private contEmergencia = new Subject<ContactoEmergencia>();
   
   constructor(private sqlite:SQLite, private platform:Platform, private alerts:AlertsService) {
     this.crearDB();
@@ -196,6 +199,11 @@ export class DatabaseService {
 
   fetchCredencialesUsuario(){
     return this.credencialesUsuario.asObservable();
+  }
+
+  fetchContactoEmergencia():Observable<ContactoEmergencia>{
+    this.buscarContactoEmergencia();
+    return this.contEmergencia.asObservable();
   }
 
   //-----> Funciones de Consulta (Select) <-----
@@ -454,6 +462,31 @@ export class DatabaseService {
     });
   }
 
+  public async buscarContactoEmergencia(){
+    return new Promise<boolean>((resolve, reject) => { 
+      this.database.executeSql('SELECT * FROM contacto_emergencia WHERE id_contacto = ?;',[this.usuarioActual.value.id_cont_emergencia])
+      .then( res => {
+        if(res.rows.length === 1) {
+          this.contEmergencia.next({
+            id_contacto: res.rows.item(0).id_contacto,
+            nombres: res.rows.item(0).nombre,
+            apellido_p: res.rows.item(0).apellido_p,
+            apellido_m: res.rows.item(0).apellido_m,
+            email: res.rows.item(0).email,
+            direccion: res.rows.item(0).direccion,
+            telefono: res.rows.item(0).telefono,
+            img_url: res.rows.item(0).img_url
+          })
+          resolve(true);
+        }
+        else {
+          //Si no se encuentra el contacto de emergencia, retornamos false
+          resolve(false);
+        }
+      })
+    })
+  }
+
   //-----> Funciones de Inserción (Insert) <-----
   public async registrarUsuario(usuario:Usuario) {
     return this.database.executeSql(`
@@ -505,6 +538,21 @@ export class DatabaseService {
     })
     .catch(error => {
       this.alerts.mostrar('Error al registrar usuario', JSON.stringify(error));
+    });
+  }
+
+  public async registrarContactoEmergencia(contacto:ContactoEmergencia){
+    return this.database.executeSql('INSERT INTO contacto_emergencia (nombre, apellido_p, apellido_m, email, direccion, telefono, img_url) VALUES (?,?,?,?,?,?,?) RETURNING id_contacto;', [contacto.nombres, contacto.apellido_p, contacto.apellido_m, contacto.email, contacto.direccion, contacto.telefono, contacto.img_url])
+    .then(res => {
+      //Actualizamos el id del contacto de emergencia en el usuario
+      this.usuarioActual.value.id_cont_emergencia = res.rows.item(0).id_contacto;
+      
+      //Actualizamos el observable del Usuario
+      this.database.executeSql('UPDATE usuario SET id_cont_emergencia = ? WHERE id_usuario = ?', [res.rows.item(0).id_contacto, this.usuarioActual.value.id_usuario]);
+      this.alerts.mostrar('Exito ', 'Contacto de emergencia registrado');
+    })
+    .catch(error => {
+      this.alerts.mostrar('Error al registrar contacto de emergencia', JSON.stringify(error));
     });
   }
 

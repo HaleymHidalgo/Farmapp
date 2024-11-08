@@ -19,6 +19,9 @@ export class RegistroContactoPage implements OnInit {
   email!:string;
   direccion!:string;
 
+  //Obtener Rol actual
+  rolActual!: number;
+
   constructor(private router: Router, private activatedroute: ActivatedRoute, private alert:AlertsService, private db:DatabaseService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -31,6 +34,8 @@ export class RegistroContactoPage implements OnInit {
   }
 
   ngOnInit() {
+    //Obtenemos el rol actual
+    this.db.fetchUsuarioActual().subscribe(data => this.rolActual = data.id_tipo_usuario);
   }
 
   //Función que se ejecuta al presionar el botón de continuar
@@ -88,7 +93,13 @@ export class RegistroContactoPage implements OnInit {
       }
     }
 
-    //Redirecciona al siguiente formulario
-    this.router.navigate(['/registro-password'], navigationextras);
+    if(this.rolActual == 0){
+      //Redirecciona al siguiente formulario
+      this.router.navigate(['/registro-password'], navigationextras);
+    }
+    else if(this.rolActual == 1){
+      //Redirecciona al siguiente formulario
+      this.router.navigate(['/registro-foto-perfil'], navigationextras);
+    }
   }
 }

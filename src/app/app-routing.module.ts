@@ -32,8 +32,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/registro_usuario/registro-foto-perfil/registro-foto-perfil.module').then( m => m.RegistroFotoPerfilPageModule)
   },
   {
-    path: 'autocuidado/perfil',
-    loadChildren: () => import('./pages/autocuidado/perfil/perfil.module').then( m => m.PerfilPageModule)
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
     path: 'autocuidado/menu-principal',
@@ -70,10 +70,6 @@ const routes: Routes = [
   {
     path: 'cambiar-password',
     loadChildren: () => import('./pages/cambiar-password/cambiar-password.module').then( m => m.CambiarPasswordPageModule)
-  },
-  {
-    path: 'soporte/perfil',
-    loadChildren: () => import('./pages/soporte/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
     path: 'soporte/agregar-medicamento',

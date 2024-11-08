@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AlertController, MenuController } from '@ionic/angular';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { CamaraService } from 'src/app/core/services/camara.service';
@@ -24,7 +25,7 @@ export class PerfilPage implements OnInit {
   direccion!:string;
   imgPerfil!:any;
 
-  constructor(private menucontroller: MenuController, private db:DatabaseService, private alert:AlertsService, private camara:CamaraService) {
+  constructor(private menucontroller: MenuController, private db:DatabaseService, private alert:AlertsService, private camara:CamaraService, private router:Router, private alerta:AlertController) {
     this.obtenerDatosUser();
   }
 
@@ -108,5 +109,43 @@ export class PerfilPage implements OnInit {
 
     //Si pasa todas las validaciones, entonces actualizamos los datos
     await this.db.actualizarUsuario(this.datosUsuario.id_usuario, this.nombre, this.apellido_p, this.apellido_m, this.correo, this.telefono, this.direccion, this.imgPerfil);
+  }
+
+  //Metodo que muestra el modal de emergencia
+  verContactoEmergecia(){
+    this.db.buscarContactoEmergencia()
+    .then(status => {
+      if(status){
+        //Redirigimos a la pagina de contacto de emergencia
+        this.router.navigate(['/autocuidado/perfil-emergencia']);
+      }else{
+        //Formulario para agregar un contacto de emergencia
+        this.formulario();
+      }
+    })
+    .catch(error => {
+      this.alert.mostrar('Error contacto de emergencia:', JSON.stringify(error));
+    });
+  }
+
+  async formulario(){
+    const alertaFormulario = await this.alerta.create({
+      header: 'No tiene un Contacto',
+      message: '¿Desea registrar un nuevo contacto de emergencia?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Si',
+          handler: () => {
+            //Redirigimos al formulario de contacto de emergencia
+            this.router.navigate(['/registro-nombre']);
+          }
+        }
+      ]
+    })
+    alertaFormulario.present();
   }
 }

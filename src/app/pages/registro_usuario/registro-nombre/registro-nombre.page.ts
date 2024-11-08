@@ -16,12 +16,17 @@ export class RegistroNombrePage implements OnInit {
   apellido_p!: string;
   apellido_m!: string;
 
+  //Obtener Rol actual
+  rolActual!: number;
+
   //Arreglo con los datos de un nuevo usuario
   nuevoUsuario = new Usuario();
 
   constructor(private router: Router, private alertcontroller: AlertController, private db: DatabaseService, private alerts:AlertsService) { }
 
   ngOnInit() {
+    //Obtenemos el rol actual
+    this.db.fetchUsuarioActual().subscribe(data => this.rolActual = data.id_tipo_usuario);
   }
 
   //Función que se ejecuta al presionar el botón de continuar

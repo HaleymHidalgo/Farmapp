@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Camera } from '@capacitor/camera';
+import { ContactoEmergencia } from 'src/app/core/models/contacto-emergencia';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { CamaraService } from 'src/app/core/services/camara.service';
@@ -15,6 +16,9 @@ export class RegistroFotoPerfilPage implements OnInit {
   //Variable para el nuevo usuario
   nuevoUsuario!: Usuario;
 
+  //Obtener Rol actual
+  rolActual!: number;
+
   constructor(private router: Router, private activatedroute: ActivatedRoute,private db: DatabaseService, private camara:CamaraService, private alert:AlertsService) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
@@ -26,8 +30,11 @@ export class RegistroFotoPerfilPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    Camera.requestPermissions();
+  async ngOnInit() {
+    //Obtenemos el rol actual
+    await this.db.fetchUsuarioActual().subscribe(data => this.rolActual = data.id_tipo_usuario);
+    //Obtenemos los permisos de la cámara
+    await Camera.requestPermissions();
   }
 
   //Función que toma la foto del usuario
@@ -47,9 +54,27 @@ export class RegistroFotoPerfilPage implements OnInit {
     this.nuevoUsuario.id_tipo_usuario = 1;
 
     //Registramos al usuario en la base de datos
-    await this.db.registrarUsuario(this.nuevoUsuario).then(() => {
-      //Redirecciona al menu principal
-      this.router.navigate(['/autocuidado/menu-principal']);
-    });
+    if(this.rolActual == 0){
+      await this.db.registrarUsuario(this.nuevoUsuario).then(() => {
+        //Redirecciona al menu principal
+        this.router.navigate(['/autocuidado/menu-principal']);
+      });
+    }
+    else if(this.rolActual == 1){
+      let contacto: ContactoEmergencia = {
+        id_contacto: this.nuevoUsuario.id_usuario,
+        nombres: this.nuevoUsuario.nombre,
+        apellido_p: this.nuevoUsuario.apellido_p,
+        apellido_m: this.nuevoUsuario.apellido_m,
+        direccion: this.nuevoUsuario.direccion,
+        email: this.nuevoUsuario.email,
+        telefono: this.nuevoUsuario.telefono,
+        img_url: this.nuevoUsuario.img_url
+      }
+      await this.db.registrarContactoEmergencia(contacto).then(() => {
+        //Redirecciona al menu principal
+        this.router.navigate(['/autocuidado/perfil-emergencia']);
+      });
+    }
   }
 }

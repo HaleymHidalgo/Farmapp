@@ -101,22 +101,44 @@
     </div>
   </div>
 
-  <!--Seccion de botones-->
-  <ion-row *ngIf="!esEditable">
+  <!-- Seccion de Opciones de Autocuidado -->
+  <ion-row *ngIf="!esEditable && datosUsuario.id_tipo_usuario === 1">
     <ion-col>
-      <ion-button [routerLink]="['/autocuidado/perfil-emergencia']" expand="block" style="margin-left: 4%;">Contacto de emergencia</ion-button>
+      <ion-button 
+        (click)="verContactoEmergecia()"
+        expand="block" 
+        style="margin-left: 4%;"
+        >Contacto de emergencia
+      </ion-button>
     </ion-col>
     <ion-col>
-      <ion-button expand="block" style="margin-right: 4%;">Historial de seguimiento</ion-button>
+      <ion-button 
+        expand="block" 
+        style="margin-right: 4%;"
+        >Historial de seguimiento
+      </ion-button>
     </ion-col>
   </ion-row>
 
+<!--Seccion de Editar Perfil -->
   <ion-row *ngIf="esEditable">
     <ion-col>
-      <ion-button (click)="cancelarCambios()" color="danger" expand="block" style="margin-left: 4%;">Cancelar</ion-button>
+      <ion-button 
+        (click)="cancelarCambios()" 
+        color="danger" 
+        expand="block" 
+        style="margin-left: 4%;"
+        >Cancelar
+      </ion-button>
     </ion-col>
     <ion-col>
-      <ion-button (click)="guardarCambios()" color="success" expand="block" style="margin-right: 4%;">Confirmar</ion-button>
+      <ion-button 
+        (click)="guardarCambios()" 
+        color="success" 
+        expand="block" 
+        style="margin-right: 4%;"
+        >Confirmar
+      </ion-button>
     </ion-col>
   </ion-row>
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Camera } from '@capacitor/camera';
+import { MenuController } from '@ionic/angular';
 import { ContactoEmergencia } from 'src/app/core/models/contacto-emergencia';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
@@ -19,7 +20,7 @@ export class RegistroFotoPerfilPage implements OnInit {
   //Obtener Rol actual
   rolActual!: number;
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute,private db: DatabaseService, private camara:CamaraService, private alert:AlertsService) {
+  constructor(private router: Router, private activatedroute: ActivatedRoute,private db: DatabaseService, private camara:CamaraService, private alert:AlertsService, private menucontroller: MenuController) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -35,6 +36,9 @@ export class RegistroFotoPerfilPage implements OnInit {
     await this.db.fetchUsuarioActual().subscribe(data => this.rolActual = data.id_tipo_usuario);
     //Obtenemos los permisos de la cámara
     await Camera.requestPermissions();
+
+    this.menucontroller.enable(false, 'soporte');
+    this.menucontroller.enable(false, 'autocuidado');
   }
 
   //Función que toma la foto del usuario

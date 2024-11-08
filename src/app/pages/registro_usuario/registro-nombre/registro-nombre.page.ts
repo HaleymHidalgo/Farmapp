@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
@@ -22,11 +22,13 @@ export class RegistroNombrePage implements OnInit {
   //Arreglo con los datos de un nuevo usuario
   nuevoUsuario = new Usuario();
 
-  constructor(private router: Router, private alertcontroller: AlertController, private db: DatabaseService, private alerts:AlertsService) { }
+  constructor(private router: Router, private alertcontroller: AlertController, private db: DatabaseService, private alerts:AlertsService, private menucontroller: MenuController) { }
 
   ngOnInit() {
     //Obtenemos el rol actual
     this.db.fetchUsuarioActual().subscribe(data => this.rolActual = data.id_tipo_usuario);
+    this.menucontroller.enable(false, 'soporte');
+    this.menucontroller.enable(false, 'autocuidado');
   }
 
   //Función que se ejecuta al presionar el botón de continuar

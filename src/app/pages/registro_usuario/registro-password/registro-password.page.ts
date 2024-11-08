@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
 import { Usuario } from 'src/app/core/models/usuario';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 
@@ -17,7 +17,7 @@ export class RegistroPasswordPage implements OnInit {
   password!: string;
   confirmPassword!: string;
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute, private alert:AlertsService) {
+  constructor(private router: Router, private activatedroute: ActivatedRoute, private alert:AlertsService, private menucontroller:MenuController) {
     //Capturamos la información de NavigationExtras
     this.activatedroute.queryParams.subscribe(params => {
       //Validamos si viene o no información desde la pagina
@@ -29,6 +29,8 @@ export class RegistroPasswordPage implements OnInit {
   }
 
   ngOnInit() {
+    this.menucontroller.enable(false, 'soporte');
+    this.menucontroller.enable(false, 'autocuidado');
   }
 
   //Función que se ejecuta al presionar el botón de continuar

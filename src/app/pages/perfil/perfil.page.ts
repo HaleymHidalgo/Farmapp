@@ -27,13 +27,18 @@ export class PerfilPage implements OnInit {
 
   constructor(private menucontroller: MenuController, private db:DatabaseService, private alert:AlertsService, private camara:CamaraService, private router:Router, private alerta:AlertController) {
     this.obtenerDatosUser();
+    //Habilitamos el menu indicado
+    if(this.datosUsuario.id_tipo_usuario == 1){
+      this.menucontroller.enable(true, 'autocuidado');
+      this.menucontroller.enable(false, 'soporte');
+    }
+    else if(this.datosUsuario.id_tipo_usuario == 2){
+      this.menucontroller.enable(true, 'soporte');
+      this.menucontroller.enable(false, 'autocuidado');
+    }
   }
 
-  ngOnInit() {
-    //Habilitamos el menu de autocuidado
-    this.menucontroller.enable(false, 'soporte');
-    this.menucontroller.enable(true, 'autocuidado');
-  }
+  ngOnInit() { }
 
   //---------> Metodos de la Vista <---------
   editarCampos() {
@@ -147,5 +152,9 @@ export class PerfilPage implements OnInit {
       ]
     })
     alertaFormulario.present();
+  }
+
+  cambiarPassword(){
+    this.router.navigate(['/cambiar-password']);
   }
 }

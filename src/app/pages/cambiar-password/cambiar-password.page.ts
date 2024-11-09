@@ -44,10 +44,8 @@ export class CambiarPasswordPage implements OnInit {
         this.id_rolUsuario = data.id_tipo_usuario;
       } else if (data.id_tipo_usuario == 2) {
         // Usuario de soporte
-        this.db.fetchCredencialesUsuario().subscribe(credenciales => {
-          this.id_usuario = credenciales.id_usuario;
-          this.id_rolUsuario = data.id_tipo_usuario;
-        });
+        this.id_usuario = data.id_usuario;
+        this.id_rolUsuario = data.id_tipo_usuario;
       }
     });
   }
@@ -75,6 +73,7 @@ export class CambiarPasswordPage implements OnInit {
   
     // Si todas las validaciones pasan, actualizar la contraseña
     try {
+      this.alerts.mostrar('Éxito: ', JSON.stringify(this.id_rolUsuario));
       await this.db.actualizarPassword(this.id_usuario, this.password);
       // Redirigir dependiendo del tipo de usuario
       switch (this.id_rolUsuario) {

@@ -4,7 +4,6 @@ import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { MenuController } from '@ionic/angular';
 import { ListadoMedicamentos } from 'src/app/core/models/listado-medicamentos';
 import { ListadoUsuarios } from 'src/app/core/models/listado-usuarios';
-import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 
 @Component({
@@ -20,7 +19,7 @@ export class MenuPrincipalPage implements OnInit {
   listadoUsuarios!:ListadoUsuarios[];
   listadoMedicamentos!:ListadoMedicamentos[];
 
-  constructor(private menucontroller: MenuController, private db:DatabaseService, private alerts:AlertsService, private router:Router, private ns:NativeStorage) {}
+  constructor(private menucontroller: MenuController, private db:DatabaseService, private router:Router) {}
 
   ngOnInit() {
     //Fetch para la lista de usuarios

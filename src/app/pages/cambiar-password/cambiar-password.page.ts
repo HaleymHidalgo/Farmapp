@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 
@@ -19,7 +18,7 @@ export class CambiarPasswordPage implements OnInit {
   password!: string;
   confirmPassword!: string;
 
-  constructor(private router: Router, private alerts:AlertsService, private db:DatabaseService, private activatedroute: ActivatedRoute) {}
+  constructor(private router: Router, private alerts:AlertsService, private db:DatabaseService) {}
 
   ngOnInit() {
     // Capturar email desde el estado de navegación

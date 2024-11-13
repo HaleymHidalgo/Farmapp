@@ -48,14 +48,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/autocuidado/perfil-emergencia/perfil-emergencia.module').then( m => m.PerfilEmergenciaPageModule)
   },
   {
-    path: 'autocuidado/buscar-farmacia',
-    loadChildren: () => import('./pages/autocuidado/buscar-farmacia/buscar-farmacia.module').then( m => m.BuscarFarmaciaPageModule)
-  },
-  {
-    path: 'autocuidado/mapa',
-    loadChildren: () => import('./pages/autocuidado/mapa/mapa.module').then( m => m.MapaPageModule)
-  },
-  {
     path: 'soporte/menu-principal',
     loadChildren: () => import('./pages/soporte/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },

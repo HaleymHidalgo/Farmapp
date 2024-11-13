@@ -16,7 +16,7 @@ export class OpcionesClientePage implements OnInit {
   nombre!: string;
   apellido_p!: string;
 
-  constructor(private menucontroller: MenuController, private alertcontroller: AlertController, private router: Router, private db:DatabaseService, private alerts:AlertsService) { }
+  constructor(private menucontroller: MenuController, private router: Router, private db:DatabaseService, private alerts:AlertsService) { }
 
   ngOnInit() {
     this.db.fetchCredencialesUsuario().subscribe(data => {

@@ -24,14 +24,14 @@ export class CodigoPasswordPage implements OnInit {
 
   async recuperarPassword(){
 
-    this.emailRecuperacion = this.emailRecuperacion.toLowerCase();
-
     //Validamos que el email no esté vacío
     if(this.emailRecuperacion == undefined || this.emailRecuperacion == "") {
       this.alert.mostrar("Error", "Por favor, ingrese su correo electrónico");
       return;
     }
 
+    this.emailRecuperacion = this.emailRecuperacion.toLowerCase();
+    
     //Validamos que el email este en la base de datos
     if(await !this.db.emailExiste(this.emailRecuperacion)) {
       this.alert.mostrar("Error", "El correo ingresado no está registrado en el sistema");

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { AutenticacionService } from 'src/app/core/services/autenticacion.service';
@@ -19,17 +19,7 @@ export class LoginPage implements OnInit {
   email!: string;
   password!: string;
 
-  constructor(private router: Router, private alert:AlertsService, private activatedroute: ActivatedRoute, private db: DatabaseService, private auth:AutenticacionService, private emailServ:EmailService, private menucontroller: MenuController) {
-    
-    //Capturamos la información de NavigationExtras
-    this.activatedroute.queryParams.subscribe(params => {
-      //Validamos si viene o no información desde la pagina
-      if(this.router.getCurrentNavigation()?.extras.state){
-        //Capturamos la información
-        this.nuevoUsuario = this.router.getCurrentNavigation()?.extras?.state?.['nuevoUsuario']
-      }
-    });
-  }
+  constructor(private router: Router, private alert:AlertsService, private db: DatabaseService, private auth:AutenticacionService, private emailServ:EmailService, private menucontroller: MenuController) { }
 
   ngOnInit(){
     this.menucontroller.enable(false, 'soporte');

@@ -34,7 +34,7 @@ export class MenuPrincipalPage implements OnInit {
 
   viendoDetalles:boolean = false;
 
-  constructor(private router: Router, private menucontroller: MenuController, private alert:AlertsService, private db:DatabaseService, private alarmaService:AlarmaService) { }
+  constructor(private router: Router, private menucontroller: MenuController, private db:DatabaseService, private alarmaService:AlarmaService) { }
 
   //Funcion que se ejecuta al entrar a la pagina (Post Init)
   async ionViewWillEnter(){

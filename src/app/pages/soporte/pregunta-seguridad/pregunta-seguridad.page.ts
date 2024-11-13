@@ -17,7 +17,7 @@ export class PreguntaSeguridadPage implements OnInit {
   respuesta!: string;
   campo!: string;
 
-  constructor(private alertcontroller: AlertController, private router: Router, private db:DatabaseService, private alerts:AlertsService, private menucontroller:MenuController, private ns:NativeStorage) { }
+  constructor(private router: Router, private db:DatabaseService, private alerts:AlertsService, private menucontroller:MenuController) { }
 
   ngOnInit() {
     this.db.fetchCredencialesUsuario().subscribe(data => {

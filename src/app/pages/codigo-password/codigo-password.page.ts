@@ -22,7 +22,7 @@ export class CodigoPasswordPage implements OnInit {
   ngOnInit() {
   }
 
-  async recuperarPassword(){
+  recuperarPassword(){
 
     //Validamos que el email no esté vacío
     if(this.emailRecuperacion == undefined || this.emailRecuperacion == "") {
@@ -30,10 +30,15 @@ export class CodigoPasswordPage implements OnInit {
       return;
     }
 
+    if(!this.verificarEmail(this.emailRecuperacion)) {
+      this.alert.mostrar("Error", "Por favor, ingrese un correo electrónico válido");
+      return;
+    }
+
     this.emailRecuperacion = this.emailRecuperacion.toLowerCase();
     
     //Validamos que el email este en la base de datos
-    if(await !this.db.emailExiste(this.emailRecuperacion)) {
+    if(!this.db.emailExiste(this.emailRecuperacion)) {
       this.alert.mostrar("Error", "El correo ingresado no está registrado en el sistema");
       return;
     }
@@ -59,6 +64,11 @@ export class CodigoPasswordPage implements OnInit {
     } else {
       this.alert.mostrar("Código incorrecto", "Por favor, ingrese el código correcto");
     }
+  }
+
+  verificarEmail(testEmail: string):boolean {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(testEmail);
   }
 
 }

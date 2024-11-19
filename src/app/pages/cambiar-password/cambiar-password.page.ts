@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 

@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PerfilPage } from './perfil.page';
 import { DatabaseService } from 'src/app/core/services/database.service';
-import { AlertController, MenuController } from '@ionic/angular';
+import { AlertController, IonicModule, MenuController } from '@ionic/angular';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { CamaraService } from 'src/app/core/services/camara.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PerfilPage', () => {
   let component: PerfilPage;
@@ -27,17 +28,20 @@ describe('PerfilPage', () => {
     buscarContactoEmergencia: jasmine.createSpy('buscarContactoEmergencia').and.returnValue(Promise.resolve(true)),
   };
 
+  const routerMock = jasmine.createSpyObj('Router', ['navigate']);
+
   //constructor(private menucontroller: MenuController, private db:DatabaseService, private alert:AlertsService, private camara:CamaraService, private router:Router, private alerta:AlertController)
   beforeEach(async() => {
     await TestBed.configureTestingModule({
       declarations: [ PerfilPage ],
+      imports: [IonicModule.forRoot()],
       providers: [
         MenuController,
         AlertsService,
         CamaraService,
-        Router,
         AlertController,
-        { provide: DatabaseService, useValue: DatabaseServiceMock }
+        Router,
+        { provide: DatabaseService, useValue: DatabaseServiceMock },
       ]
     })
     

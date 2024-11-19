@@ -3,14 +3,21 @@ import { TestBed } from '@angular/core/testing';
 import { AlarmaService } from './alarma.service';
 import { AlertsService } from './alerts.service';
 import { DatabaseService } from './database.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { query } from '@angular/animations';
 
 describe('AlarmaService', () => {
   let service: AlarmaService;
 
-  const databaseServiceMock = {
-    registrarAlarmas: jasmine.createSpy('registrarAlarmas').and.returnValue(Promise.resolve()),
-    cambiarEstadoAlarma: jasmine.createSpy('cambiarEstadoAlarma').and.returnValue(Promise.resolve()),
+  const ActivatedRouteMock = {
+    queryParams: {
+      subscribe: () => {}
+    }
+  };
+
+  const DatabaseServiceMock = {
+    registrarAlarmas: () => {},
+    cambiarEstadoAlarma: () => {},
   };
 
   beforeEach(() => {
@@ -19,7 +26,8 @@ describe('AlarmaService', () => {
       providers: [
         AlertsService,
         Router,
-        { provide: DatabaseService, useValue: databaseServiceMock }
+        { provide: ActivatedRoute, useValue: ActivatedRouteMock },
+        { provide: DatabaseService, useValue: DatabaseServiceMock },
       ]
     });
     service = TestBed.inject(AlarmaService);

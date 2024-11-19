@@ -5,24 +5,28 @@ import { AlarmaService } from 'src/app/core/services/alarma.service';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
 
 describe('AlarmaMedicamentoPage', () => {
   let component: AlarmaMedicamentoPage;
   let fixture: ComponentFixture<AlarmaMedicamentoPage>;
 
   const DatabaseServiceMock = {
-    fetchListadoMedicamentos: jasmine.createSpy('fetchListadoMedicamentos').and.returnValue(of([])) // Retorna un Observable vacío para simular la respuesta
+    fetchListadoMedicamentos: () => of([]),
+    registrarIndicacion: () => 0
   };
 
   //constructor(private db: DatabaseService, private alert:AlertsService, private router: Router, private alarma: AlarmaService)
   beforeEach(async() => {
     await TestBed.configureTestingModule({
       declarations: [ AlarmaMedicamentoPage ],
+      imports: [IonicModule.forRoot()],
       providers: [
-        Router,
         AlarmaService,
         AlertsService,
-        { provide: DatabaseService, useValue: DatabaseServiceMock },
+        Router,
+        { provide: DatabaseService, useValue: DatabaseServiceMock }
       ]
     }).compileComponents();
 

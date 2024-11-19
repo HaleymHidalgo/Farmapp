@@ -5,6 +5,15 @@ import { AlertsService } from './alerts.service';
 import { Platform } from '@ionic/angular';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 
+const SQLiteMock = {
+  create: jasmine.createSpy('create').and.returnValue(Promise.resolve({
+    executeSql: () => Promise.resolve({ rows: { length: 0 } }),
+    transaction: (callback: Function) => callback({
+      executeSql: () => Promise.resolve({ rows: { length: 0 } })
+    })
+  }))
+};
+
 describe('DatabaseService', () => {
   let service: DatabaseService;
 
@@ -14,7 +23,7 @@ describe('DatabaseService', () => {
       providers: [
         AlertsService,
         Platform,
-        SQLite
+        { provide: SQLite, useValue: SQLiteMock }
       ]
     });
     service = TestBed.inject(DatabaseService);

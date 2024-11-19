@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AgregarMedicamentoPage } from './agregar-medicamento.page';
 import { AlertsService } from 'src/app/core/services/alerts.service';
-import { MenuController } from '@ionic/angular';
+import { IonicModule, MenuController } from '@ionic/angular';
 import { DatabaseService } from 'src/app/core/services/database.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AgregarMedicamentoPage', () => {
   let component: AgregarMedicamentoPage;
@@ -16,6 +17,7 @@ describe('AgregarMedicamentoPage', () => {
   beforeEach(async() => {
     await TestBed.configureTestingModule({
       declarations: [ AgregarMedicamentoPage ],
+      imports: [IonicModule.forRoot()],
       providers: [
         AlertsService,
         MenuController,

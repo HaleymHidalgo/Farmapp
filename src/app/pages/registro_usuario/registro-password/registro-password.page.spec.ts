@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegistroPasswordPage } from './registro-password.page';
-import { MenuController } from '@ionic/angular';
+import { IonicModule, MenuController, NavController } from '@ionic/angular';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -9,7 +9,8 @@ describe('RegistroPasswordPage', () => {
   let fixture: ComponentFixture<RegistroPasswordPage>;
 
   const RouterMock = {
-    getCurrentNavigation: () => ({extras: {state: {nuevoUsuario: {}}}})
+    getCurrentNavigation: () => ({extras: {state: {nuevoUsuario: {}}}}),
+    navigate: jasmine.createSpyObj('Router', ['navigate'])
   };
 
   const ActivatedRouteMock = {
@@ -18,15 +19,22 @@ describe('RegistroPasswordPage', () => {
     }
   };
 
+  const NavControllerMock = {
+    navigateForward: jasmine.createSpy('navigateForward'),
+    navigateBack: jasmine.createSpy('navigateBack'),
+  };
+
   //constructor(private router: Router, private activatedroute: ActivatedRoute, private alert:AlertsService, private menucontroller:MenuController)
   beforeEach(async() => {
     await TestBed.configureTestingModule({
       declarations: [ RegistroPasswordPage ],
+      imports: [IonicModule.forRoot()],
       providers: [
         AlertsService,
         MenuController,
         { provide: Router, useValue: RouterMock },
-        { provide: ActivatedRoute, useValue: ActivatedRouteMock }
+        { provide: ActivatedRoute, useValue: ActivatedRouteMock },
+        { provide: NavController, useValue: NavControllerMock }
       ]
     })
 

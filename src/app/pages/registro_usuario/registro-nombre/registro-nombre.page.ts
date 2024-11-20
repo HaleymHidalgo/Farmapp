@@ -12,9 +12,9 @@ import { DatabaseService } from 'src/app/core/services/database.service';
 })
 export class RegistroNombrePage implements OnInit {
   //Variables del formulario
-  nombre!: string;
-  apellido_p!: string;
-  apellido_m!: string;
+  nombre: string = "";
+  apellido_p: string = "";
+  apellido_m: string = "";
 
   //Obtener Rol actual
   rolActual!: number;
@@ -34,11 +34,10 @@ export class RegistroNombrePage implements OnInit {
   //Función que se ejecuta al presionar el botón de continuar
   siguienteFormulario() {
     //Si el usuario no ingreso valores en los inputs o los dejo vacios
-    if (this.nombre == undefined || this.apellido_p == undefined || this.apellido_m == undefined ||
-        this.nombre == "" || this.apellido_p == "" || this.apellido_m == "")
+    if (this.nombre == "" || this.apellido_m == "")
     {
       const titulo = "Campos vacios";
-      const mensaje = "Por favor, valide que los campos contengan su información";
+      const mensaje = "Por favor, valide que los campos obigatorios contengan su información";
       this.alerts.mostrar(titulo, mensaje)
       return;
     }
@@ -46,8 +45,7 @@ export class RegistroNombrePage implements OnInit {
     //Valida que el nombre y apellidos no contengan números
     const noNumbersRegex = /^[^\d]+$/;
     if(
-      !noNumbersRegex.test(this.nombre) || 
-      !noNumbersRegex.test(this.apellido_p) || 
+      !noNumbersRegex.test(this.nombre) ||
       !noNumbersRegex.test(this.apellido_m))
     {
       const titulo = "Nombre y/o apellidos invalidos";

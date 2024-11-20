@@ -1,37 +1,42 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginPage } from './login.page';
 import { DatabaseService } from 'src/app/core/services/database.service';
-import { Router } from '@angular/router';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { AutenticacionService } from 'src/app/core/services/autenticacion.service';
-import { EmailService } from 'src/app/core/services/email.service';
 import { IonicModule, MenuController } from '@ionic/angular';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { of } from 'rxjs';
 
 describe('LoginPage', () => {
   let component: LoginPage;
   let fixture: ComponentFixture<LoginPage>;
 
-  const DatabaseServiceMock = {
-    isDatabaseReady: jasmine.createSpy('isDatabaseReady').and.returnValue(true)
+  // Spies & Mocks
+  const AlertsServiceMock = {
+    mostrar: jasmine.createSpy('mostrar')
   };
 
   const AutenticacionServiceMock = {
-    obtenerSesion: jasmine.createSpy('obtenerSesion'),
+    obtenerSesion: jasmine.createSpy('obtenerSesion').and.returnValue(Promise.resolve()),
     iniciarSesion: jasmine.createSpy('iniciarSesion')
   };
 
-  //constructor(private router: Router, private alert:AlertsService, private db: DatabaseService, private auth:AutenticacionService, private emailServ:EmailService, private menucontroller: MenuController) { }
-  beforeEach(async() => {
+  const DatabaseServiceMock = {
+    isDBReady: of(true)
+  };
+
+  const MenuControllerMock = {
+    enable: jasmine.createSpy('enable')
+  };
+
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginPage ],
+      declarations: [LoginPage],
       imports: [IonicModule.forRoot()],
       providers: [
-        AlertsService,
-        MenuController,
-        Router,
+        { provide: AlertsService, useValue: AlertsServiceMock },
+        { provide: AutenticacionService, useValue: AutenticacionServiceMock },
         { provide: DatabaseService, useValue: DatabaseServiceMock },
-        { provide: AutenticacionService, useValue: AutenticacionServiceMock } 
+        { provide: MenuController, useValue: MenuControllerMock }
       ]
     }).compileComponents();
 
@@ -43,4 +48,41 @@ describe('LoginPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Deberia deshabilitar los menús en al entar en la pagina, ngOnInit()', () => {
+    component.ngOnInit();
+    expect(MenuControllerMock.enable).toHaveBeenCalledWith(false, 'soporte');
+    expect(MenuControllerMock.enable).toHaveBeenCalledWith(false, 'autocuidado');
+  });
+
+  it('Deberia llamar a "obtenerSesion()" al ingresar a la vista', async () => {
+    await component.ionViewWillEnter();
+    expect(AutenticacionServiceMock.obtenerSesion).toHaveBeenCalled();
+  });
+
+  it('Deberia mostrar un mensaje de error si los campos están vacíos', () => {
+    component.email = '';
+    component.password = '';
+    component.validarLogin();
+
+    expect(AlertsServiceMock.mostrar).toHaveBeenCalledWith('Campos vacíos', 'Por favor, ingrese sus datos');
+  });
+
+  it('Deberia mostrar un mensaje de error si el correo no contiene "@"', () => {
+    component.email = 'emailmail.com';
+    component.password = 'password123';
+    component.validarLogin();
+
+    expect(AlertsServiceMock.mostrar).toHaveBeenCalledWith('Correo Electronico invalido', 'Por favor, ingrese sus datos nuevamente');
+  });
+
+  it('Deberia llamar a iniciarSesion() si los datos son válidos', () => {
+    component.email = 'email@mail.com';
+    component.password = 'password123';
+
+    component.validarLogin();
+
+    expect(AutenticacionServiceMock.iniciarSesion).toHaveBeenCalledWith('email@mail.com', 'password123');
+  });
+  
 });

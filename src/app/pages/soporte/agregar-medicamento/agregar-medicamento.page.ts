@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { AlertsService } from 'src/app/core/services/alerts.service';
 import { DatabaseService } from 'src/app/core/services/database.service';
@@ -13,7 +14,7 @@ export class AgregarMedicamentoPage implements OnInit {
   nombre_med!:string;
   formato_med!:number;
 
-  constructor(private db:DatabaseService, private alerts:AlertsService, private menucontroller:MenuController) { }
+  constructor(private db:DatabaseService, private alerts:AlertsService, private menucontroller:MenuController, private router:Router) { }
 
   ngOnInit() {
     this.menucontroller.enable(true, 'soporte');
@@ -32,8 +33,6 @@ export class AgregarMedicamentoPage implements OnInit {
     }
 
     this.db.registrarMedicamento(this.nombre_med, this.formato_med);
-
+    this.router.navigate(['/soporte/menu-principal']);
   }
-
-
 }

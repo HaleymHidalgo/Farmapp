@@ -76,14 +76,14 @@ export class PerfilPage implements OnInit {
 
   async guardarCambios(){
 
-    if(this.nombre == "" || this.apellido_p == "" || this.apellido_m == "" || this.correo == "" || this.telefono == "" || this.direccion == ""){
+    if(this.nombre == "" || this.apellido_m == "" || this.correo == "" || this.telefono == "" || this.direccion == ""){
       this.alert.mostrar('Error', 'Los campos no pueden estar vacios');
       return;
     }
 
     //Validamos que los campos de nombre y apellidos no contengan números
     const noNumbersRegex = /^[^\d]+$/;
-    if(!noNumbersRegex.test(this.nombre) || !noNumbersRegex.test(this.apellido_p) || !noNumbersRegex.test(this.apellido_m)){
+    if(!noNumbersRegex.test(this.nombre) || !noNumbersRegex.test(this.apellido_m)){
       this.alert.mostrar('Error', 'Los campos de nombre y/o apellidos no pueden contener números');
       return;
     }

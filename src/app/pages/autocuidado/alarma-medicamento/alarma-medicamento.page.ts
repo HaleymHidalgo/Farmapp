@@ -39,6 +39,9 @@ export class AlarmaMedicamentoPage implements OnInit {
 
   //Función que se ejecuta al presionar el botón de continuar
   async registrarIndicacion() {
+
+    this.horasMedicamento = Math.trunc(this.horasMedicamento);
+
     //Validar que los campos no estén vacíos
     if (this.idMedicamento == undefined || this.cantidadMedicamento == undefined || this.horasMedicamento == undefined || this.diasMedicamento == undefined || this.fechaInicio == undefined) {
       this.alert.mostrar('error', 'Faltan campos por llenar');
@@ -58,7 +61,7 @@ export class AlarmaMedicamentoPage implements OnInit {
     }
 
     //Validar que la cantidad de horas sea mayor a 0
-    if (this.horasMedicamento < 0) {
+    if (this.horasMedicamento < 1) {
       this.alert.mostrar('error', 'La cantidad de horas debe ser mayor a 0');
       return;
     }
